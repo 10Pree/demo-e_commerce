@@ -4,7 +4,9 @@ const { connectDB } = require('./src/config/db')
 const app = express()
 const port = 8000
 
+app.use(express.json());
 app.use('/', user)
+
 
 const startServer = async() =>{
      await connectDB()

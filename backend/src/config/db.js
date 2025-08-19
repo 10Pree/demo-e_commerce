@@ -1,5 +1,5 @@
 require("dotenv").config;
-let mysql = require("mysql");
+const mysql = require('mysql2/promise');
 
 let conn = null;
 const connectDB = async () => {
@@ -7,7 +7,7 @@ const connectDB = async () => {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
+    database: process.env.DB_NAME
   });
   console.log("Connect to DB");
 };
