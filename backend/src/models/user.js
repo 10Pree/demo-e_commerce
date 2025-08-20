@@ -1,3 +1,4 @@
+const { get } = require("../../../../demo-crud/backend/src/routers/user");
 const { getDB } = require("../config/db");
 
 class moduleUser {
@@ -8,6 +9,7 @@ class moduleUser {
             return results
         } catch (error) {
             console.log("Message Error:", error)
+            throw error
         }
     }
 
@@ -18,6 +20,7 @@ class moduleUser {
             return results
         } catch (error) {
             console.log("Message Error:", error)
+            throw error
         }
     }
 
@@ -28,6 +31,7 @@ class moduleUser {
             return results
         } catch (error) {
             console.log("Message Error:", error)
+            throw error
         }
     }
 
@@ -37,7 +41,41 @@ class moduleUser {
             const [results] = await conn.query('UPDATE users SET ? WHERE id = ?', [userData, userId])
             return results
         }catch(error){
-            console.log(error)
+            console.log("Message Error:", error)
+            throw error
+        }
+    }
+
+    static async updatePassword(userId, hashPassword){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('UPDATE users SET password = ? WHERE id = ?', [hashPassword, userId])
+            return results
+        }catch(error){
+            console.log("Message Error:", error)
+            throw error
+        }
+    }
+
+    static async getPassword(userId) {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('SELECT password FROM users WHERE id = ?', userId)
+            return results
+        }catch(error){
+            console.log("Message Error:", error)
+            throw error
+        }
+    }
+
+    static async delete(userId) {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('DELETE FROM users WHERE id = ?', userId)
+            return results
+        }catch(error){
+            console.log("Message Error:", error)
+            throw error
         }
     }
 }
