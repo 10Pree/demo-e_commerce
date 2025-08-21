@@ -7,7 +7,7 @@ const hashPassword = async (password) => {
     return hash
 }
 
-const verifyPassword = async(hashPassword, password) =>{
+const verifyPassword = async(password, hashPassword) =>{
     const verify = await argon2.verify(hashPassword, password)
     return verify
 }

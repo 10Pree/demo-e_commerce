@@ -1,15 +1,15 @@
 const express = require('express')
-const controllerUser = require('../controllers/user')
+const controllersUser = require('../controllers/user')
 const router = express.Router()
 
 router.use(express.json())
 
-router.post('/user', controllerUser.Create)
-router.get('/users', controllerUser.Reads)
-router.get('/user/:id', controllerUser.Read)
-router.put('/user/:id', controllerUser.Update)
-router.put('/user/password/:id', controllerUser.UpdatePassword)
-router.delete('/user/:id', controllerUser.Delete)
+router.post('/user', controllersUser.Create)
+router.get('/users', controllersUser.Reads)
+router.get('/user/:id', controllersUser.Read)
+router.put('/user/:id', controllersUser.Update)
+router.put('/user/password/:id', controllersUser.UpdatePassword)
+router.delete('/user/:id', controllersUser.Delete)
 
 
 module.exports = router

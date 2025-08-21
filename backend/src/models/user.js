@@ -1,7 +1,6 @@
-const { get } = require("../../../../demo-crud/backend/src/routers/user");
 const { getDB } = require("../config/db");
 
-class moduleUser {
+class modelsUser {
     static async create(data) {
         try {
             const conn = await getDB()
@@ -31,6 +30,17 @@ class moduleUser {
             return results
         } catch (error) {
             console.log("Message Error:", error)
+            throw error
+        }
+    }
+
+    static async getEmail(email){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('SELECT email, password FROM users WHERE email = ? LIMIT 1', [email])
+            return results
+        }catch(error){
+            console.log(error)
             throw error
         }
     }
@@ -80,4 +90,4 @@ class moduleUser {
     }
 }
 
-module.exports = moduleUser
+module.exports = modelsUser

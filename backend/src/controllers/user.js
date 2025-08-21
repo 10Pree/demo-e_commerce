@@ -1,8 +1,7 @@
-const e = require("express");
-const userModels = require("../models/user");
+const modelsUser = require("../models/user");
 const { hashPassword } = require("../services/password-service");
 
-class controllerUser {
+class controllersUser {
   static async Create(req, res) {
     try {
       const { username, password, email, phone, address } = req.body;
@@ -15,7 +14,7 @@ class controllerUser {
         address,
       };
 
-      await userModels.create(userDate);
+      await modelsUser.create(userDate);
 
       console.log("Create User Successful!!");
       return res.status(201).json({
@@ -31,7 +30,7 @@ class controllerUser {
 
   static async Reads(req, res) {
     try {
-      const userData = await userModels.reads();
+      const userData = await modelsUser.reads();
       return res.status(200).json({
         message: "Reads User Successful!!",
         data: userData,
@@ -52,7 +51,7 @@ class controllerUser {
           message: "User Not found",
         });
       }
-      const userData = await userModels.read(userId);
+      const userData = await modelsUser.read(userId);
       if (userData.length === 0) {
         return res.status(404).json({
           message: "User Not found",
@@ -74,7 +73,7 @@ class controllerUser {
   static async Update(req, res) {
     try {
       const userId = req.params.id;
-      const checkUserId = await userModels.read(userId);
+      const checkUserId = await modelsUser.read(userId);
       if (checkUserId.length === 0) {
         return res.status(404).json({
           message: "User Not Found",
@@ -95,7 +94,7 @@ class controllerUser {
       if (address) {
         userData.address;
       }
-      const newData = await userModels.update(userId, userData);
+      const newData = await modelsUser.update(userId, userData);
       return res.status(200).json({
         message: "Update Successful!!",
         data: newData,
@@ -111,7 +110,7 @@ class controllerUser {
   static async UpdatePassword(req, res) {
     try {
       const userId = req.params.id;
-      const rows = await userModels.getPassword(userId);
+      const rows = await modelsUser.getPassword(userId);
       if (rows.length === 0) {
         return res.status(404).json({
           message: "User Not Found",
@@ -123,7 +122,7 @@ class controllerUser {
       const newPassword = req.body.password || {};
 
       const newHash = await hashPassword(newPassword);
-      const results = await userModels.updatePassword(userId, newHash);
+      const results = await modelsUser.updatePassword(userId, newHash);
 
       return res.status(201).json({
         message: "Update Password Successful!!",
@@ -139,14 +138,14 @@ class controllerUser {
   static async Delete(req, res) {
     try {
         const userId = req.params.id
-        const rows = await userModels.read(userId)
+        const rows = await modelsUser.read(userId)
         if(rows.length === 0){
             return res.status(404).json({
                 message: "User Not Found"
             })
         }
 
-        await userModels.delete(userId)
+        await modelsUser.delete(userId)
 
         return res.status(200).json({
             message: "Delete Successful!!"
@@ -158,6 +157,8 @@ class controllerUser {
       });
     }
   }
+
+
 }
 
-module.exports = controllerUser;
+module.exports = controllersUser;
