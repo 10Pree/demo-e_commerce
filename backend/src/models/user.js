@@ -37,7 +37,7 @@ class modelsUser {
     static async getEmail(email){
         try{
             const conn = await getDB()
-            const [results] = await conn.query('SELECT email, password FROM users WHERE email = ? LIMIT 1', [email])
+            const [results] = await conn.query('SELECT id, email, password FROM users WHERE email = ? LIMIT 1', [email])
             return results
         }catch(error){
             console.log(error)
