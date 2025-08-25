@@ -1,12 +1,49 @@
 const { getDB } = require("../config/db");
+const { get } = require("../router/user");
 
 class modelsOAuth{
-    static async getPermission(permission){
+    static async getPermission(userId){
         try{
             const conn = await getDB()
-            const [results] = await conn.query('SELECT ')
+            const [results] = await conn.query(`
+                SELECT DISTINCT p.key 
+                FROM users u
+                JOIN map_roles mr ON mr.users_id = u.id
+                JOIN role_permissions rp ON rp.roles_id = mr.roles_id
+                JOIN permissions p ON p.id = rp.permissions_id
+                WHERE u.id = ?
+                `, userId)
         }catch(error){
-            console.log("Message Error:", error)
+            throw error
+        }
+    }
+
+    static async addRole(data){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('INSERT INTO roles SET ?', [data])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+
+    static async addPermission(data) {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('INSERT INTO permissions SET ?', [data])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+
+    static async addRole_permissions(data) {
+        try{
+            const conn = getDB()
+            const [results] = await conn.query('INSERT INTO role_permissions SET ?', [data])
+            return results
+        }catch(error){
             throw error
         }
     }

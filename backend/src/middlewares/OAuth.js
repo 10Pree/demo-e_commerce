@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const modelsUser = require('../models/user');
+const modelsOAuth = require('../models/auth');
 
 function Authorize(permission) {
     return async (req, res, next) => {
@@ -10,8 +12,20 @@ function Authorize(permission) {
                 })
             }
 
-            jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET)
+            const user = jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET)
 
+            const checkEmail = await modelsUser.getEmail(user.email)
+            if(!checkEmail){
+                return res.status(401).json({
+                    message: "Invalid Email "
+                })
+            }
+            // console.log(user)
+
+            const checkPermission = await modelsOAuth.getPermission(user.userId)
+            console.log(checkPermission)
+            // if(!checkEmail || checkEmail. )
+            
             return next()
         } catch (error) {
             console.log(error)

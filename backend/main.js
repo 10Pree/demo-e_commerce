@@ -3,6 +3,7 @@ const { connectDB } = require('./src/config/db')
 const cookieParser = require('cookie-parser');
 const user = require('./src/router/user')
 const login = require('./src/router/login')
+const auth = require('./src/router/Auth')
 const app = express()
 const port = 8000
 
@@ -11,6 +12,7 @@ app.use(cookieParser())
 
 app.use('/', user)
 app.use('/', login )
+app.use('/', auth)
 
 
 const startServer = async() =>{

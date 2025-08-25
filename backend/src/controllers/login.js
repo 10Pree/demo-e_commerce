@@ -4,7 +4,7 @@ const modelsUser = require("../models/user")
 const { verifyPassword } = require("../services/password-service")
 const jwt = require('jsonwebtoken');
 
-class controllersAuth {
+class controllersLogin {
     static async Login(req, res) {
         try {
             const { email, password } = req.body
@@ -53,4 +53,4 @@ class controllersAuth {
     }
 }
 
-module.exports = controllersAuth
+module.exports = controllersLogin
