@@ -10,8 +10,8 @@ class controllersOAuth {
                 })
             }
             const role = await modelsOAuth.addRole(roleName)
-            if(!role){
-                return res.status(401),json({
+            if (!role) {
+                return res.status(401), json({
                     message: "Server Error"
                 })
             }
@@ -63,13 +63,36 @@ class controllersOAuth {
 
             await modelsOAuth.addRole_permissions(data)
 
-                        return res.status(200).json({
-                message: "Add Map Role and Permission Successful!!"
+            return res.status(200).json({
+                message: "Add Role and Permission Successful!!"
             })
         } catch (error) {
             console.log("Message Error:", error)
             return res.status(500).json({
                 message: "Server Error"
+            })
+        }
+    }
+
+    static async MapRole(req, res) {
+        try {
+            const { users_id, roles_id } = req.body
+            if (!users_id || !roles_id) {
+                return res.status(401).json({
+                    message: "Not UserID and Role"
+                })
+            }
+            const data = { users_id, roles_id }
+
+            const map = await modelsOAuth.mapRoleUser(data)
+
+            return res.status(200).json({
+                message: "Map User and Role Successful!!"
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                message: "Server"
             })
         }
     }

@@ -13,6 +13,7 @@ class modelsOAuth{
                 JOIN permissions p ON p.id = rp.permissions_id
                 WHERE u.id = ?
                 `, userId)
+                return results
         }catch(error){
             throw error
         }
@@ -45,6 +46,16 @@ class modelsOAuth{
             return results
         }catch(error){
             throw error
+        }
+    }
+
+    static async mapRoleUser(data) {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('INSERT INTO map_roles SET ?', [data])
+            return results
+        }catch(error){
+            throw Error
         }
     }
 }
