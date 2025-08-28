@@ -22,13 +22,15 @@ function Authorize(permission) {
             }
             console.log(user.userId)
 
-            const checkPermission = await modelsOAuth.getPermission(user.userId)
-            console.log(checkPermission.length.key.value)
-            if(!checkPermission || checkPermission.length.key.value !== permission ){
-                res.status(401).json({
-                    message: "No access rights"
-                })
-            }
+            const Permission = await modelsOAuth.getPermission(user.userId)
+            console.log(Permission.length.key.value)
+
+            
+            // if(!checkPermission || checkPermission.length.key.value !== permission ){
+            //     res.status(401).json({
+            //         message: "No access rights"
+            //     })
+            // }
             
             return next()
         } catch (error) {
