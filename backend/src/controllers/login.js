@@ -2,7 +2,7 @@ require("dotenv").config();
 const modelsAuth = require("../models/auth")
 const modelsUser = require("../models/user")
 const { verifyPassword } = require("../services/password-service")
-const jwt = require('jsonwebtoken');
+const { createAccessToken, createRefreshToken } = require('../services/token-service')
 
 class controllersLogin {
     static async Login(req, res) {
@@ -30,14 +30,14 @@ class controllersLogin {
             const userId = user[0].id
             // console.log(userId, user)
             
-            const refresh_token = await jwt.sign({ userId , email  }, process.env.REFRESH_TOKEN_SECRET, { algorithm: 'HS256' })
-            const access_token = await jwt.sign({ userId , email  }, process.env.ACCESS_TOKEN_SECRET, { algorithm: 'HS256' })
+            const refresh_token = await createRefreshToken(userId, email)
+            const access_token = await createAccessToken(userId, email)
 
             res.cookie('refresh_token', refresh_token, {
-                mexAge: 3600000
+                mexAge: 3600000, httpOnly: true, sameSite: 'lax', secure: true
             })
             res.cookie('access_token', access_token, {
-                mexAge: 60
+                maxAge: 60 * 1000, httpOnly: true, sameSite: 'lax', secure: true
             })
 
             return res.status(200).json({

@@ -1,50 +1,78 @@
 const jwt = require('jsonwebtoken');
 const modelsUser = require('../models/user');
 const modelsOAuth = require('../models/auth');
+const { createAccessToken } = require('../services/token-service')
 
 function Authorize(permission) {
     return async (req, res, next) => {
         try {
-            const token = req.cookies.access_token
-            if(!token){
+
+            const access_token = req.cookies.access_token
+            const refresh_token = req.cookies.refresh_token
+            if (!access_token || !refresh_token) {
                 return res.status(401).json({
                     message: "No Token"
                 })
             }
 
-            const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+            let playLoad;
+            try {
+                playLoad = jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET)
+                console.log(playLoad)
+            } catch (error) {
+                if (error.name === "TokenExpiredError") {
+                    // await newAccessToken(playLoad)
+                    return res.status(401).json({
+                        message: "Token expired"
+                    })
+                } else {
+                    return res.status(401).json({
+                        message: "Invalid token"
+                    })
+                }
+            }
 
-            const checkEmail = await modelsUser.getEmail(user.email)
-            if(!checkEmail){
+            const checkEmail = await modelsUser.getEmail(playLoad.email)
+            if (!checkEmail) {
                 return res.status(401).json({
                     message: "Invalid Email "
                 })
             }
-            console.log(user.userId)
+            // console.log(user.userId)
 
-            const Permission = await modelsOAuth.getPermission(user.userId)
-            console.log(Permission.length.key.value)
+            const data = await modelsOAuth.getPermission(playLoad.userId)
 
-            
-            // if(!checkPermission || checkPermission.length.key.value !== permission ){
-            //     res.status(401).json({
-            //         message: "No access rights"
-            //     })
-            // }
-            
-            return next()
-        } catch (error) {
-            console.log(error)
-            if (error.name === "TokenExpiredError") {
-                return res.status(401).json({
-                    message: "Token expired"
-                })
+            // console.log(data)
+
+            const perms = new Set(data.map(row => row.key));
+
+            // console.log(perms)
+            // console.log(permission)
+            // console.log(perms.has(permission))
+
+            if (perms.has(permission)) {
+                return next()
             } else {
-                return res.status(401).json({
-                    message: "Invalid token"
+                return res.status(403).json({
+                    message: "No access rights"
                 })
             }
+
+        } catch (error) {
+            console.log(error)
+            return res.status(401).json({
+                message: "Server Error"
+            })
         }
+    }
+}
+
+function newAccessToken(playLoad) {
+    try{
+        const data = playLoad
+        // const newToken = await createAccessToken(data.userId, data.email)
+    }catch(error){
+        console.log("Server Error", error)
     }
 }
 
