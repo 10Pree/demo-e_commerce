@@ -1,4 +1,3 @@
-require("dotenv").config();
 const modelsAuth = require("../models/auth")
 const modelsUser = require("../models/user")
 const { verifyPassword } = require("../services/password-service")

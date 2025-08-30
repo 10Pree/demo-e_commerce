@@ -5,7 +5,7 @@ const user = require('./src/router/user')
 const login = require('./src/router/login')
 const auth = require('./src/router/Auth')
 const app = express()
-const port = 8000
+const port = process.env.POST
 
 app.use(express.json());
 app.use(cookieParser())

@@ -1,5 +1,4 @@
 const { getDB } = require("../config/db");
-const { get } = require("../router/user");
 
 class modelsOAuth{
     static async getPermission(userId){

@@ -1,6 +1,6 @@
 const express = require('express')
 const controllersUser = require('../controllers/user')
-const Authorize = require('../middlewares/OAuth')
+const Authorize = require('../middlewares/oAuth')
 const router = express.Router()
 
 router.use(express.json())
