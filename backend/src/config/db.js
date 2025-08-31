@@ -15,6 +15,7 @@ const connectDB = async () => {
   try{
   await pool.query('SELECT 1')
   conn = pool
+  
   }catch(error){
     await pool.end().catch(()=>{})
     console.log("DB Not Connect");

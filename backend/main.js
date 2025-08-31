@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const user = require('./src/router/user')
 const login = require('./src/router/login')
 const auth = require('./src/router/Auth')
+const product = require('./src/router/product')
 const app = express()
 const port = process.env.POST
 
@@ -13,7 +14,7 @@ app.use(cookieParser())
 app.use('/', user)
 app.use('/', login )
 app.use('/', auth)
-
+app.use('/', product)
 
 const startServer = async() =>{
      await connectDB()
