@@ -29,6 +29,16 @@ class moduleOrders {
             throw error
         }
     }
+
+    static async updataOrderItme(orderId, line_total){
+        try{
+            const conn = await getDB()
+            const [resulte] = await conn.query('UPDATE orders SET total = ? WHERE id = ?', [line_total, orderId])
+            return resulte
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = moduleOrders

@@ -32,14 +32,14 @@ class controllerOrders {
 
     static async createOrderItem(req, res) {
         try {
-            const { orders_id, products_id, qty} = req.body
-            if(!orders_id && !products_id){
+            const { orders_id, products_id, qty } = req.body
+            if (!orders_id && !products_id) {
                 res.status(400).json({
                     message: "Not ProductId and OrderId"
                 })
             }
             const product = await moduleOrders.productItem(products_id)
-            console.log(product)
+            // console.log(product)
             const price = product[0].p_price
 
             const line_total = price * qty
@@ -51,9 +51,13 @@ class controllerOrders {
                 qty,
                 line_total
             }
-            console.log(data)
+            // console.log(data)
 
             await moduleOrders.createOrderItem(data)
+
+            await moduleOrders.updataOrderItme(orders_id, data.line_total)
+
+
 
             res.status(200).json({
                 message: "Create OrderItem  Successful!!"
