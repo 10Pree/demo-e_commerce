@@ -30,14 +30,15 @@ class moduleOrders {
         }
     }
 
-    static async updataOrderItme(orderId, line_total){
+    static async updateOrder(orderId){
         try{
             const conn = await getDB()
-            const [resulte] = await conn.query('UPDATE orders SET total = ? WHERE id = ?', [line_total, orderId])
+            const [resulte] = await conn.query('UPDATE orders SET total = ( SELECT COALESCE(SUM(line_total)) FROM order_items WHERE orders_id = ? ) WHERE id = ?', [orderId, orderId])
             return resulte
         }catch(error){
             throw error
         }
+        // COALESCE กันค่า NULL
     }
 }
 

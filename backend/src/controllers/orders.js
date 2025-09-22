@@ -55,7 +55,7 @@ class controllerOrders {
 
             await moduleOrders.createOrderItem(data)
 
-            await moduleOrders.updataOrderItme(orders_id, data.line_total)
+            await moduleOrders.updateOrder(orders_id)
 
 
 
