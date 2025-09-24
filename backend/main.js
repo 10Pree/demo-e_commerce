@@ -6,6 +6,7 @@ const login = require('./src/router/login')
 const auth = require('./src/router/Auth')
 const product = require('./src/router/product')
 const orders = require('./src/router/orders')
+const payments = require('./src/router/payments')
 const app = express()
 const port = process.env.POST
 
@@ -17,6 +18,7 @@ app.use('/', login )
 app.use('/', auth)
 app.use('/', product)
 app.use('/', orders)
+app.use('/', payments)
 
 const startServer = async() =>{
      await connectDB()

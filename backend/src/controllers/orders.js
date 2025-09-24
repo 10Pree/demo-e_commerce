@@ -1,5 +1,5 @@
+
 const moduleOrders = require("../models/orders")
-const moduleProduct = require("../models/product")
 
 class controllerOrders {
     static async createOrder(req, res) {
@@ -34,7 +34,7 @@ class controllerOrders {
         try {
             const { orders_id, products_id, qty } = req.body
             if (!orders_id && !products_id) {
-                res.status(400).json({
+                res.status(404).json({
                     message: "Not ProductId and OrderId"
                 })
             }

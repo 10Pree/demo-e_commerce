@@ -40,6 +40,16 @@ class moduleOrders {
         }
         // COALESCE กันค่า NULL
     }
+
+        static async orderItmeByID(orderId){
+            try{
+                const conn = await getDB()
+                const [resulte] = await conn.query('SELECT total FROM orders WHERE id = ?',orderId)
+                return resulte
+            }catch(error){
+                throw error
+            }
+        }
 }
 
 module.exports = moduleOrders
