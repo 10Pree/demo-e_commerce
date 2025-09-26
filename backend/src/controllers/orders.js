@@ -19,12 +19,12 @@ class controllerOrders {
 
             await moduleOrders.createOrder(data)
 
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Create Order Successful!!"
             })
         } catch (error) {
             console.log("Message Error:", error)
-            res.status(500).json({
+            return res.status(500).json({
                 message: "Server Error"
             })
         }
@@ -34,7 +34,7 @@ class controllerOrders {
         try {
             const { orders_id, products_id, qty } = req.body
             if (!orders_id && !products_id) {
-                res.status(404).json({
+                return res.status(400).json({
                     message: "Not ProductId and OrderId"
                 })
             }
@@ -59,13 +59,13 @@ class controllerOrders {
 
 
 
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Create OrderItem  Successful!!"
             })
 
         } catch (error) {
             console.log("Message Error:", error)
-            res.status(500).json({
+           return res.status(500).json({
                 message: "Server Error"
             })
         }
