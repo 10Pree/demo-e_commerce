@@ -141,10 +141,6 @@ class controllerProduct {
             });
         }
     }
-
-    static async productItme(){
-        
-    }
 }
 
 module.exports = controllerProduct;
