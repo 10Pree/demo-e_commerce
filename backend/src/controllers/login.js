@@ -1,5 +1,6 @@
 const modelsAuth = require("../models/auth")
 const modelsUser = require("../models/user")
+const CreateLogAction = require("../services/logAction")
 const { verifyPassword } = require("../services/password-service")
 const { createAccessToken, createRefreshToken } = require('../services/token-service')
 
@@ -39,6 +40,7 @@ class controllersLogin {
                 maxAge: 60 * 1000, httpOnly: true, sameSite: 'lax', secure: true
             })
 
+            // await CreateLogAction(userId,"login")
             return res.status(200).json({
                 message: "Login Successful!!"
             })

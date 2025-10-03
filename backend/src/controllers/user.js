@@ -1,4 +1,5 @@
 const modelsUser = require("../models/user");
+const CreateLogAction = require("../services/logAction");
 const { hashPassword } = require("../services/password-service");
 
 class controllersUser {
@@ -31,6 +32,8 @@ class controllersUser {
   static async Reads(req, res) {
     try {
       const userData = await modelsUser.reads();
+      const token = req.cookies.access_token
+      await CreateLogAction(token, "Reads")
       return res.status(200).json({
         message: "Reads User Successful!!",
         data: userData,
@@ -72,7 +75,6 @@ class controllersUser {
 
   static async Update(req, res) {
     try {
-      const userId = req.params.id;
       const checkUserId = await modelsUser.read(userId);
       if (checkUserId.length === 0) {
         return res.status(404).json({

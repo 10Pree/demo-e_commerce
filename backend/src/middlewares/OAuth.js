@@ -15,13 +15,13 @@ function Authorize(permission) {
                 })
             }
 
-            let playLoad;
+            let payload;
             try {
-                playLoad = jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET)
-                console.log(playLoad)
+                payload = jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET)
+                // console.log(payload)
             } catch (error) {
                 if (error.name === "TokenExpiredError") {
-                    // await newAccessToken(playLoad)
+                    // await newAccessToken(payload)
                     return res.status(401).json({
                         message: "Token expired"
                     })
@@ -32,7 +32,7 @@ function Authorize(permission) {
                 }
             }
 
-            const checkEmail = await modelsUser.getEmail(playLoad.email)
+            const checkEmail = await modelsUser.getEmail(payload.email)
             if (!checkEmail) {
                 return res.status(401).json({
                     message: "Invalid Email "
@@ -40,7 +40,7 @@ function Authorize(permission) {
             }
             // console.log(user.userId)
 
-            const data = await modelsOAuth.getPermission(playLoad.userId)
+            const data = await modelsOAuth.getPermission(payload.userId)
 
             // console.log(data)
 
@@ -67,9 +67,9 @@ function Authorize(permission) {
     }
 }
 
-function newAccessToken(playLoad) {
+function newAccessToken(payload) {
     try{
-        const data = playLoad
+        const data = payload
         // const newToken = await createAccessToken(data.userId, data.email)
     }catch(error){
         console.log("Server Error", error)

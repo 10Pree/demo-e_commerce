@@ -87,6 +87,7 @@ class controllerProduct {
 
     static async Update(req, res) {
         try {
+            // const userId = 
             const productId = req.params.id
             const { p_code, p_name, p_price, p_details, p_stock, p_image_url } = req.body
             const newData = {}

@@ -26,7 +26,7 @@ class modelsUser {
     static async read(userId) {
         try {
             const conn = await getDB()
-            const [results] = await conn.query('SELECT username, email, phone, address FROM users WHERE id = ?', userId)
+            const [results] = await conn.query('SELECT id, username, email, phone, address FROM users WHERE id = ?', userId)
             return results
         } catch (error) {
             console.log("Message Error:", error)
