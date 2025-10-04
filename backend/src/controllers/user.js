@@ -16,8 +16,8 @@ class controllersUser {
       };
 
       await modelsUser.create(userDate);
-
-      console.log("Create User Successful!!");
+            const token = req.cookies.access_token
+      await CreateLogAction(token, "Create.User")
       return res.status(201).json({
         message: "Create User Successful!!",
       });
@@ -32,8 +32,6 @@ class controllersUser {
   static async Reads(req, res) {
     try {
       const userData = await modelsUser.reads();
-      const token = req.cookies.access_token
-      await CreateLogAction(token, "Reads")
       return res.status(200).json({
         message: "Reads User Successful!!",
         data: userData,
@@ -146,9 +144,9 @@ class controllersUser {
                 message: "User Not Found"
             })
         }
-
-        await modelsUser.delete(userId)
-
+      await modelsUser.delete(userId)
+      const token = req.cookies.access_token
+      await CreateLogAction(token, "Delete.User")
         return res.status(200).json({
             message: "Delete Successful!!"
         })

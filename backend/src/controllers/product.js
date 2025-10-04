@@ -1,12 +1,18 @@
 const moduleProduct = require("../models/product");
+const genProductCode = require("../services/genProductCode");
+const { CreateLogProducts } = require("../services/logAction");
 
 class controllerProduct {
     static async Create(req, res) {
         try {
-            const { p_code, p_name, p_price, p_details, p_stock, p_image_url } =
-                req.body;
+            const { p_name, p_price, p_details, p_stock, p_image_url } = req.body;
             const data = {};
-            if (p_code) data.p_code = p_code;
+                for (let i = 0; i < 3; i++) { // ลองสุ่มใหม่สูงสุด 3 ครั้ง เผื่อ unique ชน
+                    const code = genProductCode('PRD', 6);
+                    const dup = await moduleProduct.readCode(code);
+                    if (dup.length === 0) { data.p_code = code; break; }
+                }
+                if (!data.p_code) return res.status(409).json({ message: 'สร้างรหัสไม่สำเร็จ ลองใหม่อีกครั้ง' });
             if (p_name) data.p_name = p_name;
             if (p_price) data.p_price = p_price;
             if (p_details) data.p_details = p_details;
@@ -14,7 +20,9 @@ class controllerProduct {
             if (p_image_url) data.p_image_url = p_image_url;
 
             await moduleProduct.create(data);
+            const token = req.cookies.access_token
 
+            await CreateLogProducts(data.p_code, token, "Create.Product")
             res.status(200).json({
                 message: "Create Product Successful!!",
             });
@@ -106,7 +114,8 @@ class controllerProduct {
             }
 
             const product = await moduleProduct.update(productId, newData)
-
+            const token = req.cookies.access_token
+            await CreateLogProducts(token, "Update.Product")
             return res.status(200).json({
                 message: "Update Product Successful!!",
                 data: product
@@ -130,6 +139,8 @@ class controllerProduct {
                 })
             }
             const product = await moduleProduct.delete(productId)
+            const token = req.cookies.access_token
+            await CreateLogProducts(token, "Delete.Product")
             return res.status(200).json({
                 message: "Delete Product Successful!!",
                 data: product
