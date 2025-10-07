@@ -4,11 +4,14 @@ const modelsUser = require("../models/user")
 const jwt = require('jsonwebtoken');
 
 
-const CreateLogAction = async (token, text) => {
+const CreateLogAction = async (id, token, text) => {
     try {
-        if (!token || !text) {
-            throw new Error("token and text is required");
-        }
+        if (!id) throw new Error("id is required");
+        if (!token) throw new Error("token is required");
+        if (!text) throw new Error("text is required");
+        if (!process.env.ACCESS_TOKEN_SECRET) throw new Error("ACCESS_TOKEN_SECRET is not set");
+
+        const textAction = String(text).slice(0, 1000).trim()
         // console.log(token)
         let payload;
         try {
@@ -16,28 +19,29 @@ const CreateLogAction = async (token, text) => {
         } catch (error) {
             if (error.name === "TokenExpiredError") {
                 // await newAccessToken(playLoad)
-                  throw new Error("Token expired")
+                throw new Error("Token expired")
             } else {
-                     throw new Error("Invalid token")
+                throw new Error("Invalid token")
             }
         }
-        const userId = payload.userId
-        // console.log(token)
-        const data = {}
+        const userId = id
+        const userAction = payload.userId
         const user = await modelsUser.read(userId)
-        if (user.length === 0) {
+        const action = await modelsUser.read(userAction)
+        if (user.length === 0 || action.length === 0 ) {
             throw new Error("User Not Found")
         }
-        // console.log(user)
-        if (userId) {
-            data.users_id = user[0].id
-            data.name = user[0].username
+        const data = {
+            users_id: action[0].id,
+            name: user[0].username,
+            text: textAction
         }
-        if (text) {
-            data.text = text
+        try {
+            const log = await modelsLog.createLogAction(data)
+            return log
+        } catch (error) {
+            throw error
         }
-        const log = await modelsLog.createLogAction(data)
-        return log
     } catch (error) {
         throw error
     }
@@ -45,15 +49,10 @@ const CreateLogAction = async (token, text) => {
 
 const CreateLogProducts = async (productCode, token, text) => {
     try {
-        // console.log(productCode, token, text)
-        if (!productCode || !text || !token) {
-            throw new Error("productCode and text and Token is required");
-        }
-        const data = {}
-        const product = await moduleProduct.readCode(productCode)
-        if (product.length === 0) {
-            throw new Error("Product Not Found")
-        }
+        if (!process.env.ACCESS_TOKEN_SECRET) throw new Error("ACCESS_TOKEN_SECRET is not set");
+        if (!productCode) throw new Error("productCode is required");
+        if(!text) throw new Error("text is required")
+        if(!token) throw new Error("token is required")
 
         let payload;
         try {
@@ -61,25 +60,34 @@ const CreateLogProducts = async (productCode, token, text) => {
         } catch (error) {
             if (error.name === "TokenExpiredError") {
                 // await newAccessToken(playLoad)
-                  throw new Error("Token expired")
+                throw new Error("Token expired")
             } else {
-                     throw new Error("Invalid token")
+                throw new Error("Invalid token")
             }
         }
-        if(product[0].p_code){
-            data.products_id = product[0].id
+
+        const textAction = String(text).slice(0, 1000).trim()
+        const product = await moduleProduct.readCode(productCode)
+        if (product.length === 0) {
+            throw new Error("Product Not Found")
         }
-        data.users_id = payload.userId
-        if(product[0].p_name){
-            data.name = product[0].p_name
+
+        const data = {
+            products_id: product[0].id,
+            users_id: payload.userId,
+            name: product[0].p_name,
+            text: textAction
         }
-        data.text = text
-        const log = await modelsLog.createLogProduct(data)
-        return log
+        try {
+            const log = await modelsLog.createLogAction(data)
+            return log
+        } catch (error) {
+            throw error
+        }
     } catch (error) {
         throw error
     }
 }
 
 
-module.exports = { CreateLogAction, CreateLogProducts}
+module.exports = { CreateLogAction, CreateLogProducts }

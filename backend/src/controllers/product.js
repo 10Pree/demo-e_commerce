@@ -21,7 +21,6 @@ class controllerProduct {
 
             await moduleProduct.create(data);
             const token = req.cookies.access_token
-
             await CreateLogProducts(data.p_code, token, "Create.Product")
             res.status(200).json({
                 message: "Create Product Successful!!",
@@ -97,9 +96,8 @@ class controllerProduct {
         try {
             // const userId = 
             const productId = req.params.id
-            const { p_code, p_name, p_price, p_details, p_stock, p_image_url } = req.body
+            const { p_name, p_price, p_details, p_stock, p_image_url } = req.body
             const newData = {}
-            if (p_code) newData.p_code = p_code
             if (p_name) newData.p_name = p_name
             if (p_price) newData.p_price = p_price
             if (p_details) newData.p_details = p_details
@@ -112,10 +110,10 @@ class controllerProduct {
                     message: "Product Not Found"
                 })
             }
-
             const product = await moduleProduct.update(productId, newData)
             const token = req.cookies.access_token
-            await CreateLogProducts(token, "Update.Product")
+            const productCode = checkProduct[0].p_code
+            await CreateLogProducts(productCode, token, "Update.Product")
             return res.status(200).json({
                 message: "Update Product Successful!!",
                 data: product
@@ -140,7 +138,8 @@ class controllerProduct {
             }
             const product = await moduleProduct.delete(productId)
             const token = req.cookies.access_token
-            await CreateLogProducts(token, "Delete.Product")
+            const productCode = checkProduct[0].p_code
+            await CreateLogProducts(productCode, token, "Update.Product")
             return res.status(200).json({
                 message: "Delete Product Successful!!",
                 data: product
