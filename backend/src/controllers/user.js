@@ -142,7 +142,7 @@ class controllersUser {
       const userID = user[0].id
       const token = req.cookies.access_token 
 
-      await CreateLogAction(userID, token, "UpdatePassword.User")
+      await CreateLogAction(userID, token, "Update.User")
       return res.status(201).json({
         message: "Update Password Successful!!",
       });
@@ -163,10 +163,12 @@ class controllersUser {
           message: "User Not Found"
         })
       }
-      const user = await modelsUser.delete(userId)
-      const userID = user[0].id
+      
+      const userID = rows[0].id
       const token = req.cookies.access_token
       await CreateLogAction(userID, token, "Delete.User")
+
+      await modelsUser.delete(userId)
       return res.status(200).json({
         message: "Delete Successful!!"
       })
