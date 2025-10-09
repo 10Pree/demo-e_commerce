@@ -26,15 +26,21 @@ const CreateLogAction = async (id, token, text) => {
         }
         const userId = id
         const userAction = payload.userId
+
         const user = await modelsUser.read(userId)
         const action = await modelsUser.read(userAction)
         if (user.length === 0 || action.length === 0 ) {
             throw new Error("User Not Found")
         }
+
+        const userID_Action = action[0].id
+        const userName_Action = action[0].username
+        const username = user[0].username
+
         const data = {
-            users_id: action[0].id,
-            name: user[0].username,
-            text: textAction
+            users_id: userID_Action,
+            name: userName_Action,
+            text: textAction+`.${username}`
         }
         try {
             const log = await modelsLog.createLogAction(data)
@@ -66,20 +72,28 @@ const CreateLogProducts = async (productCode, token, text) => {
             }
         }
 
+        const userId = payload.userId
         const textAction = String(text).slice(0, 1000).trim()
+
+        const user = await modelsUser.read(userId)
         const product = await moduleProduct.readCode(productCode)
-        if (product.length === 0) {
-            throw new Error("Product Not Found")
+        if (product.length === 0 || user.length === 0) {
+            throw new Error("Product and User Not Found")
         }
 
+        const userID = user[0].id
+        const userName = user[0].username
+        const productId = product[0].id
+        const productName = product[0].p_name
+
         const data = {
-            products_id: product[0].id,
-            users_id: payload.userId,
-            name: product[0].p_name,
-            text: textAction
+            products_id: productId,
+            users_id: userID,
+            name: userName,
+            text: textAction+`.${productName}`
         }
         try {
-            const log = await modelsLog.createLogAction(data)
+            const log = await modelsLog.createLogProduct(data)
             return log
         } catch (error) {
             throw error

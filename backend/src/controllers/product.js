@@ -136,10 +136,11 @@ class controllerProduct {
                     message: "Product Not Found"
                 })
             }
-            const product = await moduleProduct.delete(productId)
             const token = req.cookies.access_token
             const productCode = checkProduct[0].p_code
-            await CreateLogProducts(productCode, token, "Update.Product")
+            await CreateLogProducts(productCode, token, "Delete.Product")
+
+            const product = await moduleProduct.delete(productId)
             return res.status(200).json({
                 message: "Delete Product Successful!!",
                 data: product
