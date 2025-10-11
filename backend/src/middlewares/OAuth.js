@@ -16,10 +16,6 @@ function Authorize(permission) {
             }
 
             let payload;
-
-            if(refresh_token){
-                const token = await 
-            }
             if (access_token) {
                 try {
                     payload = jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET)
@@ -27,6 +23,17 @@ function Authorize(permission) {
                     if (error.name !== 'TokenExpiredError') {
                         return res.status(401).json({ message: 'Invalid token' });
                     }
+                }
+            }
+
+            let refreshPayload
+            if(refresh_token){
+                try{
+                    refreshPayload = jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET)
+                }catch(error){
+                    res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                    res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                    return res.status(401).json({ message: 'Refresh token invalid' });
                 }
             }
 
