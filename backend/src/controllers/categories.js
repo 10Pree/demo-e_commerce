@@ -4,11 +4,10 @@ const moduleProduct = require("../models/product");
 class controllerCategories {
     static async Create(req, res) {
         try {
-            const { name } = req.body
+            const name  = req.body
             if (!name) return res.status(400).json({ message: "categorie Not Name" })
 
-            const data = { name: name }
-            const categorie = await modelsCategories.create(data)
+            const categorie = await modelsCategories.create(name)
 
             return res.status(200).json({
                 message: "Create categorie Successful!!",
