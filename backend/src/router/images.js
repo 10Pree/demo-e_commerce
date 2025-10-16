@@ -7,5 +7,6 @@ router.get('/images', controllerImages.getImages)
 router.get('/image/:id', controllerImages.getByID)
 router.put('/image/:id', controllerImages.Update)
 router.delete('/image/:id', controllerImages.Delete)
+router.post('/image/map', controllerImages.CreateMap)
 
 module.exports = router

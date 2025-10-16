@@ -91,6 +91,24 @@ class controllerImages {
             });
         }
     }
+
+      static async CreateMap(req, res) {
+    try {
+        const { products_id, images_id } = req.body
+        if(!products_id || !images_id) return res.status(400).json({ message: "Product and Image Not ID"})
+        
+        const data = { products_id: products_id, images_id: images_id}
+        const mapId = await modlesImages.createMap(data)
+        return res.status(200).json({
+            message: "Create Map ID Product and Image Successful!!"
+        })
+    } catch (error) {
+      console.log("Server Error:", error);
+      return res.status(500).json({
+        message: "Server Error",
+      });
+    }
+  }
 }
 
 module.exports = controllerImages;

@@ -50,6 +50,15 @@ class modlesImages {
             throw error
         }
     }
+    static async createMap(data){
+        try{
+            const conn = await getDB()
+            const [resulte] = await conn.query('INSERT INTO map_images SET ?', data)
+            return resulte
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = modlesImages
