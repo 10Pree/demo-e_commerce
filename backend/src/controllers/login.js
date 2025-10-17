@@ -1,4 +1,5 @@
 const modelsAuth = require("../models/auth")
+const modlesRefreshToken = require("../models/refresh_token")
 const modelsUser = require("../models/user")
 const CreateLogAction = require("../services/logAction")
 const { verifyPassword } = require("../services/password-service")
@@ -32,6 +33,10 @@ class controllersLogin {
             
             const refresh_token = await createRefreshToken(userId, email)
             const access_token = await createAccessToken(userId, email)
+
+            // add Token to DB
+            const data = {users_id:userId,token: refresh_token, status: 0}
+            const token = await modlesRefreshToken.create(data)
 
             res.cookie('refresh_token', refresh_token, {
                 mexAge: 3600000, httpOnly: true, sameSite: 'lax', secure: true
