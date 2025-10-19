@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const modelsUser = require('../models/user');
 const modelsOAuth = require('../models/auth');
-const { createAccessToken, createRefreshToken } = require('../services/token-service')
+const { createAccessToken, createRefreshToken } = require('../services/token-service');
+const modlesRefreshToken = require('../models/refresh_token');
 
 function Authorize(permission) {
     return async (req, res, next) => {
@@ -27,25 +28,40 @@ function Authorize(permission) {
             }
 
             let refreshPayload
-            if(refresh_token){
-                try{
+            if (refresh_token) {
+                try {
                     refreshPayload = jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET)
-                }catch(error){
+                } catch (error) {
                     res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
                     res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
                     return res.status(401).json({ message: 'Refresh token invalid' });
                 }
             }
 
+            // Check refresh_token to db
+            const CheckRefreshToken = await modlesRefreshToken.getToken(refresh_token)
+            // console.log(CheckRefreshToken[0].status)
+            if (!CheckRefreshToken || CheckRefreshToken.length === 0) {
+                res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                return res.status(401).json({
+                    message: "Refresh Token Not Found"
+                })
+            }
+
+            // ตรวจสอบว่า token ยัง active อยู่มั้ย
+            const row = CheckRefreshToken[0]
+            if (row.status === 1) {
+                res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                return res.status(401).json({
+                    message: "Please log in again."
+                })
+            }
+
             if (!payload) {
                 if (!refresh_token) {
                     return res.status(401).json({ message: 'Refresh token missing' });
-                }
-                let refreshPayload
-                try {
-                    refreshPayload = jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET)
-                } catch (error) {
-                    return res.status(401).json({ message: 'Refresh token invalid or expired' });
                 }
 
                 const user = await modelsUser.read(refreshPayload.userId)

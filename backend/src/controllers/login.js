@@ -34,12 +34,13 @@ class controllersLogin {
             const refresh_token = await createRefreshToken(userId, email)
             const access_token = await createAccessToken(userId, email)
 
-            // add Token to DB
+            await modlesRefreshToken.revokeAllByUserId(userId)
+
             const data = {users_id:userId,token: refresh_token, status: 0}
             const token = await modlesRefreshToken.create(data)
 
             res.cookie('refresh_token', refresh_token, {
-                mexAge: 3600000, httpOnly: true, sameSite: 'lax', secure: true
+                maxAge: 3600000, httpOnly: true, sameSite: 'lax', secure: true
             })
             res.cookie('access_token', access_token, {
                 maxAge: 60 * 1000, httpOnly: true, sameSite: 'lax', secure: true

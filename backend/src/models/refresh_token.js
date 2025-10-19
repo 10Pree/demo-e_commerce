@@ -1,6 +1,6 @@
 const { getDB } = require("../config/db")
 
-class modlesRefreshToken {
+class modelsRefreshToken {
     static async create(data){
         try{
             const conn = await getDB()
@@ -10,10 +10,19 @@ class modlesRefreshToken {
             throw error
         }
     }
-    static async getToken(){
+    static async getToken(token){
         try{
             const conn = await getDB()
-            const [results] = await conn.query('SELECT * FROM refresh_token')
+            const [results] = await conn.query('SELECT * FROM refresh_token WHERE token = ? and status = 0', token)
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+    static async revokeAllByUserId(id){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('UPDATE refresh_token SET status = 1 WHERE users_id = ?', [id])
             return results
         }catch(error){
             throw error
@@ -21,4 +30,4 @@ class modlesRefreshToken {
     }
 }
 
-module.exports = modlesRefreshToken
+module.exports = modelsRefreshToken
