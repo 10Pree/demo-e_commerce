@@ -38,31 +38,44 @@ function Authorize(permission) {
                 }
             }
 
-            // Check refresh_token to db
-            const CheckRefreshToken = await modlesRefreshToken.getToken(refresh_token)
-            // console.log(CheckRefreshToken[0].status)
-            if (!CheckRefreshToken || CheckRefreshToken.length === 0) {
-                res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
-                res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
-                return res.status(401).json({
-                    message: "Refresh Token Not Found"
-                })
-            }
-
-            // ตรวจสอบว่า token ยัง active อยู่มั้ย
-            const row = CheckRefreshToken[0]
-            if (row.status === 1) {
-                res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
-                res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
-                return res.status(401).json({
-                    message: "Please log in again."
-                })
-            }
 
             if (!payload) {
                 if (!refresh_token) {
+                    res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                    res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
                     return res.status(401).json({ message: 'Refresh token missing' });
                 }
+
+
+                // Check refresh_token to db
+                const CheckRefreshToken = await modlesRefreshToken.getToken(refresh_token)
+                // console.log(CheckRefreshToken[0].status)
+                if (!CheckRefreshToken || CheckRefreshToken.length === 0) {
+                    res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                    res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                    return res.status(401).json({
+                        message: "Refresh Token Not Found"
+                    })
+                }
+
+                const row = CheckRefreshToken[0]
+                // เช็ค ว่า Token เหมือนกันหรือป่าว
+                if (refresh_token !== row.token) {
+                    res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                    res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                    return res.status(401).json({
+                        message: "Token mismatch"
+                    })
+                }
+                // ตรวจสอบว่า token ยัง active อยู่มั้ย
+                if (row.status === 1) {
+                    res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                    res.clearCookie('access_token', { httpOnly: true, sameSite: 'lax', secure: false, path: '/' });
+                    return res.status(401).json({
+                        message: "Please log in again."
+                    })
+                }
+
 
                 const user = await modelsUser.read(refreshPayload.userId)
                 if (user.length === 0) {
