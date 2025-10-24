@@ -1,11 +1,13 @@
 import Image from "next/image";
+// import { useState } from "react";
 
-export default function Header() {
+export default function Header({ onToggleMenu }) {
+
   return (
     <div className="h-[67px]">
       <nav className="bg-[#1E3A8A] h-full w-full flex items-center justify-between px-5">
-        <div>
-          <Image src="/images/logo.png" alt="logo" width={75} height={75} />
+        <div className="w-8">
+          <Image onClick={onToggleMenu} className="block md:hidden cursor-pointer"  src="/icons/icons8-menu-50.svg" alt="logo" width={75} height={75} />
         </div>
         <div className="">
           <Image

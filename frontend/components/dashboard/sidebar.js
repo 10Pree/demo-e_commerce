@@ -1,16 +1,20 @@
 import Link from "next/link"
 import Image from "next/image"
 
-export default function SideBar() {
+export default function SideBar({ open }) {
     const menus = [
         { id: 1, href: '/', label: "หน้าหลัก" },
         { id: 2, href: '/', label: "Dashboard" },
         { id: 3, href: '/', label: "ผู้ใช้งาน" },
         { id: 4, href: '/', label: "Log" },
     ]
+
     return (
-        <div className="w-[283px] h-full">
+        <div className={`w-[283px] h-full md:block ${open ? "block": "hidden"}`}>
             <nav className="bg-[#1E3A8A] h-full">
+                        <div className="flex justify-center items-center">
+                          <Image src="/images/logo.png" alt="logo" width={75} height={75} />
+                        </div>
                 <div className=" flex flex-col gap-3 pl-10 pt-10">
                     {menus.map((m) => {
                         return (
