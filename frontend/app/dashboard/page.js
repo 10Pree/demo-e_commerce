@@ -1,21 +1,7 @@
-"use client";
-
-import Header from "@/components/dashboard/header";
-import SideBar from "@/components/dashboard/sidebar";
 import Image from "next/image";
-import { useState } from "react";
-export default function Page() {
-  const  [openSidebar, setOpenSidebar] = useState(false)
 
-  const handleToggle = () => {
-    setOpenSidebar(prev => !prev)
-    // console.log(openSidebar)
-  }
+export default function Page() {
   return (
-    <div className="w-screen h-screen flex">
-        <SideBar open={openSidebar} />
-      <div className="flex flex-col w-full h-full">
-      <Header onToggleMenu={handleToggle}/>
         <main className="w-full h-full flex justify-center items-center p-10">
           <div className="w-full h-full">
             <div className="flex gap-7 justify-center items-center flex-col  md:flex-row md:gap-14">
@@ -65,7 +51,5 @@ export default function Page() {
             </div>
           </div>
         </main>
-      </div>
-    </div>
   );
 }
