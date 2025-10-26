@@ -9,14 +9,13 @@ export default function DashboardLayout({ children }) {
 
   const handleToggle = () => {
     setOpenSidebar(prev => !prev)
-    // console.log(openSidebar)
   }
     return (
-        <div className=" w-screen h-screen flex overflow-hidden">
+        <div className="w-screen h-screen flex">
             <SideBar open={openSidebar}/>
-            <div className="flex flex-col flex-1 h-full ">
+            <div className="flex flex-col w-full h-full">
                 <Header onToggleMenu={handleToggle} />
-                <main className="flex-1  p-5 bg-gray-100">
+                <main className="flex-1 p-5 bg-amber-300 overflow-x-auto">
                     {children}
                 </main>
             </div>

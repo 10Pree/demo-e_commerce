@@ -10,7 +10,7 @@ export default function SideBar({ open }) {
     ]
 
     return (
-        <div className={`bg-[#1E3A8A] flex-shrink-0 w-[59%] md:w-[200px] h-full md:block ${open ? "block": "hidden"}`}>
+        <div className={`bg-[#1E3A8A] flex-shrink-0 w-[59%] md:w-[200px] h-full lg:block  ${open ? "block": "hidden"}`}>
             <nav className="w-full h-full">
                         <div className="flex justify-center items-center">
                           <Image src="/images/logo.png" alt="logo" width={75} height={75} />
