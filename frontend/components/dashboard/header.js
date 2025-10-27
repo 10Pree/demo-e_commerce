@@ -12,7 +12,7 @@ export default function Header({ onToggleMenu }) {
         <div className="">
           <Image
             className="mx-3 w-[35px] h-[36px]"
-              src="/images/icons8-user-profile-50.png"
+              src="/icons/icons8-user-profile-50.png"
               alt="icon-search"
               width={20}
               height={20}
