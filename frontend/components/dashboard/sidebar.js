@@ -3,10 +3,10 @@ import Image from "next/image"
 
 export default function SideBar({ open }) {
     const menus = [
-        { id: 1, href: '/', label: "หน้าหลัก" },
-        { id: 2, href: '/', label: "Dashboard" },
-        { id: 3, href: '/', label: "ผู้ใช้งาน" },
-        { id: 4, href: '/', label: "Log" },
+        { id: 1, href: '/dashboard/main', label: "หน้าหลัก" },
+        { id: 2, href: '/dashboard/overview', label: "Dashboard" },
+        { id: 3, href: '/dashboard/users', label: "ผู้ใช้งาน" },
+        { id: 4, href: '/dashboard/logs', label: "Log" },
     ]
 
     return (
