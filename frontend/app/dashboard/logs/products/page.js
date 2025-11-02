@@ -60,7 +60,7 @@ export default function Page() {
                         <tbody>
                             {currentItem.map((l) => (
                                 <tr key={l.id} className="bg-white border-b text-[#111827] border-gray-200 hover:bg-[#111827] hover:text-white ">
-                                    <th scope="row" className="px-3 py-4 font-medium hover:text-[#111827] whitespace-nowrap ">
+                                    <th scope="row" className="px-3 py-4 font-medium text-white hover:text-[#111827] whitespace-nowrap ">
                                         {l.id}
                                     </th>
                                     <td className="px-6 py-4">
