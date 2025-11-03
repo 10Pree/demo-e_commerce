@@ -21,15 +21,15 @@ export default function SideBar({ open }) {
                 </div>
                 <div className=" flex flex-col gap-3 pl-10 pt-10">
                     <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/main">หน้าหลัก</Link>
-                    <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/overview">Dashboard</Link>
+                    <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/products">สินค้า</Link>
                     <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/users">ผู้ใช้งาน</Link>
                     <div>
                         <button onClick={handleLog} className="text-white w-fit hover:text-[#2563EB] rounded-2xl text-start">Logs <span className="text-[13px]">{logOpen ? "▼" : "▲"}</span></button>
                         {
                             logOpen && (
                                 <div className="flex flex-col ml-3 mt-2 gap-2 animate-fadeIn">
-                                    <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/logs/users">Users</Link>
-                                    <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/logs/products">Products</Link>
+                                    <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/logs/users">ผู้ใช้งาน</Link>
+                                    <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/logs/products">สินค้า</Link>
                                 </div>
                             )
                         }
