@@ -85,10 +85,10 @@ export default function Page() {
           </button>
         </div>
         <h1 className="my-5 text-3xl font-bold">Dashboard</h1>
-        <div className="w-[100%] h-[80%] bg-white rounded-xl shadow p-4">
+        <div className="w-full overflow-x-scroll  md:overflow-auto h-[80%] bg-[#F3F4F6] rounded-xl shadow p-4">
           {showGraph === 1 ? <Graph1 data={revenueData} /> : <div className="text-center hidden">ไม่มีกราฟ</div>}
-          {showGraph === 2 ? <Graph2 data={orderData} /> : <div className="text-center hidden">ไม่มีกราฟ</div>}
-          {showGraph === 3 ? <Graph3 data={productData} /> : <div className="text-center hidden">ไม่มีกราฟ</div>}
+          {showGraph === 2 ? <div className="w-[1200px] md:w-full h-full"><Graph2 data={orderData} /></div> : <div className="text-center hidden">ไม่มีกราฟ</div>}
+          {showGraph === 3 ? <div className="w-[1200px] md:w-full h-full"><Graph3 data={productData} /></div> : <div className="text-center hidden">ไม่มีกราฟ</div>}
         </div>
       </div>
     </main>

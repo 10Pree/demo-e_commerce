@@ -88,7 +88,7 @@ export default function Page() {
                                         <span className="p-2 bg-green-400 rounded-2xl border-green-800">{u.role}</span>
                                     </td>
                                     <td className="py-4 text-center flex justify-center items-center gap-4">
-                                        <a href="#" className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</a>
+                                        <a href="/dashboard/users/edit" className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</a>
                                         <a href="#" className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</a>
                                     </td>
                                 </tr>

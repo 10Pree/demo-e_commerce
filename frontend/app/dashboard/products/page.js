@@ -39,8 +39,8 @@ export default function Page() {
     }
 
     return (
-        <div className="w-full h-full">
-            <h1 className="text-3xl font-bold my-4">Dashboard</h1>
+        <div>
+            <h1 className="text-3xl font-bold my-4">สินค้า</h1>
             <div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
