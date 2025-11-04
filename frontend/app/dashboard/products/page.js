@@ -79,19 +79,19 @@ export default function Page() {
                                         {p.p_stock}
                                     </td>
                                     <td className="py-4 text-center flex justify-center items-center gap-4">
-                                        <a href="#" className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</a>
+                                        <a href="/dashboard/products/edit" className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</a>
                                         <a href="#" className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</a>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                </div>
                     <div className="flex flex-row justify-center items-center gap-2 p-3">
                         <button onClick={handlePrev} disabled={currentPage === 1} className="px-3 py-2 mt-3 rounded-2xl bg-[#1E3A8A] text-white">กลับ</button>
                         <span className="text-[#111827] tracking-widest">{currentPage}...{totalPages}</span>
                         <button onClick={handleNext} disabled={currentPage === totalPages} className="px-3 py-2 mt-3 rounded-2xl bg-[#1E3A8A] text-white">ถัดไป</button>
                     </div>
-                </div>
 
             </div>
         </div>

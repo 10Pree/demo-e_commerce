@@ -15,7 +15,7 @@ export default function DashboardLayout({ children }) {
             <SideBar open={openSidebar}/>
             <div className="flex flex-col w-full h-full">
                 <Header onToggleMenu={handleToggle} />
-                <main className="flex-1 p-5 overflow-x-auto">
+                <main className="flex-1 p-5 overflow-x-auto bg-[#F3F4F6]">
                     {children}
                 </main>
             </div>

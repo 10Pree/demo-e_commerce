@@ -5,7 +5,7 @@ export default function Page() {
         <div>
             <h1 className="text-3xl font-bold my-4">แก้ไขผู้ใช้งาน</h1>
             <div className="w-full h-full flex-row justify-center items-center gap-4 md:flex md:w-full">
-                <div className="w-full h-1/2 bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 md:w-1/2">
+                <div className="w-full h-1/2 bg-white rounded-2xl shadow-2xl p-4 md:w-1/2">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
                         <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" />
