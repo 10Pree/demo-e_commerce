@@ -46,7 +46,7 @@ export default function Page() {
                             <span>รูป</span>
                         <div className="w-[300px] flex justify-center items-center">
                                 {
-                                    urlImagePreview ? (<Image className="w-full" src={urlImagePreview} alt="icon upload" width={200} height={300} />) : <div>ไม่ได้อัพรูป</div>
+                                    urlImagePreview ? (<Image className="w-full" src={urlImagePreview} alt="icon upload" width={300} height={300} />) : <div className="w-[300px] h-[300px] border-[1px] rounded-2xl flex justify-center items-center">ไม่ได้อัพรูป</div>
                                 }
                         </div>
                     </div>
