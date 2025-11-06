@@ -4,14 +4,13 @@ import Image from "next/image"
 
 
 export default function Page() {
-    const [urlImagePreview, seturlImagePreview] = useState(null)
+    const [urlImagePreview, seturlImagePreview] = useState([])
 
     const handleUpload = (e) => {
-        const file = e.target.files[0]
-        if(file){
-            const image = URL.createObjectURL(file)
-            seturlImagePreview(image)
-        }
+        const files = Array.from(e.target.files)
+        const prevViewUrl = files.map(file => URL.createObjectURL(file))
+
+        seturlImagePreview(prev => [...prev, ...prevViewUrl])
     }
     return (
         <div>
@@ -40,13 +39,13 @@ export default function Page() {
                         <h1 className="text-[16px] font-bold">อัพโหลด</h1>
                         <div className="w-fit h-fit bg-[#1E3A8A] rounded-[8px] flex justify-center items-center p-3">
                             <label className="cursor-pointer shadow-2xl h-full w-full">
-                                <input onChange={handleUpload} className="hidden" type="file" accept="image/*"/><Image src={"/icons/icons8-upload-48.png"} alt="icon upload" width={20} height={20} />
+                                <input onChange={handleUpload} multiple className="hidden" type="file" accept="image/*"/><Image src={"/icons/icons8-upload-48.png"} alt="icon upload" width={20} height={20} />
                             </label>
                         </div>
                             <span>รูป</span>
-                        <div className="w-[300px] flex justify-center items-center">
+                        <div className="w-[300px] h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
                                 {
-                                    urlImagePreview ? (<Image className="w-full" src={urlImagePreview} alt="icon upload" width={300} height={300} />) : <div className="w-[300px] h-[300px] border-[1px] rounded-2xl flex justify-center items-center">ไม่ได้อัพรูป</div>
+                                    urlImagePreview.length > 0 ? urlImagePreview.map((src , index) => <Image className="w-1/2 h-1/2 object-cover" unoptimized key={index} src={src} alt="icon upload" width={300} height={300} />) : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
                                 }
                         </div>
                     </div>
