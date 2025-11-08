@@ -12,6 +12,17 @@ export default function Page() {
 
         seturlImagePreview(prev => [...prev, ...prevViewUrl])
     }
+    const dataType = [
+        { id: 1, name: "Smartphone" },
+        { id: 2, name: "ACCESSORIES SMARTPHONE" },
+        { id: 3, name: "SMART WATCH" },
+        { id: 4, name: "SMART LIFE & IOT" },
+        { id: 5, name: "NOTEBOOK" },
+        { id: 6, name: "ACCESSORIES NOTEBOOK" },
+        { id: 7, name: "HEADSET" },
+        { id: 8, name: "MICROPHONE" },
+        { id: 9, name: "MICROPHONE111" },
+    ]
     return (
         <div>
             <h1 className="text-3xl font-bold my-4">เพิ่มสินค้า</h1>
@@ -27,7 +38,12 @@ export default function Page() {
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ประเภท</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" />
+                        <select className="bg-white border-[1px] rounded-[8px] p-1">
+                            <option>--เลือกประเภท--</option>
+                            {dataType.map(t => (
+                                <option key={t.id}>{t.name}</option>
+                            ))}
+                        </select>
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">จำนวน</h1>
@@ -39,14 +55,14 @@ export default function Page() {
                         <h1 className="text-[16px] font-bold">อัพโหลด</h1>
                         <div className="w-fit h-fit bg-[#1E3A8A] rounded-[8px] flex justify-center items-center p-3">
                             <label className="cursor-pointer shadow-2xl h-full w-full">
-                                <input onChange={handleUpload} multiple className="hidden" type="file" accept="image/*"/><Image src={"/icons/icons8-upload-48.png"} alt="icon upload" width={20} height={20} />
+                                <input onChange={handleUpload} multiple className="hidden" type="file" accept="image/*" /><Image src={"/icons/icons8-upload-48.png"} alt="icon upload" width={20} height={20} />
                             </label>
                         </div>
-                            <span>รูป</span>
+                        <span>รูป</span>
                         <div className="w-[300px] h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
-                                {
-                                    urlImagePreview.length > 0 ? urlImagePreview.map((src , index) => <Image className="w-1/2 h-1/2 object-cover" unoptimized key={index} src={src} alt="icon upload" width={300} height={300} />) : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
-                                }
+                            {
+                                urlImagePreview.length > 0 ? urlImagePreview.map((src, index) => <Image className="w-1/2 h-1/2 object-cover" unoptimized key={index} src={src} alt="icon upload" width={300} height={300} />) : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
+                            }
                         </div>
                     </div>
                 </div>
