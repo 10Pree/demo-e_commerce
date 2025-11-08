@@ -1,15 +1,32 @@
 "use client"
-import Link from "next/link"
+
 import Image from "next/image"
 import { useState } from "react"
 export default function Page() {
     const [data, setdata] = useState({
-        username: "user12",
-        password: "1234",
-        email: "user12@gmail.com",
-        phone: "0892039342",
-        address: "10/3 ho thai"
+        username: "",
+        password: "",
+        email: "",
+        phone: 0,
+        address: "",
+        role: ""
     })
+    const [urlImagePreview, seturlImagePreview] = useState(null)
+
+    const handleUpload = (e) => {
+        const image = e.target.files[0]
+        if(image) {
+            const urlImage = URL.createObjectURL(image)
+            seturlImagePreview(urlImage)
+        }
+    }
+
+    const handleChange = (e) => {
+        const { name, value} = e.target
+        setdata(prve => ({...prve, [name]: value}))
+        console.log(data)
+    }
+
     return (
         <form>
             <h1 className="text-3xl font-bold my-4">เพิ่มผู้ใช้งาน</h1>
@@ -17,7 +34,7 @@ export default function Page() {
                 <div className="w-full h-1/2 bg-white rounded-2xl shadow-2xl p-4 md:w-1/2">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" value={data.username}/>
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" name="username" onChange={handleChange}  />
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">รหัสผ่าน</h1>
@@ -27,15 +44,15 @@ export default function Page() {
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">อีเมล</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="email" value={data.email}/>
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="email"  name="email" onChange={handleChange} />
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">เบอร์โทร</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" value={data.phone}/>
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="tel"  name="phone" onChange={handleChange} />
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ที่อยู่</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" value={data.address}/>
+                        <textarea className="bg-white border-[1px] rounded-[8px] p-1 w-full "  name="address" onChange={handleChange} />
                     </div>
                 </div>
                 <div className="flex justify-center items-center m-8 md:m-0">
@@ -43,21 +60,27 @@ export default function Page() {
                         <h1 className="text-[16px] font-bold">หน้าที่</h1>
                         <div className="flex gap-2">
                             <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                                <input type="radio" name="role" value={"admin"} className=" peer hidden" />
+                                <input type="radio" name="role" value={"admin"} onChange={handleChange}  className=" peer hidden"/>
                                 <span className="p-1 border rounded-[8px] shadow-xl bg-white cursor-pointer hover:bg-[#1E3A8A] hover:text-white peer-checked:bg-[#1E3A8A] peer-checked:text-white">admin</span>
                             </label>
                             <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                                <input type="radio" name="role" value={"user"} className=" peer hidden" />
+                                <input type="radio" name="role" value={"user"} onChange={handleChange}  className=" peer hidden" />
                                 <span className="p-1 border rounded-[8px] shadow-xl bg-white cursor-pointer hover:bg-[#1E3A8A] hover:text-white peer-checked:bg-[#1E3A8A] peer-checked:text-white">user</span>
                             </label>
                         </div>
                         <h1 className="text-[16px] font-bold">อัพโหลด</h1>
                         <div className="w-fit h-fit bg-[#1E3A8A] rounded-[8px] flex justify-center items-center p-3">
-                            <button className="cursor-pointer shadow-2xl h-full w-full"><Image src={"/icons/icons8-upload-48.png"} alt="icon upload" width={20} height={20} /></button>
+                            <label className="cursor-pointer shadow-2xl h-full w-full">
+                                <input onChange={handleUpload} multiple className="hidden" type="file" accept="image/*"/><Image src={"/icons/icons8-upload-48.png"} alt="icon upload" width={20} height={20} />
+                            </label>
                         </div>
                         <div>
                             <span>รูป</span>
-                            <Image src={"/icons/icons8-upload-50.png"} alt="icon upload" width={200} height={300} />
+                            <div className="w-[300px] h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
+                                {
+                                    urlImagePreview ? <Image className="w-1/2 h-1/2 object-cover" src={urlImagePreview} alt="image user" width={300} height={300} /> : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
