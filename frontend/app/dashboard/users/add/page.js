@@ -34,7 +34,7 @@ export default function Page() {
                 <div className="w-full h-1/2 bg-white rounded-2xl shadow-2xl p-4 md:w-1/2">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" name="username" onChange={handleChange}  />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" name="username" onChange={handleChange} placeholder="username1234"/>
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">รหัสผ่าน</h1>
@@ -44,15 +44,15 @@ export default function Page() {
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">อีเมล</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="email"  name="email" onChange={handleChange} />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="email"  name="email" onChange={handleChange} placeholder="user@Gmail.com"/>
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">เบอร์โทร</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="tel"  name="phone" onChange={handleChange} />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="tel"  name="phone" onChange={handleChange} placeholder="012-314-5678"/>
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ที่อยู่</h1>
-                        <textarea className="bg-white border-[1px] rounded-[8px] p-1 w-full "  name="address" onChange={handleChange} />
+                        <textarea className="bg-white border-[1px] rounded-[8px] p-1 w-full "  name="address" onChange={handleChange} placeholder="44/2001 Thai....."/>
                     </div>
                 </div>
                 <div className="flex justify-center items-center m-8 md:m-0">
