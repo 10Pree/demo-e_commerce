@@ -8,9 +8,9 @@ import 'swiper/css';
 
 export default function SwiperContainer() {
     return (
-        <>
+        <div className='px-2 md:px-0'>
             <Swiper
-                className="w-full h-[397px]"
+                className="w-full h-[350px]"
                 modules={[Autoplay]}
                 loop={true}
                 autoplay={{
@@ -23,22 +23,22 @@ export default function SwiperContainer() {
                 centeredSlides={false}
 
             >
-                <SwiperSlide className='!w-[820px] !h-full'>
-                    <div className='h-full bg-pink-300 flex items-center justify-center'>
+                <SwiperSlide className='!w-full !h-full md:!w-[820px]'>
+                    <div className='h-full bg-[#1E3A8A] flex items-center justify-center rounded-[8px]'>
                         slide 1
                     </div>
                 </SwiperSlide>
-                <SwiperSlide className='!w-[820px] !h-full'>
-                    <div className='h-full bg-pink-300 flex items-center justify-center'>
+                <SwiperSlide className='!w-full !h-full md:!w-[820px]'>
+                    <div className='h-full bg-[#1E3A8A] flex items-center justify-center rounded-[8px]'>
                         slide 2
                     </div>
                 </SwiperSlide>
-                <SwiperSlide className='!w-[820px] !h-full '>
-                    <div className='h-full bg-pink-300 flex items-center justify-center'>
+                <SwiperSlide className='!w-full !h-full md:!w-[820px]'>
+                    <div className='h-full bg-[#1E3A8A] flex items-center justify-center rounded-[8px]'>
                         slide 3
                     </div>
                 </SwiperSlide>
             </Swiper>
-        </>
+        </div>
     )
 }
