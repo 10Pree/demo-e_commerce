@@ -67,32 +67,85 @@ export default function Page() {
   return (
     <div className=" w-full min-h-screen">
       <Header />
-      <section>
+      <section className=" my-8">
         <SwiperContainer />
       </section>
-      <section className="w-full h-full">
+      <section className=" my-8">
         <div className="flex my-8 mx-0 md:mx-32 justify-center md:justify-start">
           <h1 className="text-2xl text-[#111827] font-bold">สินค้ายอดนิยม</h1>
-          <Image width="40" height="40" src={"/icons/icons8-trending-96-c111827.png"} alt="icon"/>
+          <Image width="40" height="40" src={"/icons/icons8-trending-96-c111827.png"} alt="icon" />
         </div>
         <div className=" flex justify-center items-center">
           <div className=" grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-12 mx-2 md:mx-0">
             {
               productData.map((p) => (
                 <div key={p.id} className="w-full h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
-                  <div className="bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 transition-colors">
-                    <Image className="w-[50%]" src={p.urlImage} width={50} height={50} alt="image product" />
+                  <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 transition-colors">
+                    <Image className="object-contain" src={p.urlImage} fill alt="image product" />
                   </div>
                   <div className="p-3 flex flex-col gap-1 text-[#111827]">
                     <span className="font-bold line-clamp-1">{p.name}</span>
 
-                      <p className=" font-light text-gray-500 w-full h-full line-clamp-2 md:line-clamp-3">{p.detaile}</p>
-        
-                    <div className="font-bold text-2xl text-end text-[#1E3A8A]">{p.price}$</div>
+                    <p className=" font-light text-gray-500 w-full h-full line-clamp-2 md:line-clamp-3">{p.detaile}</p>
+
+                    <div className="font-bold text-2xl text-end text-[#1E3A8A]">{p.price}฿</div>
                   </div>
                 </div>
               ))
             }
+          </div>
+        </div>
+      </section>
+      <section className="w-full h-[360px] bg-[#1E3A8A] my-8 flex justify-center items-center gap-8 overflow-x-auto">
+        <div className="w-[243px] h-[265px] bg-[#FACC15] rounded-2xl flex flex-col justify-center items-center gap-2 mr-16">
+          <div className="relative w-[166px] h-[133px] bg-[#D9D9D9]">
+            <Image className="object-contain" src={"/images/a.png"} fill alt="image" />
+          </div>
+          <div className="flex flex-col leading-1.5">
+            <span className="text-2xl font-bold text-[#F97316]">99฿</span>
+            <span className="text-end text-white line-through">199฿</span>
+          </div>
+          <button className="w-[100px] h-[30px] bg-[#F97316] text-white rounded-[8px] cursor-pointer mt-2">ซื้อ</button>
+        </div>
+
+        <div className="min-w-[230px] h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group  ">
+          <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 transition-colors">
+            <Image className="object-contain" src={"/images/iphone-card-40-17pro.png"} fill alt="image product" />
+          </div>
+          <div className="p-3 flex flex-col gap-1 text-[#111827]">
+            <span className="font-bold line-clamp-1">IPHONE 17 Pro</span>
+            <p className=" font-light text-gray-500 w-full h-full line-clamp-2 md:line-clamp-3">ชิป A19 Pro พร้อม GPU แบบ 6-core ระบายความร้อนด้วยไอระเหย เพื่อความเร็วสุดขั้ว</p>
+            <div className="font-bold text-2xl text-end text-[#1E3A8A]">1999฿</div>
+          </div>
+        </div>
+        <div className="min-w-[230px] h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
+          <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 transition-colors">
+            <Image className="object-contain" src={"/images/iphone-card-40-17pro.png"} fill alt="image product" />
+          </div>
+          <div className="p-3 flex flex-col gap-1 text-[#111827]">
+            <span className="font-bold line-clamp-1">IPHONE 17 Pro</span>
+            <p className=" font-light text-gray-500 w-full h-full line-clamp-2 md:line-clamp-3">ชิป A19 Pro พร้อม GPU แบบ 6-core ระบายความร้อนด้วยไอระเหย เพื่อความเร็วสุดขั้ว</p>
+            <div className="font-bold text-2xl text-end text-[#1E3A8A]">1999฿</div>
+          </div>
+        </div>
+        <div className="min-w-[230px] h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
+          <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 transition-colors">
+            <Image className="object-contain" src={"/images/iphone-card-40-17pro.png"} fill alt="image product" />
+          </div>
+          <div className="p-3 flex flex-col gap-1 text-[#111827]">
+            <span className="font-bold line-clamp-1">IPHONE 17 Pro</span>
+            <p className=" font-light text-gray-500 w-full h-full line-clamp-2 md:line-clamp-3">ชิป A19 Pro พร้อม GPU แบบ 6-core ระบายความร้อนด้วยไอระเหย เพื่อความเร็วสุดขั้ว</p>
+            <div className="font-bold text-2xl text-end text-[#1E3A8A]">1999฿</div>
+          </div>
+        </div>
+        <div className="min-w-[230px] h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
+          <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 transition-colors">
+            <Image className="object-contain" src={"/images/iphone-card-40-17pro.png"} fill alt="image product" />
+          </div>
+          <div className="p-3 flex flex-col gap-1 text-[#111827]">
+            <span className="font-bold line-clamp-1">IPHONE 17 Pro</span>
+            <p className=" font-light text-gray-500 w-full h-full line-clamp-2 md:line-clamp-3">ชิป A19 Pro พร้อม GPU แบบ 6-core ระบายความร้อนด้วยไอระเหย เพื่อความเร็วสุดขั้ว</p>
+            <div className="font-bold text-2xl text-end text-[#1E3A8A]">1999฿</div>
           </div>
         </div>
       </section>
