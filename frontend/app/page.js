@@ -65,7 +65,7 @@ export default function Page() {
   ];
 
   return (
-    <div className=" w-full min-h-screen">
+    <div className=" w-full min-h-screen bg-[#F3F4F6]">
       <Header />
       <section className=" my-8">
         <SwiperContainer />
@@ -85,9 +85,7 @@ export default function Page() {
                   </div>
                   <div className="p-3 flex flex-col gap-1 text-[#111827]">
                     <span className="font-bold line-clamp-1">{p.name}</span>
-
                     <p className=" font-light text-gray-500 w-full h-full line-clamp-2 md:line-clamp-3">{p.detaile}</p>
-
                     <div className="font-bold text-2xl text-end text-[#1E3A8A]">{p.price}฿</div>
                   </div>
                 </div>
@@ -96,8 +94,8 @@ export default function Page() {
           </div>
         </div>
       </section>
-      <section className="w-full h-[360px] bg-[#1E3A8A] my-8 flex justify-center items-center gap-8 overflow-x-auto">
-        <div className="w-[243px] h-[265px] bg-[#FACC15] rounded-2xl flex flex-col justify-center items-center gap-2 mr-16">
+      <section className="w-full py-6 px-4 bg-[#1E3A8A] my-8 flex justify-start items-center md:justify-center gap-8 overflow-x-auto">
+        <div className="min-w-[243px] h-[265px] bg-[#FACC15] rounded-2xl flex flex-col justify-center items-center gap-2 mr-16">
           <div className="relative w-[166px] h-[133px] bg-[#D9D9D9]">
             <Image className="object-contain" src={"/images/a.png"} fill alt="image" />
           </div>
@@ -107,7 +105,6 @@ export default function Page() {
           </div>
           <button className="w-[100px] h-[30px] bg-[#F97316] text-white rounded-[8px] cursor-pointer mt-2">ซื้อ</button>
         </div>
-
         <div className="min-w-[230px] h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group  ">
           <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 transition-colors">
             <Image className="object-contain" src={"/images/iphone-card-40-17pro.png"} fill alt="image product" />
@@ -149,6 +146,23 @@ export default function Page() {
           </div>
         </div>
       </section>
+      <section className="h-[500px] flex flex-col justify-center items-center gap-8 md:flex-row">
+        <div className="  flex flex-col justify-center items-center bg-[#F3F4F6] w-[450px] h-[260px] shadow-lg border border-gray-300 rounded-[8px]">
+          <Image className="mt-8" src={"/images/apple_logo.png"} width={200} height={200} alt="image" />
+          <Image className=" mt-10" src={"/images/b2a01456b47f9c24a30087980101be2c.png"} width={350} height={150} alt="image" />
+        </div>
+        <div className="  flex flex-col justify-center items-center bg-[#F3F4F6] w-[450px] h-[260px] shadow-lg border border-gray-300 rounded-[8px]">
+          <Image className="mt-18" src={"/images/sony_logo.png"} width={180} height={200} alt="image" />
+          <Image className=" mt-18" src={"/images/sony_bg.png"} width={350} height={150} alt="image" />
+        </div>
+        <div className="  flex flex-col justify-center items-center bg-[#F3F4F6] w-[450px] h-[260px] shadow-lg border border-gray-300 rounded-[8px]">
+          <Image className="mt-8" src={"/images/Samsung.png"} width={200} height={200} alt="image" />
+          <Image className=" mt-4" src={"/images/samsung_bg.png"} width={350} height={150} alt="image" />
+        </div>
+      </section>
+      <footer className="h-[500px] bg-[#1E3A8A]">
+
+      </footer>
     </div>
   );
 }
