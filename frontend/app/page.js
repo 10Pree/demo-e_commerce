@@ -146,17 +146,17 @@ export default function Page() {
           </div>
         </div>
       </section>
-      <section className="h-[500px] flex flex-col justify-center items-center gap-8 md:flex-row">
-        <div className="  flex flex-col justify-center items-center bg-[#F3F4F6] w-[450px] h-[260px] shadow-lg border border-gray-300 rounded-[8px]">
-          <Image className="mt-8" src={"/images/apple_logo.png"} width={200} height={200} alt="image" />
+      <section className="h-[1000px] md:h-[500px] flex flex-col justify-center items-center gap-16 md:gap-8 md:flex-row">
+        <div className=" group w-[350px] md:w-[450px] h-[260px]  flex flex-col justify-center items-center bg-[#F3F4F6] shadow-lg border border-gray-300 rounded-[8px] hover:bg-[#1E3A8A] duration-300 ease-in ">
+          <Image className="mt-8  group-hover:invert" src={"/images/apple_logo.png"} width={200} height={200} alt="image" />
           <Image className=" mt-10" src={"/images/b2a01456b47f9c24a30087980101be2c.png"} width={350} height={150} alt="image" />
         </div>
-        <div className="  flex flex-col justify-center items-center bg-[#F3F4F6] w-[450px] h-[260px] shadow-lg border border-gray-300 rounded-[8px]">
-          <Image className="mt-18" src={"/images/sony_logo.png"} width={180} height={200} alt="image" />
+        <div className=" group w-[350px] md:w-[450px] h-[260px]  flex flex-col justify-center items-center bg-[#F3F4F6] shadow-lg border border-gray-300 rounded-[8px] hover:bg-[#1E3A8A] duration-300 ease-in">
+          <Image className="mt-18 group-hover:invert" src={"/images/sony_logo.png"} width={200} height={200} alt="image" />
           <Image className=" mt-18" src={"/images/sony_bg.png"} width={350} height={150} alt="image" />
         </div>
-        <div className="  flex flex-col justify-center items-center bg-[#F3F4F6] w-[450px] h-[260px] shadow-lg border border-gray-300 rounded-[8px]">
-          <Image className="mt-8" src={"/images/Samsung.png"} width={200} height={200} alt="image" />
+        <div className=" group w-[350px] md:w-[450px] h-[260px]  flex flex-col justify-center items-center bg-[#F3F4F6] shadow-lg border border-gray-300 rounded-[8px] hover:bg-[#1E3A8A] duration-300 ease-in">
+          <Image className="mt-8" src={"/images/samsung-removebg.png"} width={200} height={200} alt="image" />
           <Image className=" mt-4" src={"/images/samsung_bg.png"} width={350} height={150} alt="image" />
         </div>
       </section>
