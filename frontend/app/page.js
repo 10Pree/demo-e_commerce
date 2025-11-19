@@ -1,5 +1,6 @@
 
 import Header from "@/components/header";
+import Footer from "@/components/footer"
 import SwiperContainer from "@/components/Swiper";
 import Image from 'next/image'
 
@@ -80,7 +81,7 @@ export default function Page() {
             {
               productData.map((p) => (
                 <div key={p.id} className="w-full h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
-                  <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 transition-colors">
+                  <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 duration-300 ease-in">
                     <Image className="object-contain" src={p.urlImage} fill alt="image product" />
                   </div>
                   <div className="p-3 flex flex-col gap-1 text-[#111827]">
@@ -156,13 +157,12 @@ export default function Page() {
           <Image className=" mt-18" src={"/images/sony_bg.png"} width={350} height={150} alt="image" />
         </div>
         <div className=" group w-[350px] md:w-[450px] h-[260px]  flex flex-col justify-center items-center bg-[#F3F4F6] shadow-lg border border-gray-300 rounded-[8px] hover:bg-[#1E3A8A] duration-300 ease-in">
-          <Image className="mt-8" src={"/images/samsung-removebg.png"} width={200} height={200} alt="image" />
+          <Image className="mt-8 block group-hover:hidden" src={"/images/samsung-removebg.png"} width={200} height={200} alt="image" />
+          <Image className="mt-8 hidden group-hover:block" src={"/images/samsung-w-removebg.png"} width={200} height={200} alt="image" />
           <Image className=" mt-4" src={"/images/samsung_bg.png"} width={350} height={150} alt="image" />
         </div>
       </section>
-      <footer className="h-[500px] bg-[#1E3A8A]">
-
-      </footer>
+      <Footer/>
     </div>
   );
 }
