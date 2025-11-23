@@ -7,28 +7,14 @@ export default function Header() {
         <div>
           <Image src="/images/logo.png" alt="logo" width={80} height={80} />
         </div>
-        <div className="bg-[#D9D9D9] rounded-[0.5rem] w-96 h-9 flex items-center">
-          <div className="absolute">
-            <Image
-              className="mx-3"
-              src="/icons/icons8-search.svg"
-              alt="icon-search"
-              width={20}
-              height={20}
-              priority
-            />
-          </div>
-          <input className="w-full h-full px-10" type="text" />
-        </div>
         <div className=" md:block hidden">
-          <div className="flex gap-8">
-            <div className="flex gap-2">
-              <span className=" cursor-pointer hover:bg-[#]">Sing up</span>
-              <span>/</span>
-              <span className=" cursor-pointer">Login</span>
-            </div>
-            <Image src="/icons/icons8-shopping-cart-48.png" alt="logo" width={20} height={20} />
-          </div>
+          <ul>
+            <li className=" flex gap-2">
+              <strong className=" cursor-pointer hover:bg-[#]">Sing up</strong>
+              <strong>/</strong>
+              <strong className=" cursor-pointer">Login</strong>
+            </li>
+          </ul>
         </div>
         <div className=" group md:hidden block mt-4 cursor-pointer w-fit">
           <label className="flex flex-col justify-center items-center">
