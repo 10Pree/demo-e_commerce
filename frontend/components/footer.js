@@ -1,8 +1,9 @@
 import Image from "next/image"
 export default function Page() {
     return(
-              <footer className="h-[100%] bg-[#1E3A8A] flex flex-col justify-around items-center gap-16  md:flex-row p-8">
-                <div className="flex flex-col justify-center items-center">
+              <footer className="hidden md:block">
+                <div className="h-[100%] bg-[#1E3A8A] flex flex-col justify-around items-center gap-16  md:flex-row p-8">
+                                  <div className="flex flex-col justify-center items-center">
                   <Image src={"/images/logo2.png"} width={150} height={150} alt="logo" />
                   <p className="text-[#111827]">
                     บริษัท Example Co., Ltd.<br/>
@@ -41,6 +42,7 @@ export default function Page() {
                       ..................................<br/>
                     </span>
                   </div>
+                </div>
                 </div>
               </footer>
     )
