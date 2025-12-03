@@ -1,6 +1,3 @@
-
-import Header from "@/components/header2";
-import Footer from "@/components/footer"
 import Image from "next/image";
 import Link from "next/link";
 
@@ -221,7 +218,6 @@ export default function Page() {
 
   return (
     <>
-      <Header/>
       <div className=" flex flex-col justify-center items-center my-4">
         <div className="flex flex-col justify-center items-center">
           <div className="w-[280px] md:w-[480px] h-[38px] bg-[#F3F4F6] rounded-[8px] relative">
@@ -262,7 +258,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <Footer/>
     </>
   )
 }

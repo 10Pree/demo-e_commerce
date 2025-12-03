@@ -1,8 +1,8 @@
 
-import Header from "@/components/header";
-import Footer from "@/components/footer"
 import SwiperContainer from "@/components/Swiper";
 import Image from 'next/image'
+import Header from "@/components/header";
+import Footer from "@/components/footer"
 
 export default function Page() {
 

@@ -1,12 +1,9 @@
 import Image from "next/image"
-import Header from "@/components/header2"
-import Footer from "@/components/footer"
 
 export default function Page({ params }) {
 
     return (
         <div className="w-full min-h-screen">
-            <Header/>
             <div className="flex flex-col gap-24 justify-center items-center my-4 md:my-24 px-4">
                 <div className="flex flex-col md:flex-row gap-9 px-8">
                     <div>
@@ -76,7 +73,6 @@ export default function Page({ params }) {
                         รองรับ Wi-Fi 7, 5G และ Bluetooth 6 </p>
                 </div>
             </div>
-            <Footer/>
         </div>
     )
 }
