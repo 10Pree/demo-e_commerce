@@ -10,21 +10,37 @@ export default function Page() {
                 </Link>
                 <span className=" font-bold text-[#111827]">กลับ</span>
             </div>
-            <main className="flex flex-col justify-center items-center">
-                <div className=" border-2 w-[1040px] h-[88px] rounded-2xl flex justify-center items-center gap-[100px]">
+            <main className="flex flex-col justify-center items-center gap-4">
+                <div className=" border-2 w-[1040px] h-[88px] rounded-2xl flex justify-center items-center gap-[100px] shadow-md">
                     <Link href={"/"} className=" hover:bg-[#111827] hover:text-white w-[150px] h-[70px] font-bold flex justify-center items-center rounded-[8px] transition delay-150 ease-in">ทั้งหมด</Link>
                     <Link href={"/"} className=" hover:bg-[#111827] hover:text-white w-[150px] h-[70px] font-bold flex justify-center items-center rounded-[8px] transition delay-150 ease-in">ที่ต้องชำละ</Link>
                     <Link href={"/"} className=" hover:bg-[#111827] hover:text-white w-[150px] h-[70px] font-bold flex justify-center items-center rounded-[8px] transition delay-150 ease-in">ที่ต้องจัดส่ง</Link>
                     <Link href={"/"} className=" hover:bg-[#111827] hover:text-white w-[150px] h-[70px] font-bold flex justify-center items-center rounded-[8px] transition delay-150 ease-in">สำเร็จแล้ว</Link>
                 </div>
-                <div>
-                    <div>
-                        <div>
-                            <Image src={"/public/images/ChatGPT Image 27 ก.ย. 2568 15_59_55.png"} width={50} height={50} alt="image" />
-                            <h2>Apple iPhone 16 128GB Teal</h2>
+                <div className="border-2 w-[1040px] h-[400px] rounded-2xl flex flex-col items-center shadow-md">
+                    <div className="w-[1000px] h-[97px] border-2 rounded-[8px] mt-[20px] flex justify-between items-center px-8 shadow-md">
+                        <div className="flex justify-center items-center gap-1">
+                            <Image src={"/images/iphone-card-40-17pro.png"} width={50} height={50} alt="image" />
+                            <h2 className="truncate w-[400px]">Apple iPhone 16 128GB Teal</h2>
                         </div>
                         <span>26,900  บาท</span>
-                        <span>ที่ต้องรอการชำละ</span>
+                        <span className="text-[#EF4444] text-center">ที่ต้องรอการชำละ</span>
+                    </div>
+                                        <div className="w-[1000px] h-[97px] border-2 rounded-[8px] mt-[20px] flex justify-between items-center px-8 shadow-md">
+                        <div className="flex justify-center items-center gap-1">
+                            <Image src={"/images/iphone-card-40-17pro.png"} width={50} height={50} alt="image" />
+                            <h2 className="truncate w-[400px]">Apple iPhone 16 128GB Teal</h2>
+                        </div>
+                        <span>26,900  บาท</span>
+                        <span className="text-[#F97316] text-center">ที่ต้องจัดส่ง</span>
+                    </div>
+                                                            <div className="w-[1000px] h-[97px] border-2 rounded-[8px] mt-[20px] flex justify-between items-center px-8 shadow-md">
+                        <div className="flex justify-center items-center gap-1">
+                            <Image src={"/images/iphone-card-40-17pro.png"} width={50} height={50} alt="image" />
+                            <h2 className="truncate w-[400px]">Apple iPhone 16 128GB Teal</h2>
+                        </div>
+                        <span>26,900  บาท</span>
+                        <span className="text-[#10B981] text-center">สำเร็จแล้ว</span>
                     </div>
                 </div>
             </main>
