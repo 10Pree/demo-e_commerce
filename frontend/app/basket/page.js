@@ -19,7 +19,7 @@ export default function Page() {
                     <span className="text-[12px] md:text-[16px]">26,900  บาท</span>
                     <Image src={"/icons/icons8-delete-90.svg"} width={35} height={35} alt="image" />
                 </div>
-                                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
+                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
                     <div className="flex justify-center items-center gap-1 ">
                         <Image src={"/images/iphone-card-40-17pro.png"} width={50} height={50} alt="image" />
                         <h2 className="truncate w-[100px] md:w-[400px] text-[12px] md:text-[16px]">Apple iPhone 16 128GB Teal</h2>
@@ -27,7 +27,7 @@ export default function Page() {
                     <span className="text-[12px] md:text-[16px]">26,900  บาท</span>
                     <Image src={"/icons/icons8-delete-90.svg"} width={35} height={35} alt="image" />
                 </div>
-                                                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
+                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
                     <div className="flex justify-center items-center gap-1 ">
                         <Image src={"/images/iphone-card-40-17pro.png"} width={50} height={50} alt="image" />
                         <h2 className="truncate w-[100px] md:w-[400px] text-[12px] md:text-[16px]">Apple iPhone 16 128GB Teal</h2>
@@ -35,7 +35,7 @@ export default function Page() {
                     <span className="text-[12px] md:text-[16px]">26,900  บาท</span>
                     <Image src={"/icons/icons8-delete-90.svg"} width={35} height={35} alt="image" />
                 </div>
-                                                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
+                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
                     <div className="flex justify-center items-center gap-1 ">
                         <Image src={"/images/iphone-card-40-17pro.png"} width={50} height={50} alt="image" />
                         <h2 className="truncate w-[100px] md:w-[400px] text-[12px] md:text-[16px]">Apple iPhone 16 128GB Teal</h2>
@@ -43,7 +43,7 @@ export default function Page() {
                     <span className="text-[12px] md:text-[16px]">26,900  บาท</span>
                     <Image src={"/icons/icons8-delete-90.svg"} width={35} height={35} alt="image" />
                 </div>
-                                                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
+                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
                     <div className="flex justify-center items-center gap-1 ">
                         <Image src={"/images/iphone-card-40-17pro.png"} width={50} height={50} alt="image" />
                         <h2 className="truncate w-[100px] md:w-[400px] text-[12px] md:text-[16px]">Apple iPhone 16 128GB Teal</h2>
@@ -51,7 +51,7 @@ export default function Page() {
                     <span className="text-[12px] md:text-[16px]">26,900  บาท</span>
                     <Image src={"/icons/icons8-delete-90.svg"} width={35} height={35} alt="image" />
                 </div>
-                                                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
+                <div className="max-w-[1236px] h-[84px] bg-white hover:bg-[#1E3A8A] shadow-md rounded-2xl transition delay-75 ease-in flex justify-between items-center gap-6 px-7 border border-gray-200">
                     <div className="flex justify-center items-center gap-1 ">
                         <Image src={"/images/iphone-card-40-17pro.png"} width={50} height={50} alt="image" />
                         <h2 className="truncate w-[100px] md:w-[400px] text-[12px] md:text-[16px]">Apple iPhone 16 128GB Teal</h2>
