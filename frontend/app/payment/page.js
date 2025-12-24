@@ -125,9 +125,59 @@ export default function Page() {
             </div>
 
             {/* popup add address */}
-            {/* <div className=" fixed w-full h-[1600px] bg-black">
-
-            </div> */}
+            <div className="w-screen h-screen bg-black/50 fixed inset-0 flex justify-center items-center">
+                <div className="w-[1045px] h-[614px] bg-[#D9D9D9] p-4 rounded-2xl">
+                    <h3 className=" font-bold">ที่อยู่ในการจัดส่ง</h3>
+                    <from className="flex justify-center items-center">
+                        <div className="flex flex-col gap-5">
+                            <div className="flex flex-col">
+                                <label className=" font-bold">
+                                    ชื่อ  นามสกุล
+                                </label>
+                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="username" />
+                            </div>
+                            <div className="flex flex-col">
+                                <label className=" font-bold">
+                                    หมายเลขโทรศัพท์
+                                </label>
+                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="phone" />
+                            </div>
+                            <div className="flex flex-col">
+                                <label className=" font-bold">
+                                    บ้านเลขที่ / ซอย / หมู่ / ถนน
+                                </label>
+                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="address" />
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-5">
+                            <div className="flex flex-col">
+                                <label className=" font-bold">
+                                    จังหวัด
+                                </label>
+                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="county" />
+                            </div>
+                            <div className="flex flex-col">
+                                <label className=" font-bold">
+                                    อำเภอ
+                                </label>
+                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="canton1" />
+                            </div>
+                            <div className="flex flex-col">
+                                <label className=" font-bold">
+                                    ตำบล
+                                </label>
+                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="canton2" />
+                            </div>
+                                                        <div className="flex flex-col">
+                                <label className=" font-bold">
+                                    รหัสไปรษณีย์น
+                                </label>
+                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="post" />
+                            </div>
+                        </div>
+                    </from>
+                </div>
+            </div>
         </div>
     )
 }
