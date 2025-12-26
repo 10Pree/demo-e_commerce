@@ -1,7 +1,20 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Page() {
+    const [opanFromAddress, setOpanFromAddress] = useState(false)
+    const [opanFromPayment, setOpanFromPayment] = useState(false)
+
+    const handleOpanFromAddress = () => {
+        setOpanFromAddress(prev => !prev)
+        // console.log(opanFromAddress)
+    }
+        const handleOpanFromPayment = () => {
+        setOpanFromPayment(prev => !prev)
+        // console.log(opanFromPayment)
+    }
     return (
         <div className="w-full h-[1200px] md:h-screen">
             <div className="flex flex-col gap-4">
@@ -15,7 +28,7 @@ export default function Page() {
                     <div className="w-full md:w-[559px] flex flex-col gap-4 shrink-0">
                         <div className="w-full h-[234px] bg-white shadow-[0px_7px_8px_2px_rgba(0,_0,_0,_0.1)] border border-gray-300 rounded-2xl flex flex-col items-center gap-2 p-4">
                             <div className="w-full flex justify-end">
-                                <Image src={"/icons/icons8-plus-96.png"} width={19} height={19} alt="icon" />
+                                <Image src={"/icons/icons8-plus-96.png"} width={19} height={19} alt="icon" onClick={handleOpanFromAddress} />
                             </div>
                             <div className="w-full flex justify-start">
                                 <h1 className="font-bold">ตัวเลือกการจัดส่ง</h1>
@@ -125,59 +138,69 @@ export default function Page() {
             </div>
 
             {/* popup add address */}
-            <div className="w-screen h-screen bg-black/50 fixed inset-0 flex justify-center items-center">
-                <div className="w-[1045px] h-[614px] bg-[#D9D9D9] p-4 rounded-2xl">
-                    <h3 className=" font-bold">ที่อยู่ในการจัดส่ง</h3>
-                    <from className="flex justify-center items-center">
-                        <div className="flex flex-col gap-5">
-                            <div className="flex flex-col">
-                                <label className=" font-bold">
-                                    ชื่อ  นามสกุล
-                                </label>
-                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="username" />
+            { opanFromAddress && (
+                            <div className="w-screen h-screen bg-black/50 fixed inset-0 flex justify-center items-center px-4 md:px-0">
+                <div className="w-full md:w-[1045px] h-[614px] bg-[#D9D9D9] p-4 rounded-2xl flex items-center justify-center gap-10 relative overflow-hidden">
+                    <div className=" absolute top-0 right-0 px-4 py-4">
+                        <Image className="" src={"/icons/icons8-plus-96.png"} width={20} height={20} alt="icon" onClick={handleOpanFromAddress}/>
+                    </div>
+                    <form className="flex flex-col justify-center items-center gap-4 ">
+                        <h3 className="w-full flex justify-start font-bold text-2xl">ที่อยู่ในการจัดส่ง</h3>
+                        <div className=" flex flex-col md:flex-row gap-16">
+                            <div className="flex flex-col gap-5 w-[90%] md:w-[352px]">
+                                <div className="flex flex-col">
+                                    <label className=" font-bold">
+                                        ชื่อ  นามสกุล
+                                    </label>
+                                    <input className="w-full h-[45px] bg-white rounded-[8px] p-2" name="username" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <label className=" font-bold">
+                                        หมายเลขโทรศัพท์
+                                    </label>
+                                    <input className="w-full h-[45px] bg-white rounded-[8px] p-2" name="phone" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <label className=" font-bold">
+                                        บ้านเลขที่ / ซอย / หมู่ / ถนน
+                                    </label>
+                                    <input className="w-full h-[45px] bg-white rounded-[8px] p-2" name="address" />
+                                </div>
                             </div>
-                            <div className="flex flex-col">
-                                <label className=" font-bold">
-                                    หมายเลขโทรศัพท์
-                                </label>
-                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="phone" />
-                            </div>
-                            <div className="flex flex-col">
-                                <label className=" font-bold">
-                                    บ้านเลขที่ / ซอย / หมู่ / ถนน
-                                </label>
-                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="address" />
+                            <div className="flex flex-col gap-5 w-[90%] md:w-[352px]">
+                                <div className="flex flex-col">
+                                    <label className=" font-bold">
+                                        จังหวัด
+                                    </label>
+                                    <input className="w-full h-[45px] bg-white rounded-[8px] p-2" name="county" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <label className=" font-bold">
+                                        อำเภอ
+                                    </label>
+                                    <input className="w-full h-[45px] bg-white rounded-[8px] p-2" name="canton1" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <label className=" font-bold">
+                                        ตำบล
+                                    </label>
+                                    <input className="w-full h-[45px] bg-white rounded-[8px] p-2" name="canton2" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <label className=" font-bold">
+                                        รหัสไปรษณีย์น
+                                    </label>
+                                    <input className="w-full h-[45px] bg-white rounded-[8px] p-2" name="post" />
+                                </div>
                             </div>
                         </div>
-                        <div className="flex flex-col gap-5">
-                            <div className="flex flex-col">
-                                <label className=" font-bold">
-                                    จังหวัด
-                                </label>
-                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="county" />
-                            </div>
-                            <div className="flex flex-col">
-                                <label className=" font-bold">
-                                    อำเภอ
-                                </label>
-                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="canton1" />
-                            </div>
-                            <div className="flex flex-col">
-                                <label className=" font-bold">
-                                    ตำบล
-                                </label>
-                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="canton2" />
-                            </div>
-                                                        <div className="flex flex-col">
-                                <label className=" font-bold">
-                                    รหัสไปรษณีย์น
-                                </label>
-                                <input className="w-[352px] h-[45px] bg-white rounded-[8px] p-2" name="post" />
-                            </div>
+                        <div className="w-full flex justify-end">
+                            <button className="px-7 py-2 bg-[#1E3A8A] rounded-[8px] font-bold text-white">เพิ่ม</button>
                         </div>
-                    </from>
+                    </form>
                 </div>
             </div>
+            )}
         </div>
     )
 }
