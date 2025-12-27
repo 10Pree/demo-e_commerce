@@ -43,9 +43,9 @@ export default function Page() {
                             </div>
                         </div>
                         <div className="w-full h-[234px] bg-white shadow-[0px_7px_8px_2px_rgba(0,_0,_0,_0.1)] border border-gray-300 rounded-2xl flex flex-col items-center gap-2 p-4">
-                            <div className="w-full flex justify-end">
+                            {/* <div className="w-full flex justify-end">
                                 <Image src={"/icons/icons8-plus-96.png"} width={19} height={19} alt="icon" />
-                            </div>
+                            </div> */}
                             <div className="w-full flex justify-start">
                                 <h1 className="font-bold">ช่องทางการชำละเงิน</h1>
                             </div>
