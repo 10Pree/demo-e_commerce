@@ -11,8 +11,15 @@ const categories = require('./src/router/categories')
 const images = require('./src/router/images')
 const app = express()
 const port = process.env.POST
+const cors = require('cors')
 
 app.use(express.json());
+
+app.use(cors({
+     origin: "http://localhost:3000",
+     credentials: true
+}))
+
 app.use(cookieParser())
 
 app.use('/', users)
