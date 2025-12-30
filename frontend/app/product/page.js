@@ -1,5 +1,8 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const productData = [
@@ -215,7 +218,20 @@ export default function Page() {
       urlImage: "/images/iphone-card-40-17pro.png"
     },
   ]
+  const [apiProducts, setapiProducts] = useState([])
 
+  const getDataProducts = async() => {
+    try{
+      const res = await axios.get("http://localhost:8000/products")
+      console.log(res.data.data)
+      setapiProducts(res.data.data)
+    }catch(error){
+      console.log(error)
+    }
+  } 
+  useEffect(() => {
+    getDataProducts()
+  }, [])
   return (
     <>
       <div className=" flex flex-col justify-center items-center my-4">
@@ -239,18 +255,18 @@ export default function Page() {
             </select>
           </div>
         </div>
-        <div className=" flex justify-center items-center mt-12">
-          <div className=" grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 mx-2 md:mx-0">
+        <div className="w-full flex justify-center items-center mt-12 bg-amber-400">
+          <div className="w-full md:w-fit grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 mx-2 md:mx-0">
             {
-              productData.map((p) => (
+              apiProducts.map((p) => (
                 <Link key={p.id} href={`/product/${p.id}`} className="w-full h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
                   <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 duration-300 ease-in">
-                    <Image className="object-contain" src={p.urlImage} fill alt="image product" />
+                    <Image className="object-contain" src={"/images/iphone-card-40-17pro.png"} fill alt="image product" />
                   </div>
                   <div className="p-3 flex flex-col gap-1 text-[#111827]">
-                    <span className="font-bold line-clamp-1">{p.name}</span>
-                    <p className=" font-light text-gray-500 w-full h-full line-clamp-2 md:line-clamp-3">{p.detaile}</p>
-                    <div className="font-bold text-2xl text-end text-[#1E3A8A]">{p.price}฿</div>
+                    <span className="font-bold line-clamp-1">{p.p_name}</span>
+                    <p className=" font-light text-gray-500 w-full h-full line-clamp-2 md:line-clamp-3">{p.p_details}</p>
+                    <div className="font-bold text-2xl text-end text-[#1E3A8A]">{p.p_price}฿</div>
                   </div>
                 </Link>
               ))
