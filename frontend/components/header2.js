@@ -38,7 +38,7 @@ export default function Header() {
           </label>
         </div>
         <div className=" block md:hidden">
-          <div className="w-full h-[70px] bg-[#1E3A8A] fixed bottom-0 left-0 right-0 flex gap-13 items-center justify-center">
+          <div className="w-full h-[70px] bg-[#1E3A8A] fixed bottom-0 left-0 right-0 z-[9999] flex gap-13 items-center justify-center">
             <Link className="flex flex-col justify-center items-center" href={"/"}>
               <Image src={"/icons/icons8-home-96.png"} width={35} height={35} alt="icon" />
               <span className="text-white font-bold">หน้าหลัก</span>

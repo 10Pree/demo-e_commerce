@@ -1,7 +1,23 @@
+"use client"
+import axios from "axios"
 import Image from "next/image"
+import { use, useEffect, useState } from "react"
 
 export default function Page({ params }) {
-
+    const { id } = use(params)
+    const [productData, setProductdata] = useState({})
+    useEffect(() => {
+        const getProductById = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8000/product/${id}`)
+                // console.log(res.data.data)
+                setProductdata(res.data.data[0])
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        if(id) getProductById()
+    }, [id])
     return (
         <div className="w-full min-h-screen">
             <div className="flex flex-col gap-24 justify-center items-center my-4 md:my-24 px-4">
@@ -10,9 +26,9 @@ export default function Page({ params }) {
                         <Image src={"/images/iphone-card-40-17pro.png"} width={500} height={600} alt="image product" />
                     </div>
                     <div className="flex flex-col gap-4">
-                        <h1 className="text-4xl font-bold">IPHONE 17 Pro</h1>
+                        <h1 className="text-4xl font-bold">{ productData.p_name}</h1>
                         <div className="flex gap-2">
-                            <span className="text-3xl font-bold">1999</span>
+                            <span className="text-3xl font-bold">{ productData.p_price}</span>
                             <span className=" text-gray-400 line-through  mt-4">999</span>
                         </div>
                         <span className="text-[1rem] font-bold">ความจุ</span>

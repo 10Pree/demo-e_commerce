@@ -223,7 +223,7 @@ export default function Page() {
   const getDataProducts = async() => {
     try{
       const res = await axios.get("http://localhost:8000/products")
-      console.log(res.data.data)
+      // console.log(res.data.data)
       setapiProducts(res.data.data)
     }catch(error){
       console.log(error)
@@ -255,7 +255,7 @@ export default function Page() {
             </select>
           </div>
         </div>
-        <div className="w-full flex justify-center items-center mt-12 bg-amber-400">
+        <div className="w-full flex justify-center items-center mt-12">
           <div className="w-full md:w-fit grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 mx-2 md:mx-0">
             {
               apiProducts.map((p) => (
