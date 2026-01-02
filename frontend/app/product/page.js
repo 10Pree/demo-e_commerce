@@ -257,8 +257,8 @@ export default function Page() {
         </div>
         <div className="w-full flex justify-center items-center mt-12">
           <div className="w-full md:w-fit grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 mx-2 md:mx-0">
-            {
-              apiProducts.map((p) => (
+            { apiProducts.length > 0 && (
+                            apiProducts.map((p) => (
                 <Link key={p.id} href={`/product/${p.id}`} className="w-full h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
                   <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 duration-300 ease-in">
                     <Image className="object-contain" src={"/images/iphone-card-40-17pro.png"} fill alt="image product" />
@@ -270,7 +270,16 @@ export default function Page() {
                   </div>
                 </Link>
               ))
+            )
             }
+            { apiProducts.length === 0 && (
+              <div className="w-screen h-screen flex justify-center items-center">
+                <div className="flex flex-col justify-center items-center opacity-50">
+                  <Image src="/images/logo.png" alt="logo" width={100} height={100} />
+                  <span className="text-2xl font-bold text-[#111827]">ไม่มีสินค้าอยู่</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
