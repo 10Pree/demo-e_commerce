@@ -22,7 +22,7 @@ class controllerProduct {
             await moduleProduct.create(data);
             const token = req.cookies.access_token
             await CreateLogProducts(data.p_code, token, "Create.Product")
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Create Product Successful!!",
             });
         } catch (error) {
