@@ -6,8 +6,8 @@ class controllersSearch {
             const { search, category } = req.query
             let sql 
             let sqlBase = `
-                SELECT p.*
-                FROM products p
+                SELECT DISTINCT  p.*
+                FROM products p 
                 LEFT JOIN map_categories mc ON mc.products_id = p.id
                 LEFT JOIN categories c ON c.id = mc.categories_id
                 WHERE 1=1
