@@ -3,11 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
 
+  const searchParams = useSearchParams()
+  const searchValue = searchParams.get("keyword") || ""
   const [category, setCategory] = useState("")
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState(searchValue)
   const [apiProducts, setapiProducts] = useState([])
   useEffect(() => {
     const getDataProducts = async () => {

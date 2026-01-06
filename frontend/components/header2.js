@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Header() {
+
   return (
     <div>
       <nav className=" flex flex-col justify-around items-center px-3 md:flex-row">
