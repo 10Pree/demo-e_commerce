@@ -1,6 +1,38 @@
+"use client"
 import Link from "next/link"
 import Image from "next/image"
-export default function Page() {
+import { use, useEffect, useState } from "react"
+import axios from "axios"
+
+export default function Page({ params }) {
+    const { id } = use(params)
+    console.log(id)
+    const [product, setProduct] = useState(
+        {
+            p_code: "",
+            p_name: "",
+            p_price: "",
+            p_details: "",
+            p_stock: 0,
+            p_image_url: "",
+            created_at: "00-00-00",
+            updated_at: "",
+        }
+    )
+
+    const getProduct = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8000/product/${id}`)
+            setProduct(res.data.data[0])
+            console.log(product)
+
+        } catch (error) {
+            console.log("Message Error: ", error)
+        }
+    }
+    useEffect(() => {
+        getProduct()
+    }, [])
     return (
         <div>
             <h1 className="text-3xl font-bold my-4">แก้ไขสินค้า</h1>
@@ -8,11 +40,11 @@ export default function Page() {
                 <div className="w-full h-1/2 bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 md:w-1/2">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" value={product.p_name} onChange={(e)=> setProduct({...product, p_name:e.target.value})}/>
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ราคา</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" value={product.p_price} onChange={(e)=> setProduct({...product, p_price:e.target.value})}/>
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ประเภท</h1>
@@ -20,7 +52,7 @@ export default function Page() {
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">จำนวน</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" value={product.p_stock} onChange={(e)=> setProduct({...product, p_stock:e.target.value})}/>
                     </div>
                 </div>
                 <div className="flex justify-center items-center m-8 md:m-0">

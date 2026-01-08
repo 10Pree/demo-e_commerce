@@ -1,8 +1,22 @@
 "use client"
+import axios from "axios"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function Page() {
+    const [product, setProduct] = useState([])
+
+    const getProducts = async () => {
+        try {
+            const res = await axios.get("http://localhost:8000/products")
+            setProduct(res.data.data)
+        } catch (error) {
+            console.log("Message Errer: ", error)
+        }
+    }
+    useEffect(() => {
+        getProducts()
+    }, [])
     const data = [
         { id: 1, p_name: "Mouse1", p_price: 191, p_stock: 21 },
         { id: 2, p_name: "Mouse2", p_price: 192, p_stock: 22 },
@@ -68,7 +82,7 @@ export default function Page() {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentItem.map((p) => (
+                            {product.map((p) => (
                                 <tr key={p.id} className="bg-white border-b text-[#111827] border-gray-200 hover:bg-[#111827] hover:text-white ">
                                     <th scope="row" className="px-3 py-4 font-medium whitespace-nowrap ">
                                         {p.id}
@@ -83,19 +97,19 @@ export default function Page() {
                                         {p.p_stock}
                                     </td>
                                     <td className="py-4 text-center flex justify-center items-center gap-4">
-                                        <a href="/dashboard/products/edit" className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</a>
-                                        <a href="#" className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</a>
+                                        <Link href={`/dashboard/products/edit/${p.id}`} className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</Link>
+                                        <Link href="#" className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</Link>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-                    <div className="flex flex-row justify-center items-center gap-2 p-3">
-                        <button onClick={handlePrev} disabled={currentPage === 1} className="px-3 py-2 mt-3 rounded-2xl bg-[#1E3A8A] text-white">กลับ</button>
-                        <span className="text-[#111827] tracking-widest">{currentPage}...{totalPages}</span>
-                        <button onClick={handleNext} disabled={currentPage === totalPages} className="px-3 py-2 mt-3 rounded-2xl bg-[#1E3A8A] text-white">ถัดไป</button>
-                    </div>
+                <div className="flex flex-row justify-center items-center gap-2 p-3">
+                    <button onClick={handlePrev} disabled={currentPage === 1} className="px-3 py-2 mt-3 rounded-2xl bg-[#1E3A8A] text-white">กลับ</button>
+                    <span className="text-[#111827] tracking-widest">{currentPage}...{totalPages}</span>
+                    <button onClick={handleNext} disabled={currentPage === totalPages} className="px-3 py-2 mt-3 rounded-2xl bg-[#1E3A8A] text-white">ถัดไป</button>
+                </div>
 
             </div>
         </div>
