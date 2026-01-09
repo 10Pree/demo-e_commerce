@@ -6,7 +6,8 @@ import axios from "axios"
 
 export default function Page({ params }) {
     const { id } = use(params)
-    console.log(id)
+    const [category, setCategory] = useState("0")
+    const [categories, setCategories] = useState([])
     const [product, setProduct] = useState(
         {
             p_code: "",
@@ -24,7 +25,25 @@ export default function Page({ params }) {
         try {
             const res = await axios.get(`http://localhost:8000/product/${id}`)
             setProduct(res.data.data[0])
-            console.log(product)
+            // console.log(product)
+
+        } catch (error) {
+            console.log("Message Error: ", error)
+        }
+    }
+    const getCategoryById = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8000/categorie/${id}`)
+            setCategory(res.data.data[0].id)
+
+        } catch (error) {
+            console.log("Message Error: ", error)
+        }
+    }
+    const getCategory = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8000/categories`)
+            setCategories(res.data.data)
 
         } catch (error) {
             console.log("Message Error: ", error)
@@ -32,6 +51,8 @@ export default function Page({ params }) {
     }
     useEffect(() => {
         getProduct()
+        getCategory()
+        getCategoryById()
     }, [])
     return (
         <div>
@@ -40,19 +61,28 @@ export default function Page({ params }) {
                 <div className="w-full h-1/2 bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 md:w-1/2">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" value={product.p_name} onChange={(e)=> setProduct({...product, p_name:e.target.value})}/>
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" value={product.p_name} onChange={(e) => setProduct({ ...product, p_name: e.target.value })} />
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ราคา</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" value={product.p_price} onChange={(e)=> setProduct({...product, p_price:e.target.value})}/>
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" value={product.p_price} onChange={(e) => setProduct({ ...product, p_price: e.target.value })} />
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ประเภท</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" />
+                        <div className="w-[280px] md:w-[480px] h-[38px] flex gap-2 mt-2">
+                            <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-[50%] h-[38px] bg-[#F3F4F6] rounded-[8px] border">
+                                <option value="0">เลือก</option>
+                                {
+                                    categories.map((c) => (
+                                        <option key={c.id} value={String(c.id)}>{c.name}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">จำนวน</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" value={product.p_stock} onChange={(e)=> setProduct({...product, p_stock:e.target.value})}/>
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" value={product.p_stock} onChange={(e) => setProduct({ ...product, p_stock: e.target.value })} />
                     </div>
                 </div>
                 <div className="flex justify-center items-center m-8 md:m-0">
