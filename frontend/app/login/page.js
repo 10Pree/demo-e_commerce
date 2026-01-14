@@ -1,19 +1,22 @@
 "use client"
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
+    const router = useRouter()
     const [loginData,setLoginData ] = useState({
             email: "",
             password: ""
         })
-
-console.log(loginData)
-
     const handleLogin = async() => {
         try{
-            const res = await axios.post("http://localhost:8000/login", loginData)
+            const res = await axios.post("http://localhost:8000/login", loginData,{
+                withCredentials: true
+            }
+        )
+            router.push("/dashboard/main")
             alert("Login Successful!!")
         }catch(error){
             console.log("Message Error: ", error)
