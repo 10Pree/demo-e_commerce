@@ -40,10 +40,10 @@ class controllersLogin {
             const token = await modlesRefreshToken.create(data)
 
             res.cookie('refresh_token', refresh_token, {
-                maxAge: 3600000, httpOnly: true, sameSite: 'lax', secure: true
+                maxAge: 3600000, httpOnly: true, sameSite: 'lax', secure: false
             })
             res.cookie('access_token', access_token, {
-                maxAge: 60 * 1000, httpOnly: true, sameSite: 'lax', secure: true
+                maxAge: 60 * 1000, httpOnly: true, sameSite: 'lax', secure: false
             })
 
             // await CreateLogAction(userId,"login")
