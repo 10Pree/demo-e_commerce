@@ -5,6 +5,7 @@ const { hashPassword } = require("../services/password-service");
 class controllersUser {
   static async Create(req, res) {
     try {
+      
       const { username, password, email, phone, address } = req.body;
       const hash_Password = await hashPassword(password);
       const userDate = {
@@ -28,7 +29,7 @@ class controllersUser {
         message: "Create User Successful!!",
       });
     } catch (error) {
-      if (error.code === 'ER_DUP_ENTRT') {
+      if (error.code === 'ER_DUP_ENTRY') {
         return res.status(409).json({ message: "Duplicate entry (username or email already exists)" })
       }
       console.log("Message Error:", error);
