@@ -3,8 +3,10 @@ import Link from "next/link"
 import Image from "next/image"
 import { use, useEffect, useState } from "react"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 export default function Page({ params }) {
+    const router = useRouter()
     const { id } = use(params)
     const [category, setCategory] = useState("0")
     const [categories, setCategories] = useState([])
@@ -16,8 +18,6 @@ export default function Page({ params }) {
             p_details: "",
             p_stock: 0,
             p_image_url: "",
-            created_at: "00-00-00",
-            updated_at: "",
         }
     )
 
@@ -44,6 +44,20 @@ export default function Page({ params }) {
         try {
             const res = await axios.get(`http://localhost:8000/categories`)
             setCategories(res.data.data)
+
+        } catch (error) {
+            console.log("Message Error: ", error)
+        }
+    }
+
+    const updateProduct = async () => {
+        try {
+            const res = await axios.put(`http://localhost:8000/product/${id}`, product, {
+                withCredentials: true
+
+            })
+            alert("update Sucessful!")
+            console.log(res)
 
         } catch (error) {
             console.log("Message Error: ", error)
@@ -98,7 +112,7 @@ export default function Page({ params }) {
                     </div>
                 </div>
             </div>
-            <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white">บันทึก</button></div>
+            <div className="text-end"><button onClick={updateProduct} type="submit" className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white">บันทึก</button></div>
         </div>
     )
 }
