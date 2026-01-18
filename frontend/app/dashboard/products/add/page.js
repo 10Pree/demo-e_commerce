@@ -1,10 +1,30 @@
 "use client"
 import { useState } from "react"
 import Image from "next/image"
+import axios from "axios"
+import { useRouter } from "next/navigation"
 
 
 export default function Page() {
+    const router = useRouter()
     const [urlImagePreview, seturlImagePreview] = useState([])
+    const [productData, setProductData] = useState({
+        p_name: "",
+        p_price: 0,
+        p_details: "",
+        p_stock: 0,
+        p_image_url: ""
+    })
+
+    const handleAddUser = async () => {
+        try {
+            const res = await axios.post("http://localhost:8000/product", productData, { withCredentials: true})
+            alert("Create User Successful")
+            router.push("/dashboard/products")
+        } catch (error) {
+            console.log("Message Error: ", error)
+        }
+    }
 
     const handleUpload = (e) => {
         const files = Array.from(e.target.files)
@@ -30,11 +50,11 @@ export default function Page() {
                 <div className="w-full h-1/2 bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 md:w-1/2">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" onChange={(e)=>setProductData({...productData, p_name: e.target.value})} />
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ราคา</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" onChange={(e)=>setProductData({...productData, p_price: e.target.value})}/>
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ประเภท</h1>
@@ -47,7 +67,7 @@ export default function Page() {
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">จำนวน</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" onChange={(e)=>setProductData({...productData, p_stock: e.target.value})} />
                     </div>
                 </div>
                 <div className="flex justify-center items-center m-8 md:m-0">
@@ -67,7 +87,7 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white">บันทึก</button></div>
+            <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={handleAddUser}>บันทึก</button></div>
         </div>
     )
 }
