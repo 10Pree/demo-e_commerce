@@ -53,26 +53,15 @@ const CreateLogAction = async (id, token, text) => {
     }
 }
 
-const CreateLogProducts = async (productCode, token, text) => {
+const CreateLogProducts = async (productCode, userid, text) => {
     try {
         if (!process.env.ACCESS_TOKEN_SECRET) throw new Error("ACCESS_TOKEN_SECRET is not set");
         if (!productCode) throw new Error("productCode is required");
         if(!text) throw new Error("text is required")
-        if(!token) throw new Error("token is required")
+        if(!userid) throw new Error("token is required")
 
-        let payload;
-        try {
-            payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-        } catch (error) {
-            if (error.name === "TokenExpiredError") {
-                // await newAccessToken(playLoad)
-                throw new Error("Token expired")
-            } else {
-                throw new Error("Invalid token")
-            }
-        }
-
-        const userId = payload.userId
+        const userId = userid.userId
+        console.log(userId)
         const textAction = String(text).slice(0, 1000).trim()
 
         const user = await modelsUser.read(userId)

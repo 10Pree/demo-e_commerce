@@ -79,7 +79,7 @@ function Authorize(permission) {
                 }
 
                 const newToken = await createAccessToken(refreshPayload.userId, refreshPayload.email)
-                console.log(newToken)
+                // console.log(newToken)
                 res.cookie('access_token', newToken, {
                     httpOnly: true,
                     sameSite: 'lax',
@@ -87,6 +87,7 @@ function Authorize(permission) {
                     maxAge: 60 * 1000,
                     path: '/',
                 })
+
 
                 payload = { userId: refreshPayload.userId, email: refreshPayload.email }
             }
@@ -108,6 +109,7 @@ function Authorize(permission) {
                 })
             }
 
+            req.user = payload
             return next()
         } catch (error) {
             console.log(error)
