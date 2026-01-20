@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post('/product',Authorize("project.create"), controllerProduct.Create)
 router.get('/products', controllerProduct.Reads)
-router.get('/product/:id',Authorize("project.read"), controllerProduct.Read)
+router.get('/product/:id', controllerProduct.Read)
 router.get('/product/code/:code', controllerProduct.ReadCode)
 router.put('/product/:id',Authorize("project.edit"), controllerProduct.Update)
 router.delete('/product/:id',Authorize("product.delete"), controllerProduct.Delete)
