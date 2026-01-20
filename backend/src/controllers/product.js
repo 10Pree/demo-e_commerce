@@ -1,3 +1,4 @@
+const modelsCategories = require("../models/categories");
 const moduleProduct = require("../models/product");
 const genProductCode = require("../services/genProductCode");
 const { CreateLogProducts } = require("../services/logAction");
@@ -5,7 +6,7 @@ const { CreateLogProducts } = require("../services/logAction");
 class controllerProduct {
     static async Create(req, res) {
         try {
-            const { p_name, p_price, p_details, p_stock } = req.body;
+            const { p_name, p_price, p_details, p_stock, p_image_url, categories_ids } = req.body;
             const data = {};
             for (let i = 0; i < 3; i++) { // สุ่มใหม่ 3 ครั้ง
                 const code = genProductCode('PRD', 6);
@@ -17,11 +18,20 @@ class controllerProduct {
             if (p_price) data.p_price = p_price;
             if (p_details) data.p_details = p_details;
             if (p_stock) data.p_stock = p_stock;
+            if (p_image_url) data.p_image_url = p_image_url
 
-            await moduleProduct.create(data);
+            const product = await moduleProduct.create(data);
 
             const userId = req.user
-            // console.log("user id", userId.userId )
+
+            if(Array.isArray(categories_ids) && categories_ids.length > 0){
+                const rows = categories_ids.map(catId => [product.insertId, catId])
+                await modelsCategories.createMap(rows)
+            }
+
+            // await modelsCategories.createMap(row)
+
+            // console.log("product id", productId.insertId )
             await CreateLogProducts(data.p_code, userId, "Create.Product")
             return res.status(200).json({
                 message: "Create Product Successful!!",

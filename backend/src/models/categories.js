@@ -41,7 +41,7 @@ class modelsCategories {
     static async createMap(data){
         try{
             const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO map_categories SET ?', [data])
+            const [resulte] = await conn.query('INSERT INTO map_categories (products_id, categories_id) VALUES ?', [data])
             return resulte
         }catch(error){
             throw error
