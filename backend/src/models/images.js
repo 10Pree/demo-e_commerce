@@ -4,7 +4,7 @@ class modlesImages {
     static async create(data){
         try{
             const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO images SET ?', data)
+            const [resulte] = await conn.query('INSERT INTO images (image_url) VALUES (?)', data)
             return resulte 
         }catch(error){
             throw error
@@ -53,7 +53,7 @@ class modlesImages {
     static async createMap(data){
         try{
             const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO map_images SET ?', data)
+            const [resulte] = await conn.query('INSERT INTO map_images (products_id, images_id) VALUES ?', [data])
             return resulte
         }catch(error){
             throw error

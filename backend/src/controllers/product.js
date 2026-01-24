@@ -1,4 +1,5 @@
 const modelsCategories = require("../models/categories");
+const modlesImages = require("../models/images");
 const moduleProduct = require("../models/product");
 const genProductCode = require("../services/genProductCode");
 const { CreateLogProducts } = require("../services/logAction");
@@ -6,7 +7,7 @@ const { CreateLogProducts } = require("../services/logAction");
 class controllerProduct {
     static async Create(req, res) {
         try {
-            const { p_name, p_price, p_details, p_stock, p_image_url, categories_ids } = req.body;
+            const { p_name, p_price, p_details, p_stock, image_url, categories_ids } = req.body;
             const data = {};
             for (let i = 0; i < 3; i++) { // สุ่มใหม่ 3 ครั้ง
                 const code = genProductCode('PRD', 6);
@@ -18,13 +19,28 @@ class controllerProduct {
             if (p_price) data.p_price = p_price;
             if (p_details) data.p_details = p_details;
             if (p_stock) data.p_stock = p_stock;
-            if (p_image_url) data.p_image_url = p_image_url
+
 
             const product = await moduleProduct.create(data);
 
             const userId = req.user
+            // console.log("p_image_url:", image_url, Array.isArray(image_url))
 
-            if(Array.isArray(categories_ids) && categories_ids.length > 0){
+            if (Array.isArray(image_url) && image_url.length > 0) {
+                // const imagesRows = image_url.map(url => [url])
+                const imageIds = []
+
+                for (const url of image_url) {
+                    const image = await modlesImages.create(url)
+                    imageIds.push(image.insertId)
+                }
+
+                const rows = imageIds.map(imgId => [product.insertId, imgId])
+                // console.log(rows)
+                await modlesImages.createMap(rows)
+            }
+
+            if (Array.isArray(categories_ids) && categories_ids.length > 0) {
                 const rows = categories_ids.map(catId => [product.insertId, catId])
                 await modelsCategories.createMap(rows)
             }
