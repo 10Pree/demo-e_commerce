@@ -60,7 +60,7 @@ const CreateLogProducts = async (productCode, userid, text) => {
         if(!text) throw new Error("text is required")
         if(!userid) throw new Error("userId is required")
 
-        const userId = userid.userId
+        const userId = userid
         console.log(userId)
         const textAction = String(text).slice(0, 1000).trim()
 
