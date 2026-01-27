@@ -23,11 +23,10 @@ class controllerProduct {
 
             const product = await moduleProduct.create(data);
 
-            const userId = req.user
+            const userId = req.user.userId
             // console.log("p_image_url:", image_url, Array.isArray(image_url))
 
             if (Array.isArray(image_url) && image_url.length > 0) {
-                // const imagesRows = image_url.map(url => [url])
                 const imageIds = []
 
                 for (const url of image_url) {
@@ -121,29 +120,44 @@ class controllerProduct {
 
     static async Update(req, res) {
         try {
-            // const userId = 
             const productId = req.params.id
-            const { p_name, p_price, p_details, p_stock, p_image_url } = req.body
-            const newData = {}
-            if (p_name) newData.p_name = p_name
-            if (p_price) newData.p_price = p_price
-            if (p_details) newData.p_details = p_details
-            if (p_stock) newData.p_stock = p_stock
-            if (p_image_url) newData.p_image_url = p_image_url
-
             const checkProduct = await moduleProduct.read(productId)
             if (checkProduct.length === 0) {
                 return res.status(401).json({
                     message: "Product Not Found"
                 })
             }
-            const product = await moduleProduct.update(productId, newData)
-            const token = req.cookies.access_token
-            const productCode = checkProduct[0].p_code
-            await CreateLogProducts(productCode, token, "Update.Product")
+
+            const { p_name, p_price, p_details, p_stock, image_url, categories_ids } = req.body
+            const newData = {}
+            if (p_name) newData.p_name = p_name
+            if (p_price) newData.p_price = p_price
+            if (p_details) newData.p_details = p_details
+            if (p_stock) newData.p_stock = p_stock
+
+            if (Object.keys(newData).length > 0) {
+                await moduleProduct.update(productId, newData)
+            }
+
+            if (Array.isArray(image_url) && image_url.length > 0) {
+                const imgIds = []
+                await modlesImages.deleteImgByIdProduct(productId)
+                // await modlesImages.deleteByMapId(productId)
+                
+                for (const url of image_url) {
+                    const image = await modlesImages.create(url)
+                    imgIds.push(image.insertId)
+                }
+                
+                const mapImages = imgIds.map(imgid => [productId, imgid])
+                await modlesImages.createMap(mapImages)
+            }
+
+
+            const userId = req.user.userId
+            await CreateLogProducts(productId, userId, "Update.Product")
             return res.status(200).json({
                 message: "Update Product Successful!!",
-                data: product
             })
 
         } catch (error) {
