@@ -23,7 +23,6 @@ class controllerProduct {
 
             const product = await moduleProduct.create(data);
 
-            const userId = req.user.userId
             // console.log("p_image_url:", image_url, Array.isArray(image_url))
 
             if (Array.isArray(image_url) && image_url.length > 0) {
@@ -35,7 +34,6 @@ class controllerProduct {
                 }
 
                 const rows = imageIds.map(imgId => [product.insertId, imgId])
-                // console.log(rows)
                 await modlesImages.createMap(rows)
             }
 
@@ -47,7 +45,8 @@ class controllerProduct {
             // await modelsCategories.createMap(row)
 
             // console.log("product id", productId.insertId )
-            await CreateLogProducts(data.p_code, userId, "Create.Product")
+            const userId = req.user.userId
+            await CreateLogProducts(product.insertId, userId, "Create.Product")
             return res.status(200).json({
                 message: "Create Product Successful!!",
             });
@@ -153,6 +152,14 @@ class controllerProduct {
                 await modlesImages.createMap(mapImages)
             }
 
+            if(Array.isArray(categories_ids) && categories_ids.length > 0){
+                await modelsCategories.delete(productId)
+                
+                const rows = categories_ids.map(catId => [productId, catId])
+                await modelsCategories.createMap(rows)
+
+            }
+
 
             const userId = req.user.userId
             await CreateLogProducts(productId, userId, "Update.Product")
@@ -177,14 +184,19 @@ class controllerProduct {
                     message: "Product Not Found"
                 })
             }
-            const token = req.cookies.access_token
-            const productCode = checkProduct[0].p_code
-            await CreateLogProducts(productCode, token, "Delete.Product")
 
+
+            await modelsCategories.delete(productId)
+            await modlesImages.deleteByMapId(productId)
             const product = await moduleProduct.delete(productId)
+
+            const userId = req.user.insertId
+            await CreateLogProducts(productId, userId, "Delete.Product")
+
+
             return res.status(200).json({
-                message: "Delete Product Successful!!",
-                data: product
+                message: "Delete Product Successful!!"
+                // data: product
             })
 
         } catch (error) {

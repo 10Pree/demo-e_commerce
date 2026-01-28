@@ -37,6 +37,15 @@ class modelsCategories {
             throw error
         }
     }
+    static async delete(id){
+        try{
+            const conn = getDB()
+            const [resulte] = await conn.query('DELETE FROM map_categories WHERE products_id = ?', id)
+            return resulte
+        }catch(error){
+            throw error
+        }
+    }
 
     static async createMap(data){
         try{
