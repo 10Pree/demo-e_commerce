@@ -187,7 +187,7 @@ class controllerProduct {
 
 
             await modelsCategories.delete(productId)
-            await modlesImages.deleteByMapId(productId)
+            await modlesImages.deleteImgByIdProduct(productId)
             const product = await moduleProduct.delete(productId)
 
             const userId = req.user.insertId
