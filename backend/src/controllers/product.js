@@ -8,8 +8,11 @@ const { CreateLogProducts } = require("../services/logAction");
 class controllerProduct {
     static async Create(req, res) {
         try {
-            const { p_name, p_price, p_details, p_stock, categories_ids } = req.body;
+            const { p_name, p_price, p_details, p_stock, categories_ids } = req.body || {};
             const image_url = req.files
+            console.log("FILES:", req.files);
+            console.log("BODY:", req.body);
+
             const data = {};
             for (let i = 0; i < 3; i++) { // สุ่มใหม่ 3 ครั้ง
                 const code = genProductCode('PRD', 6);
@@ -145,19 +148,19 @@ class controllerProduct {
                 const imgIds = []
                 await modlesImages.deleteImgByIdProduct(productId)
                 // await modlesImages.deleteByMapId(productId)
-                
+
                 for (const url of image_url) {
                     const image = await modlesImages.create(url)
                     imgIds.push(image.insertId)
                 }
-                
+
                 const mapImages = imgIds.map(imgid => [productId, imgid])
                 await modlesImages.createMap(mapImages)
             }
 
-            if(Array.isArray(categories_ids) && categories_ids.length > 0){
+            if (Array.isArray(categories_ids) && categories_ids.length > 0) {
                 await modelsCategories.delete(productId)
-                
+
                 const rows = categories_ids.map(catId => [productId, catId])
                 await modelsCategories.createMap(rows)
 

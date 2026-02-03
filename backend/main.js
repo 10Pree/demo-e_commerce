@@ -14,19 +14,22 @@ const app = express()
 const port = process.env.POST
 const cors = require('cors')
 
-app.use(express.json());
 
 app.use(cors({
      origin: "http://localhost:3000",
      credentials: true
 }))
-
+app.use(express.json());
 app.use(cookieParser())
+app.use(express.urlencoded({ extended: true}))
 
+
+
+
+app.use('/', products)
 app.use('/', users)
 app.use('/', login)
 app.use('/', auth)
-app.use('/', products)
 app.use('/', orders)
 app.use('/', payments)
 app.use('/', categories)
