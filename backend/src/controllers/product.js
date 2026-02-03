@@ -4,10 +4,12 @@ const moduleProduct = require("../models/product");
 const genProductCode = require("../services/genProductCode");
 const { CreateLogProducts } = require("../services/logAction");
 
+
 class controllerProduct {
     static async Create(req, res) {
         try {
-            const { p_name, p_price, p_details, p_stock, image_url, categories_ids } = req.body;
+            const { p_name, p_price, p_details, p_stock, categories_ids } = req.body;
+            const image_url = req.files
             const data = {};
             for (let i = 0; i < 3; i++) { // สุ่มใหม่ 3 ครั้ง
                 const code = genProductCode('PRD', 6);
@@ -28,7 +30,8 @@ class controllerProduct {
             if (Array.isArray(image_url) && image_url.length > 0) {
                 const imageIds = []
 
-                for (const url of image_url) {
+                for (const file of image_url) {
+                    const url = `/uploads/products/${file.filename}`
                     const image = await modlesImages.create(url)
                     imageIds.push(image.insertId)
                 }
