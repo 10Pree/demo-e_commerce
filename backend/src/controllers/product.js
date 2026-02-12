@@ -134,7 +134,8 @@ class controllerProduct {
                 })
             }
 
-            const { p_name, p_price, p_details, p_stock, image_url, categories_ids } = req.body
+            const { p_name, p_price, p_details, p_stock, categories_ids } = req.body
+            const image_url = req.files
             const newData = {}
             if (p_name) newData.p_name = p_name
             if (p_price) newData.p_price = p_price
@@ -148,9 +149,11 @@ class controllerProduct {
             if (Array.isArray(image_url) && image_url.length > 0) {
                 const imgIds = []
                 await modlesImages.deleteImgByIdProduct(productId)
+
                 // await modlesImages.deleteByMapId(productId)
 
-                for (const url of image_url) {
+                for (const file of image_url) {
+                    const url = `/uploads/products${file.filename}`
                     const image = await modlesImages.create(url)
                     imgIds.push(image.insertId)
                 }
