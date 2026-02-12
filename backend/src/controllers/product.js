@@ -1,8 +1,11 @@
+const { getDB } = require("../config/db");
+const fs = require('fs')
 const modelsCategories = require("../models/categories");
 const modlesImages = require("../models/images");
 const moduleProduct = require("../models/product");
 const genProductCode = require("../services/genProductCode");
 const { CreateLogProducts } = require("../services/logAction");
+const path = require("path");
 
 
 class controllerProduct {
@@ -125,13 +128,13 @@ class controllerProduct {
     }
 
     static async Update(req, res) {
+        // const conn = await getDB()
         try {
+            // await conn.beginTransaction()
             const productId = req.params.id
             const checkProduct = await moduleProduct.read(productId)
             if (checkProduct.length === 0) {
-                return res.status(401).json({
-                    message: "Product Not Found"
-                })
+                throw new Error("Product Not Found")
             }
 
             const { p_name, p_price, p_details, p_stock, categories_ids } = req.body
@@ -148,12 +151,19 @@ class controllerProduct {
 
             if (Array.isArray(image_url) && image_url.length > 0) {
                 const imgIds = []
+                const rows = await modlesImages.getImgByIdProduct(productId)
+
+                for(const img of rows){
+                    const fullPath = path.join(__dirname, '../../', img.image_url)
+
+                    if(fs.existsSync(fullPath)){
+                        fs.unlinkSync(fullPath)
+                    }
+                }
+                    
                 await modlesImages.deleteImgByIdProduct(productId)
-
-                // await modlesImages.deleteByMapId(productId)
-
                 for (const file of image_url) {
-                    const url = `/uploads/products${file.filename}`
+                    const url = `/uploads/products/${file.filename}`
                     const image = await modlesImages.create(url)
                     imgIds.push(image.insertId)
                 }
@@ -178,6 +188,12 @@ class controllerProduct {
             })
 
         } catch (error) {
+        
+            if(req.files){
+                for(const file of req.files){
+                    fs.unlinkSync(file.path)
+                }
+            }
             console.log("Message Error:", error);
             return res.status(500).json({
                 message: "Server Error",
@@ -210,7 +226,7 @@ class controllerProduct {
             })
 
         } catch (error) {
-            console.log("Message Error:", error);
+            console.log("Message Error:", error.message);
             return res.status(500).json({
                 message: "Server Error",
             });

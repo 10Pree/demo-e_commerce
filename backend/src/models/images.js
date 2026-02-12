@@ -39,7 +39,20 @@ class modlesImages {
             throw error
         }
     }
-
+    static async getImgByIdProduct(id) {
+        try {
+            const conn = await getDB()
+            const [resulte] = await conn.query(`
+                SELECT i.*
+                FROM images i
+                JOIN map_images mi ON mi.images_id = i.id
+                WHERE mi.products_id = ?
+                `, id)
+            return resulte
+        } catch (error) {
+            throw error
+        }
+    }
     static async update(id, data) {
         try {
             const conn = await getDB()
