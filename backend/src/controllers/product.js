@@ -206,17 +206,26 @@ class controllerProduct {
             const productId = req.params.id
             const checkProduct = await moduleProduct.read(productId)
             if (checkProduct.length === 0) {
-                return res.status(401).json({
-                    message: "Product Not Found"
-                })
+                throw new Error("Product Not Found")
             }
 
+            // const rows = await modlesImages.getImgByIdProduct(productId)
 
-            await modelsCategories.delete(productId)
-            await modlesImages.deleteImgByIdProduct(productId)
-            const product = await moduleProduct.delete(productId)
+            // for(const img of rows){
+            //     const fullPath = path.join(__dirname,'../../',img.image_url)
+            //     if(fs.existsSync(fullPath)){
+            //         fs.unlinkSync(fullPath)
+            //     }
+            // }
 
-            const userId = req.user.insertId
+            
+            // await modlesImages.deleteImgByIdProduct(productId)
+            
+            // await modelsCategories.delete(productId)
+            
+            await moduleProduct.softDelete(productId)
+
+            const userId = req.user.userId
             await CreateLogProducts(productId, userId, "Delete.Product")
 
 

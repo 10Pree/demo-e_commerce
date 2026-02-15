@@ -59,6 +59,16 @@ class moduleProduct {
             throw error
         }
     }
+
+        static async softDelete(productId){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('UPDATE products SET deleted_at = Now() WHERE id = ?', productId)
+            return results
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = moduleProduct
