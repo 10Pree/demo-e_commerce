@@ -1,7 +1,7 @@
 const { getDB } = require("../config/db");
 const fs = require('fs')
 const modelsCategories = require("../models/categories");
-const modlesImages = require("../models/images");
+const modlesImagesProducts = require("../models/images_products");
 const moduleProduct = require("../models/product");
 const genProductCode = require("../services/genProductCode");
 const { CreateLogProducts } = require("../services/logAction");
@@ -39,12 +39,12 @@ class controllerProduct {
 
                 for (const file of image_url) {
                     const url = `/uploads/products/${file.filename}`
-                    const image = await modlesImages.create(url)
+                    const image = await modlesImagesProducts.create(url)
                     imageIds.push(image.insertId)
                 }
 
                 const rows = imageIds.map(imgId => [product.insertId, imgId])
-                await modlesImages.createMap(rows)
+                await modlesImagesProducts.createMap(rows)
             }
 
             if (Array.isArray(categories_ids) && categories_ids.length > 0) {
@@ -151,7 +151,7 @@ class controllerProduct {
 
             if (Array.isArray(image_url) && image_url.length > 0) {
                 const imgIds = []
-                const rows = await modlesImages.getImgByIdProduct(productId)
+                const rows = await modlesImagesProducts.getImgByIdProduct(productId)
 
                 for(const img of rows){
                     const fullPath = path.join(__dirname, '../../', img.image_url)
@@ -161,15 +161,15 @@ class controllerProduct {
                     }
                 }
                     
-                await modlesImages.deleteImgByIdProduct(productId)
+                await modlesImagesProducts.deleteImgByIdProduct(productId)
                 for (const file of image_url) {
                     const url = `/uploads/products/${file.filename}`
-                    const image = await modlesImages.create(url)
+                    const image = await modlesImagesProducts.create(url)
                     imgIds.push(image.insertId)
                 }
 
                 const mapImages = imgIds.map(imgid => [productId, imgid])
-                await modlesImages.createMap(mapImages)
+                await modlesImagesProducts.createMap(mapImages)
             }
 
             if (Array.isArray(categories_ids) && categories_ids.length > 0) {

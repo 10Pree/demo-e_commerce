@@ -8,7 +8,7 @@ const products = require('./src/router/product')
 const orders = require('./src/router/orders')
 const payments = require('./src/router/payments')
 const categories = require('./src/router/categories')
-const images = require('./src/router/images')
+// const images = require('./src/router/images')
 const search = require('./src/router/search')
 const app = express()
 const port = process.env.POST
@@ -31,7 +31,7 @@ app.use('/', auth)
 app.use('/', orders)
 app.use('/', payments)
 app.use('/', categories)
-app.use('/', images)
+// app.use('/', images)
 app.use('/', search)
 
 const startServer = async() =>{
