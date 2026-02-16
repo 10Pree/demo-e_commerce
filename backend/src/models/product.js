@@ -13,7 +13,7 @@ class moduleProduct {
     static async reads(){
         try{
             const conn = await getDB()
-            const [results] = await conn.query('SELECT * FROM products')
+            const [results] = await conn.query('SELECT * FROM products WHERE deleted_at IS NULL')
             return results
         }catch(error){
             throw error
@@ -23,7 +23,7 @@ class moduleProduct {
     static async read(productId){
         try{
             const conn = await getDB()
-            const [results] = await conn.query('SELECT * FROM products WHERE id = ?', productId)
+            const [results] = await conn.query('SELECT * FROM products WHERE id = ? AND deleted_at IS NULL', productId)
             return results
         }catch(error){
             throw error
