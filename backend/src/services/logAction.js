@@ -4,31 +4,19 @@ const modelsUser = require("../models/user")
 const jwt = require('jsonwebtoken');
 
 
-const CreateLogAction = async (id, token, text) => {
+const CreateLogAction = async (newUserId, actionUser, text) => {
     try {
-        if (!id) throw new Error("id is required");
-        if (!token) throw new Error("token is required");
+        if (!newUserId) throw new Error("id is required");
+        if (!actionUser) throw new Error("userid is required");
         if (!text) throw new Error("text is required");
         if (!process.env.ACCESS_TOKEN_SECRET) throw new Error("ACCESS_TOKEN_SECRET is not set");
 
         const textAction = String(text).slice(0, 1000).trim()
         // console.log(token)
-        let payload;
-        try {
-            payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-        } catch (error) {
-            if (error.name === "TokenExpiredError") {
-                // await newAccessToken(playLoad)
-                throw new Error("Token expired")
-            } else {
-                throw new Error("Invalid token")
-            }
-        }
-        const userId = id
-        const userAction = payload.userId
 
-        const user = await modelsUser.read(userId)
-        const action = await modelsUser.read(userAction)
+
+        const user = await modelsUser.read(newUserId)
+        const action = await modelsUser.read(actionUser)
         if (user.length === 0 || action.length === 0 ) {
             throw new Error("User Not Found")
         }
