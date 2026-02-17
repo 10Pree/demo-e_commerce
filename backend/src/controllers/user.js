@@ -1,3 +1,4 @@
+const modlesImages = require("../models/images_users");
 const modelsUser = require("../models/user");
 const { CreateLogAction } = require("../services/logAction");
 const { hashPassword } = require("../services/password-service");
@@ -7,6 +8,8 @@ class controllersUser {
     try {
       
       const { username, password, email, phone, address } = req.body;
+      const file_images = req.files
+      console.log("file_Image:",req.files)
       const hash_Password = await hashPassword(password);
       const userDate = {
         username,
@@ -15,12 +18,27 @@ class controllersUser {
         phone,
         address,
       };
-      const user = await modelsUser.create(userDate);
-      const token = req.cookies.access_token
-      const userId = user.insertId
+
+        const user = await modelsUser.create(userDate);
+      
+
+      if(Array.isArray(file_images) && file_images.length > 0){
+        const imagsId = []
+        for(const img of file_images){
+          const url = `/uploads/users/${img.filename}`
+          const row = await modlesImages.create(url)
+          imagsId.push(row.insertId)
+        }
+
+        const rows = imagsId.map(imgId => [user.insertId, imgId])
+        await modlesImages.createMap(rows)
+      }
+      
+      const actionUser = req.user.userId
+      const newUserId = user.insertId
 
       try {
-        await CreateLogAction(userId, token, "Create.User")
+        await CreateLogAction(newUserId, actionUser, "Create.User")
       } catch (error) {
         console.warn("Log failed:", error?.message || error);
       }

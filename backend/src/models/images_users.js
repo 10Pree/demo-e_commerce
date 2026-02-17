@@ -78,7 +78,7 @@ class modlesImages {
             const [resulte] = await conn.query(`
                 DELETE i
                 FROM images_users i
-                JOIN map_images_users mi ON mi.images_id = i.id
+                JOIN map_image_users mi ON mi.images_id = i.id
                 WHERE mi.users_id = ?
                 `, id)
             return resulte
@@ -89,7 +89,7 @@ class modlesImages {
     static async deleteByMapId(id) {
         try {
             const conn = await getDB()
-            const [resulte] = await conn.query('DELETE FROM map_images_products WHERE products_id = ?', id)
+            const [resulte] = await conn.query('DELETE FROM map_image_users WHERE users_id = ?', id)
             return resulte
         } catch (error) {
             throw error
@@ -98,7 +98,7 @@ class modlesImages {
     static async createMap(data) {
         try {
             const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO map_images_products (products_id, images_id) VALUES ?', [data])
+            const [resulte] = await conn.query('INSERT INTO map_image_users  (users_id, images_id) VALUES ?', [data])
             return resulte
         } catch (error) {
             throw error
