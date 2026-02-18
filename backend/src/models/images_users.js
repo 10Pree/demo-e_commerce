@@ -45,7 +45,7 @@ class modlesImages {
             const [resulte] = await conn.query(`
                 SELECT i.*
                 FROM images_users i
-                JOIN map_images_users mi ON mi.images_id = i.id
+                JOIN map_image_users mi ON mi.images_id = i.id
                 WHERE mi.users_id = ?
                 `, id)
             return resulte
