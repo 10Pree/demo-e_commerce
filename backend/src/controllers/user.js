@@ -1,15 +1,17 @@
 const modlesImages = require("../models/images_users");
 const modelsUser = require("../models/user");
+const path = require('path')
+const fs = require('fs')
 const { CreateLogAction } = require("../services/logAction");
 const { hashPassword } = require("../services/password-service");
 
 class controllersUser {
   static async Create(req, res) {
     try {
-      
+
       const { username, password, email, phone, address } = req.body;
       const file_images = req.files
-      console.log("file_Image:",req.files)
+      console.log("file_Image:", req.files)
       const hash_Password = await hashPassword(password);
       const userDate = {
         username,
@@ -19,12 +21,12 @@ class controllersUser {
         address,
       };
 
-        const user = await modelsUser.create(userDate);
-      
+      const user = await modelsUser.create(userDate);
 
-      if(Array.isArray(file_images) && file_images.length > 0){
+
+      if (Array.isArray(file_images) && file_images.length > 0) {
         const imagsId = []
-        for(const img of file_images){
+        for (const img of file_images) {
           const url = `/uploads/users/${img.filename}`
           const row = await modlesImages.create(url)
           imagsId.push(row.insertId)
@@ -33,7 +35,7 @@ class controllersUser {
         const rows = imagsId.map(imgId => [user.insertId, imgId])
         await modlesImages.createMap(rows)
       }
-      
+
       const actionUser = req.user.userId
       const newUserId = user.insertId
 
@@ -102,6 +104,7 @@ class controllersUser {
   static async Update(req, res) {
     try {
       const userId = req.params.id
+      const file_Images = req.files
       const user = await modelsUser.read(userId);
       if (user.length === 0) {
         return res.status(400).json({
@@ -109,18 +112,44 @@ class controllersUser {
         });
       }
       const { username, email, phone, address } = req.body;
-      const userData = {};
+      const userData = {
+      };
 
       if (username) userData.username = username;
       if (email) userData.email = email;
       if (phone) userData.phone = phone
       if (address) userData.address = address
 
+      if (Array.isArray(file_Images) && file_Images.length > 0) {
+        const imagsId = []
+        const image = await modlesImages.getImgByIdUsers(userId)
+
+        for (const img of image) {
+          const fullPath = path.join(__dirname, '../../', img.image_url)
+
+          if (fs.existsSync(fullPath)) {
+            fs.unlinkSync(fullPath)
+          }
+        }
+        await modlesImages.deleteImgByIdUsers(userId)
+        for (const img of file_Images) {
+          const url = `/uploads/users/${img.filename}`
+          const row = await modlesImages.create(url)
+          imagsId.push(row.insertId)
+        }
+
+        const rows = imagsId.map(imgId => [userId, imgId])
+        await modlesImages.createMap(rows)
+      }
+
+
       const newData = await modelsUser.update(userId, userData);
-      const userID = user[0].id
-      const token = req.cookies.access_token
+      const actionUser = req.user.userId
+      const DataUserId = userId
+
+      // console.log(DataUserId)
       try {
-        await CreateLogAction(userID, token, "Update.User")
+        await CreateLogAction(DataUserId, actionUser, "Update.User")
       } catch (error) {
         console.warn("Log failed:", error?.message || error)
       }
@@ -159,7 +188,7 @@ class controllersUser {
       await modelsUser.updatePassword(userId, newHash);
 
       const userID = user[0].id
-      const token = req.cookies.access_token 
+      const token = req.cookies.access_token
 
       await CreateLogAction(userID, token, "Update.User")
       return res.status(201).json({
@@ -182,7 +211,7 @@ class controllersUser {
           message: "User Not Found"
         })
       }
-      
+
       const userID = rows[0].id
       const token = req.cookies.access_token
       await CreateLogAction(userID, token, "Delete.User")
