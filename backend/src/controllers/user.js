@@ -187,10 +187,10 @@ class controllersUser {
       const newHash = await hashPassword(newPassword);
       await modelsUser.updatePassword(userId, newHash);
 
-      const userID = user[0].id
-      const token = req.cookies.access_token
+      const actionUser = req.user.userId
+      const DataUserId = userId
 
-      await CreateLogAction(userID, token, "Update.User")
+      await CreateLogAction(DataUserId, actionUser, "Update.User")
       return res.status(201).json({
         message: "Update Password Successful!!",
       });
@@ -207,9 +207,7 @@ class controllersUser {
       const userId = req.params.id
       const rows = await modelsUser.read(userId)
       if (rows.length === 0) {
-        return res.status(404).json({
-          message: "User Not Found"
-        })
+        throw new Error("User Not Found")
       }
 
       const userID = rows[0].id
