@@ -54,7 +54,7 @@ class modelsOAuth{
             const [results] = await conn.query('INSERT INTO map_roles SET ?', [data])
             return results
         }catch(error){
-            throw Error
+            throw error
         }
     }
 }

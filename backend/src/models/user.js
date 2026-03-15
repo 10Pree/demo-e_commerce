@@ -22,6 +22,27 @@ class modelsUser {
             throw error
         }
     }
+    static async readsMapRole() {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query(`
+                SELECT
+                u.id,
+                u.username,
+                u.email,
+                u.phone,
+                u.address,
+                r.name AS roles_name
+                FROM users u
+                JOIN map_roles mr ON mr.users_id = u.id
+                JOIN roles r ON r.id = mr.roles_id
+                `)
+                return results
+        }catch(error){
+            console.log("Message Error:", error)
+            throw error
+        }
+    }
 
     static async read(userId) {
         try {
