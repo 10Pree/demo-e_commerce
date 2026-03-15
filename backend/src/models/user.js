@@ -15,7 +15,7 @@ class modelsUser {
     static async reads() {
         try {
             const conn = await getDB()
-            const [results] = await conn.query('SELECT username, email, phone, address FROM users')
+            const [results] = await conn.query('SELECT id, username, email, phone, address FROM users WHERE deleted_at IS NULL')
             return results
         } catch (error) {
             console.log("Message Error:", error)
@@ -26,7 +26,7 @@ class modelsUser {
     static async read(userId) {
         try {
             const conn = await getDB()
-            const [results] = await conn.query('SELECT id, username, email, phone, address FROM users WHERE id = ?', userId)
+            const [results] = await conn.query('SELECT id, username, email, phone, address FROM users WHERE id = ? AND deleted_at IS NULL', userId)
             return results
         } catch (error) {
             console.log("Message Error:", error)
@@ -82,6 +82,16 @@ class modelsUser {
         try{
             const conn = await getDB()
             const [results] = await conn.query('DELETE FROM users WHERE id = ?', userId)
+            return results
+        }catch(error){
+            console.log("Message Error:", error)
+            throw error
+        }
+    }
+        static async softdelete(userId) {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('UPDATE users SET deleted_at = Now() WHERE id = ?', userId)
             return results
         }catch(error){
             console.log("Message Error:", error)
