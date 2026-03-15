@@ -1,9 +1,10 @@
-const modlesImages = require("../models/images_users");
+const modelsImages = require("../models/images_users");
 const modelsUser = require("../models/user");
 const path = require('path')
 const fs = require('fs')
 const { CreateLogAction } = require("../services/logAction");
 const { hashPassword } = require("../services/password-service");
+const modelsOAuth = require("../models/auth");
 
 class controllersUser {
   static async Create(req, res) {
@@ -11,7 +12,7 @@ class controllersUser {
 
       const { username, password, email, phone, address } = req.body;
       const file_images = req.files
-      console.log("file_Image:", req.files)
+      // console.log("file_Image:", req.files)
       const hash_Password = await hashPassword(password);
       const userDate = {
         username,
@@ -28,14 +29,22 @@ class controllersUser {
         const imagsId = []
         for (const img of file_images) {
           const url = `/uploads/users/${img.filename}`
-          const row = await modlesImages.create(url)
+          const row = await modelsImages.create(url)
           imagsId.push(row.insertId)
         }
 
         const rows = imagsId.map(imgId => [user.insertId, imgId])
-        await modlesImages.createMap(rows)
+        await modelsImages.createMap(rows)
       }
 
+      if(user){
+        try{
+        const data = {users_id: user.insertId, roles_id: 2}
+        const map = await modelsOAuth.mapRoleUser(data)
+        }catch(error){
+        console.log(error)
+      }
+    }
       const actionUser = req.user.userId
       const newUserId = user.insertId
 
@@ -61,7 +70,7 @@ class controllersUser {
 
   static async Reads(req, res) {
     try {
-      const userData = await modelsUser.reads();
+      const userData = await modelsUser.readsMapRole();
       return res.status(200).json({
         message: "Reads User Successful!!",
         data: userData,
@@ -122,7 +131,7 @@ class controllersUser {
 
       if (Array.isArray(file_Images) && file_Images.length > 0) {
         const imagsId = []
-        const image = await modlesImages.getImgByIdUsers(userId)
+        const image = await modelsImages.getImgByIdUsers(userId)
 
         for (const img of image) {
           const fullPath = path.join(__dirname, '../../', img.image_url)
@@ -131,15 +140,15 @@ class controllersUser {
             fs.unlinkSync(fullPath)
           }
         }
-        await modlesImages.deleteImgByIdUsers(userId)
+        await modelsImages.deleteImgByIdUsers(userId)
         for (const img of file_Images) {
           const url = `/uploads/users/${img.filename}`
-          const row = await modlesImages.create(url)
+          const row = await modelsImages.create(url)
           imagsId.push(row.insertId)
         }
 
         const rows = imagsId.map(imgId => [userId, imgId])
-        await modlesImages.createMap(rows)
+        await modelsImages.createMap(rows)
       }
 
 
@@ -210,11 +219,11 @@ class controllersUser {
         throw new Error("User Not Found")
       }
 
-      const userID = rows[0].id
-      const token = req.cookies.access_token
-      await CreateLogAction(userID, token, "Delete.User")
+      const actionUser = req.user.userId
+      const DataUserId = userId
+      await CreateLogAction(DataUserId, actionUser, "Delete.User")
 
-      await modelsUser.delete(userId)
+      await modelsUser.softdelete(userId)
       return res.status(200).json({
         message: "Delete Successful!!"
       })

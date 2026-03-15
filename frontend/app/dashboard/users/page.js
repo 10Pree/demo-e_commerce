@@ -1,32 +1,47 @@
 "use client"
+import axios from "axios";
 import Link from "next/link";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 export default function Page() {
-    const data = [
-        { id: 1, username: "user1", email: "user1@gmail.com", role: "admin" },
-        { id: 2, username: "user2", email: "user2@gmail.com", role: "user" },
-        { id: 3, username: "user3", email: "user3@gmail.com", role: "user" },
-        { id: 4, username: "user4", email: "user4@gmail.com", role: "editor" },
-        { id: 5, username: "user5", email: "user5@gmail.com", role: "user" },
-        { id: 6, username: "user6", email: "user6@gmail.com", role: "admin" },
-        { id: 7, username: "user7", email: "user7@gmail.com", role: "user" },
-        { id: 8, username: "user8", email: "user8@gmail.com", role: "editor" },
-        { id: 9, username: "user9", email: "user9@gmail.com", role: "user" },
-        { id: 10, username: "user10", email: "user10@gmail.com", role: "user" },
-        { id: 11, username: "user11", email: "user11@gmail.com", role: "admin" },
-        { id: 12, username: "user12", email: "user12@gmail.com", role: "editor" },
-        { id: 13, username: "user13", email: "user13@gmail.com", role: "user" },
-        { id: 14, username: "user14", email: "user14@gmail.com", role: "user" },
-        { id: 15, username: "user15", email: "user15@gmail.com", role: "admin" },
-        { id: 16, username: "user16", email: "user16@gmail.com", role: "editor" },
-        { id: 17, username: "user17", email: "user17@gmail.com", role: "user" },
-        { id: 18, username: "user18", email: "user18@gmail.com", role: "user" },
-        { id: 19, username: "user19", email: "user19@gmail.com", role: "user" },
-        { id: 20, username: "user20", email: "user20@gmail.com", role: "editor" },
-        { id: 21, username: "user21", email: "user21@gmail.com", role: "admin" },
-        { id: 22, username: "user22", email: "user22@gmail.com", role: "user" },
-        { id: 23, username: "user23", email: "user23@gmail.com", role: "user" },
-    ];
+    // const data = [
+    //     { id: 1, username: "user1", email: "user1@gmail.com", role: "admin" },
+    //     { id: 2, username: "user2", email: "user2@gmail.com", role: "user" },
+    //     { id: 3, username: "user3", email: "user3@gmail.com", role: "user" },
+    //     { id: 4, username: "user4", email: "user4@gmail.com", role: "editor" },
+    //     { id: 5, username: "user5", email: "user5@gmail.com", role: "user" },
+    //     { id: 6, username: "user6", email: "user6@gmail.com", role: "admin" },
+    //     { id: 7, username: "user7", email: "user7@gmail.com", role: "user" },
+    //     { id: 8, username: "user8", email: "user8@gmail.com", role: "editor" },
+    //     { id: 9, username: "user9", email: "user9@gmail.com", role: "user" },
+    //     { id: 10, username: "user10", email: "user10@gmail.com", role: "user" },
+    //     { id: 11, username: "user11", email: "user11@gmail.com", role: "admin" },
+    //     { id: 12, username: "user12", email: "user12@gmail.com", role: "editor" },
+    //     { id: 13, username: "user13", email: "user13@gmail.com", role: "user" },
+    //     { id: 14, username: "user14", email: "user14@gmail.com", role: "user" },
+    //     { id: 15, username: "user15", email: "user15@gmail.com", role: "admin" },
+    //     { id: 16, username: "user16", email: "user16@gmail.com", role: "editor" },
+    //     { id: 17, username: "user17", email: "user17@gmail.com", role: "user" },
+    //     { id: 18, username: "user18", email: "user18@gmail.com", role: "user" },
+    //     { id: 19, username: "user19", email: "user19@gmail.com", role: "user" },
+    //     { id: 20, username: "user20", email: "user20@gmail.com", role: "editor" },
+    //     { id: 21, username: "user21", email: "user21@gmail.com", role: "admin" },
+    //     { id: 22, username: "user22", email: "user22@gmail.com", role: "user" },
+    //     { id: 23, username: "user23", email: "user23@gmail.com", role: "user" },
+    // ];
+    const [data, setData] = useState([])
+    const getuser = async () => {
+        try{
+            const res = await axios.get("http://localhost:8000/users")
+            console.log(res.data)
+            setData(res.data.data)
+        }catch (err){
+            console.error("Server Error: ", err)
+        }
+    }
+    
+    useEffect(()=>{
+        getuser()
+    },[])
 
 
     const [currentPage, setCurrentPage] = useState(1)
