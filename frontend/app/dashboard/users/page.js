@@ -1,33 +1,9 @@
 "use client"
 import axios from "axios";
+import { withCoalescedInvoke } from "next/dist/lib/coalesced-function";
 import Link from "next/link";
 import { useEffect, useState } from "react"
 export default function Page() {
-    // const data = [
-    //     { id: 1, username: "user1", email: "user1@gmail.com", role: "admin" },
-    //     { id: 2, username: "user2", email: "user2@gmail.com", role: "user" },
-    //     { id: 3, username: "user3", email: "user3@gmail.com", role: "user" },
-    //     { id: 4, username: "user4", email: "user4@gmail.com", role: "editor" },
-    //     { id: 5, username: "user5", email: "user5@gmail.com", role: "user" },
-    //     { id: 6, username: "user6", email: "user6@gmail.com", role: "admin" },
-    //     { id: 7, username: "user7", email: "user7@gmail.com", role: "user" },
-    //     { id: 8, username: "user8", email: "user8@gmail.com", role: "editor" },
-    //     { id: 9, username: "user9", email: "user9@gmail.com", role: "user" },
-    //     { id: 10, username: "user10", email: "user10@gmail.com", role: "user" },
-    //     { id: 11, username: "user11", email: "user11@gmail.com", role: "admin" },
-    //     { id: 12, username: "user12", email: "user12@gmail.com", role: "editor" },
-    //     { id: 13, username: "user13", email: "user13@gmail.com", role: "user" },
-    //     { id: 14, username: "user14", email: "user14@gmail.com", role: "user" },
-    //     { id: 15, username: "user15", email: "user15@gmail.com", role: "admin" },
-    //     { id: 16, username: "user16", email: "user16@gmail.com", role: "editor" },
-    //     { id: 17, username: "user17", email: "user17@gmail.com", role: "user" },
-    //     { id: 18, username: "user18", email: "user18@gmail.com", role: "user" },
-    //     { id: 19, username: "user19", email: "user19@gmail.com", role: "user" },
-    //     { id: 20, username: "user20", email: "user20@gmail.com", role: "editor" },
-    //     { id: 21, username: "user21", email: "user21@gmail.com", role: "admin" },
-    //     { id: 22, username: "user22", email: "user22@gmail.com", role: "user" },
-    //     { id: 23, username: "user23", email: "user23@gmail.com", role: "user" },
-    // ];
     const [data, setData] = useState([])
     const getuser = async () => {
         try{
@@ -35,7 +11,21 @@ export default function Page() {
             console.log(res.data)
             setData(res.data.data)
         }catch (err){
-            console.error("Server Error: ", err)
+            console.error("Error: ", err)
+        }
+    }
+
+    const deleteUser = async (id) => {
+        try{
+            console.log(id)
+            const res = await axios.delete(`http://localhost:8000/user/${id}`, {
+                withCredentials: true
+            }
+            )
+            alert("ลบแล้ว")
+            getuser()
+        }catch(err){
+        console.error("Error: ", err)
         }
     }
     
@@ -104,11 +94,11 @@ export default function Page() {
                                         {u.email}
                                     </td>
                                     <td className="px-3 py-4">
-                                        <span className="p-2 bg-green-400 rounded-2xl border-green-800">{u.role}</span>
+                                        <span className="p-2 bg-green-400 rounded-2xl border-green-800">{u.roles_name}</span>
                                     </td>
                                     <td className="py-4 text-center flex justify-center items-center gap-4">
                                         <a href="/dashboard/users/edit" className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</a>
-                                        <a href="#" className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</a>
+                                        <button onClick={() => deleteUser(u.id)} className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</button>
                                     </td>
                                 </tr>
                             ))}
