@@ -36,6 +36,7 @@ class modelsUser {
                 FROM users u
                 JOIN map_roles mr ON mr.users_id = u.id
                 JOIN roles r ON r.id = mr.roles_id
+                WHERE deleted_at IS NULL
                 `)
                 return results
         }catch(error){
