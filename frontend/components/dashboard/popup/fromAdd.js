@@ -37,7 +37,7 @@ export default function FromAdd({ onClose, data, setdata }) {
                         <div className="w-[50%] flex flex-col gap-2">
                             <h2>รหัสผ่าน</h2>
                             <div className="flex gap-2 relative justify-center items-center">
-                                <input name="password" onChange={handleChangePassword} className="w-full h-10 p-3 border-2 rounded-xl" type="password" placeholder="รหัสผ่าน" />
+                                <input name="password" onChange={handleChangePassword} value={data.password  || ""} className="w-full h-10 p-3 border-2 rounded-xl" type="password" placeholder="รหัสผ่าน" />
                                 {
                                     isPasswordValid !== null &&  (<img className=" absolute right-1 " src={isPasswordValid ? "/icons/icons8-checked-96.png" : "/icons/icons8-cross-96.png"} width={20} />) 
                                 }
@@ -54,7 +54,7 @@ export default function FromAdd({ onClose, data, setdata }) {
                         </div>
                     </div>
                     <div className="flex justify-center items-center mt-4">
-                        <button className="bg-[#1E3A8A] py-3 px-4 rounded-xl text-white">ยืนยัน</button>
+                        <button className="bg-[#1E3A8A] py-3 px-4 rounded-xl text-white" type="button" onClick={onClose}>ยืนยัน</button>
                     </div>
                 </div>
             </div>
