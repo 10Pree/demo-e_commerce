@@ -14,11 +14,11 @@ export default function Page() {
         p_price: 0,
         p_details: "",
         p_stock: 0,
-        p_image_url: "",
+        p_image_url: [],
         categories_ids: []
     })
 
-    console.log(productData)
+    // console.log(productData)
 
     const handleCreateUser = async () => {
         try {
@@ -41,10 +41,11 @@ export default function Page() {
     }
 
     const handleUpload = (e) => {
-        const files = Array.from(e.target.files)
-        const prevViewUrl = files.map(file => URL.createObjectURL(file))
-
+        const files = [...e.target.files]
+        // const prevViewUrl = files.map(file => URL.createObjectURL(file))
+        const ImageName = files.map(file => "/uploads/products/" + file.name) 
         seturlImagePreview(prev => [...prev, ...prevViewUrl])
+        setProductData({...productData, p_image_url: ImageName})
     }
     const dataType = [
         { id: 1, name: "Smartphone" },
@@ -102,7 +103,7 @@ export default function Page() {
                         <span>รูป</span>
                         <div className="w-[300px] h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
                             {
-                                urlImagePreview.length > 0 ? urlImagePreview.map((src, index) => <Image className="w-1/2 h-1/2 object-cover" unoptimized key={index} src={src} alt="icon upload" width={300} height={300} />) : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
+                                urlImagePreview.length > 0 ? urlImagePreview.map((src, index) => <Image className="w-1/2 h-1/2 object-cover" unoptimized key={index} src={src} alt="icon upload" width={300} height={300}  />) : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
                             }
                         </div>
                     </div>
