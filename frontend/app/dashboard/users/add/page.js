@@ -12,14 +12,15 @@ export default function Page() {
     const [showPopupAdd, setShowPopupAdd] = useState(false)
     const [data, setdata] = useState({
         username: "",
-        password: null,
+        password: "",
         email: "",
         phone: 0,
         address: "",
         images: []
     })
     //! ข้อมูลส่งไปไม่ครบ
-    const addUser = async () => {
+    const addUser = async (e) => {
+        e.preventDefault();
         try {
             const formData = new FormData()
 
@@ -66,12 +67,16 @@ export default function Page() {
 
     const handleClosePopup = () => {
         setShowPopupAdd(false)
+        setdata({...data, password: ""})
+    }
+    const handlerComfirmPassword = () => {
+        setShowPopupAdd(false)
     }
     console.log(data)
     return (
         <form>
             {
-                showPopupAdd && <FromAdd onClose={handleClosePopup} handleChangePassword={handleChange} data={data} setdata={setdata} />
+                showPopupAdd && <FromAdd onClose={handleClosePopup} onComfirmPassword={handlerComfirmPassword} handleChangePassword={handleChange} data={data} setdata={setdata} />
             }
             <h1 className="text-3xl font-bold my-4">เพิ่มผู้ใช้งาน</h1>
             <div className="w-full h-full flex-row justify-center items-center gap-4 md:flex md:w-full">
