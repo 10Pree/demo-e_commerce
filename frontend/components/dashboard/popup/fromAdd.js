@@ -35,7 +35,7 @@ export default function FromAdd({ onClose, onComfirmPassword, data, setdata }) {
                     <img src="/icons/icons8-forward-52.png" width={30} height={30} onClick={onClose} />
                 </div>
                 <div className="w-full h-full flex flex-col items-center gap-4">
-                    <h1 className="text-center font-bold">เพิ่มผู้ใช้งาน</h1>
+                    <h1 className="text-center font-bold">รหัสผ่าน</h1>
                     <div className="w-full flex flex-col justify-center items-center gap-4">
                         <div className="w-[70%] flex flex-col gap-2">
                             <h2>รหัสผ่าน (อย่างน้อย 6 ตัว)</h2>
