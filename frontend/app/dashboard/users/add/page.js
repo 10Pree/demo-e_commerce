@@ -74,7 +74,7 @@ export default function Page() {
     }
     console.log(data)
     return (
-        <form>
+        <form onSubmit={addUser}>
             {
                 showPopupAdd && <FromAdd onClose={handleClosePopup} onComfirmPassword={handlerComfirmPassword} handleChangePassword={handleChange} data={data} setdata={setdata} />
             }
@@ -141,7 +141,7 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            <div className="text-end"><button onClick={() => addUser()}  className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white">บันทึก</button></div>
+            <div className="text-end"><button type="submit" className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white">บันทึก</button></div>
         </form>
     )
 }
