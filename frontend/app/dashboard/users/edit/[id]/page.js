@@ -23,14 +23,16 @@ export default function Page() {
     const getData = async () => {
         try{
             const res = await axios.get(`http://localhost:8000/user/${userId}`)
-            setData(res.data.data[0])
-            // console.log(res.data.data)
+            const {id, username, password, email, phone, address, image_url} = res.data.data[0]
+            setData({username, password, email, phone, address})
+            setUrlImagePreview(image_url)
+            // console.log("image", image_url)
+
+            console.log("data: ",res.data.data[0].id)
         }catch(err){
             console.log("Massage Error: ", err)
         }
     }
-
-
     const handleUpload = (e) => {
         const file = Array.from(e.target.files)
         if(file.length > 0){
@@ -44,13 +46,13 @@ export default function Page() {
         const { name, value } = e.target
         setData(prev => ({ ...prev, [name]: value }))
     }
+    console.log(urlImagePreview)
     console.log("data: ",data)
     useEffect(()=>{
         if(userId){
             getData()
         }
     },[userId])
-
     return (
         <form>
             {/* {
@@ -112,7 +114,7 @@ export default function Page() {
                             <span>รูป</span>
                             <div className="w-[300px] h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
                                 {
-                                    urlImagePreview ? <Image className="w-1/2 h-1/2 object-cover" src={urlImagePreview} alt="image user" width={300} height={300} /> : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
+                                    urlImagePreview ? <Image className="w-1/2 h-1/2 object-cover" src={`http://localhost:8000${urlImagePreview}`} alt="image user" width={300} height={300} /> : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
                                 }
                             </div>
                         </div>
