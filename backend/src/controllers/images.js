@@ -1,4 +1,4 @@
-const modlesImages = require("../models/images");
+const modlesImages = require("../models/images_users");
 
 class controllerImages {
     static async Create(req, res) {
@@ -39,6 +39,23 @@ class controllerImages {
             const imageId = req.params.id;
             if (!imageId) return res.status(400).json({ message: "Image Not ID" });
             const image = await modlesImages.getById(imageId);
+
+            return res.status(200).json({
+                message: "Get Image Successful!!",
+                data: image,
+            });
+        } catch (error) {
+            console.log("Server Error:", error);
+            return res.status(500).json({
+                message: "Server Error",
+            });
+        }
+    }
+        static async getMapByIdUser(req, res) {
+        try {
+            const userId = req.params.id;
+            if (!userId) return res.status(400).json({ message: "User Not ID" });
+            const image = await modlesImages.getMapByIdUser(userId);
 
             return res.status(200).json({
                 message: "Get Image Successful!!",
