@@ -45,10 +45,15 @@ class modelsUser {
         }
     }
 
-    static async read(userId) {
+    static async readById(userId) {
         try {
             const conn = await getDB()
-            const [results] = await conn.query('SELECT id, username, email, phone, address FROM users WHERE id = ? AND deleted_at IS NULL', userId)
+            const [results] = await conn.query(`
+                SELECT u.*, iu.id AS img_id, iu.image_url
+                FROM users u 
+                JOIN map_image_users miu ON u.id = miu.users_id
+                JOIN images_users iu ON iu.id = miu.images_id
+                WHERE u.id = ? AND deleted_at IS NULL`, userId)
             return results
         } catch (error) {
             console.log("Message Error:", error)

@@ -12,6 +12,8 @@ class controllersUser {
 
       const { username, password, email, phone, address } = req.body;
       const file_images = req.files
+            console.log("1. req.body:", req.body);
+        console.log("2. req.files:", req.files); // เช็คว่าไฟล์มาถึงไหม
       // console.log("file_Image:", req.files)
       const hash_Password = await hashPassword(password);
       const userDate = {
@@ -83,7 +85,7 @@ class controllersUser {
     }
   }
 
-  static async Read(req, res) {
+  static async ReadById(req, res) {
     try {
       const userId = req.params.id;
       if (userId === null) {
@@ -91,7 +93,7 @@ class controllersUser {
           message: "User Not found",
         });
       }
-      const userData = await modelsUser.read(userId);
+      const userData = await modelsUser.readById(userId);
       if (userData.length === 0) {
         return res.status(400).json({
           message: "User Not found",
