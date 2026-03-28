@@ -30,6 +30,21 @@ class modlesImages {
             throw error
         }
     }
+    static async getMapByIdUser(id) {
+        try {
+            const conn = await getDB()
+            const [resulte] = await conn.query(`
+                SELECT *
+                FROM users u
+                JOIN map_image_users miu ON u.id = miu.users_id
+                JOIN images_users iu ON iu.id = miu.images_id
+                WHERE u.id = ?
+                `, id)
+            return resulte
+        } catch (error) {
+            throw error
+        }
+    }
     static async getByMapId(id) {
         try {
             const conn = await getDB()
@@ -72,7 +87,7 @@ class modlesImages {
             throw error
         }
     }
-        static async deleteImgByIdUsers(id) {
+    static async deleteImgByIdUsers(id) {
         try {
             const conn = await getDB()
             const [resulte] = await conn.query(`
