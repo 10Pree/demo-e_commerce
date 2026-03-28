@@ -20,12 +20,32 @@ export default function Page() {
         images: []
     })
 
+    const update = async(e) => {
+        e.preventDefault();
+        try{
+            const fromData = new FormData()
+            fromData.append('username', data.username)
+            fromData.append('email', data.email)
+            fromData.append('phone', data.phone)
+            fromData.append('address', data.address)
+            
+            if(data.images && data.images[0]){
+                fromData.append('images', data.images[0])
+            }
+            const res = await axios.put(`http://localhost:8000/user/${userId}`, fromData, { withCredentials: true , headers: {"Content-Type" : "multipart/form-data"}})
+            console.log("Success:", res.data);
+            alert(`อัพเดต ID ${userId} แล้ว`)
+        }catch(err){
+            console.log("Massage Error: ", err)
+        }
+    }
+
     const getData = async () => {
         try{
             const res = await axios.get(`http://localhost:8000/user/${userId}`)
             const {id, username, password, email, phone, address, image_url} = res.data.data[0]
             setData({username, password, email, phone, address})
-            setUrlImagePreview(image_url)
+            setUrlImagePreview(image_url === null ? (`http://localhost:8000/uploads/users/image.png`) : (`http://localhost:8000${image_url}`))
             // console.log("image", image_url)
 
             console.log("data: ",res.data.data[0].id)
@@ -54,7 +74,7 @@ export default function Page() {
         }
     },[userId])
     return (
-        <form>
+        <form onSubmit={update}>
             {/* {
                 showPopupAdd && <FromEdit onClose={handleClosePopup} onComfirmPassword={handlerComfirmPassword} handleChangePassword={handleChange} data={data} setdata={setdata} />
             } */}
@@ -114,7 +134,7 @@ export default function Page() {
                             <span>รูป</span>
                             <div className="w-[300px] h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
                                 {
-                                    urlImagePreview ? <Image className="w-1/2 h-1/2 object-cover" src={`http://localhost:8000${urlImagePreview}`} alt="image user" width={300} height={300} /> : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
+                                    urlImagePreview ? <Image className="w-1/2 h-1/2 object-cover" src={urlImagePreview} alt="image user" width={300} height={300} /> : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
                                 }
                             </div>
                         </div>
