@@ -51,8 +51,8 @@ class modelsUser {
             const [results] = await conn.query(`
                 SELECT u.*, iu.id AS img_id, iu.image_url
                 FROM users u 
-                JOIN map_image_users miu ON u.id = miu.users_id
-                JOIN images_users iu ON iu.id = miu.images_id
+                LEFT JOIN map_image_users miu ON u.id = miu.users_id
+                LEFT JOIN images_users iu ON iu.id = miu.images_id
                 WHERE u.id = ? AND deleted_at IS NULL`, userId)
             return results
         } catch (error) {
