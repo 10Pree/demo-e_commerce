@@ -22,6 +22,16 @@ class modelsUser {
             throw error
         }
     }
+        static async read(id) {
+        try {
+            const conn = await getDB()
+            const [results] = await conn.query('SELECT id, username, email, phone, address FROM users WHERE id = ?', id)
+            return results
+        } catch (error) {
+            console.log("Message Error:", error)
+            throw error
+        }
+    }
     static async readsMapRole() {
         try{
             const conn = await getDB()
