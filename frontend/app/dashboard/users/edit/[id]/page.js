@@ -42,6 +42,7 @@ export default function Page() {
         try{
             const res = await axios.put(`http://localhost:8000/user/password/${userId}`, isPassword, {withCredentials: true})
             alert(`อัพเดต รหัสผ่าน ID ${userId} แล้ว`)
+            setShowPopupAdd(false)
         }catch(err){
             console.log("Massage Error: ", err)
         }
