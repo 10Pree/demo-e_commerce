@@ -10,10 +10,9 @@ export default function Page() {
     const [showPopupAdd, setShowPopupAdd] = useState(false)
     const [urlImagePreview, setUrlImagePreview] = useState(false)
     const userId = params.id
-    // console.log(userId)
+    const [isPassword, setIsPassword] = useState({password: ""})
     const [data, setData] = useState({
         username: "",
-        password: "",
         email: "",
         phone: 0,
         address: "",
@@ -33,8 +32,16 @@ export default function Page() {
                 fromData.append('images', data.images[0])
             }
             const res = await axios.put(`http://localhost:8000/user/${userId}`, fromData, { withCredentials: true , headers: {"Content-Type" : "multipart/form-data"}})
-            console.log("Success:", res.data);
+            // console.log("Success:", res.data);
             alert(`อัพเดต ID ${userId} แล้ว`)
+        }catch(err){
+            console.log("Massage Error: ", err)
+        }
+    }
+    const updatePassword = async() => {
+        try{
+            const res = await axios.put(`http://localhost:8000/user/password/${userId}`, isPassword, {withCredentials: true})
+            alert(`อัพเดต รหัสผ่าน ID ${userId} แล้ว`)
         }catch(err){
             console.log("Massage Error: ", err)
         }
@@ -66,8 +73,11 @@ export default function Page() {
         const { name, value } = e.target
         setData(prev => ({ ...prev, [name]: value }))
     }
+    const handleClosePopup = () => {
+        setShowPopupAdd(false)
+    }
     console.log(urlImagePreview)
-    console.log("data: ",data)
+    console.log("data: ",isPassword)
     useEffect(()=>{
         if(userId){
             getData()
@@ -75,9 +85,9 @@ export default function Page() {
     },[userId])
     return (
         <form onSubmit={update}>
-            {/* {
-                showPopupAdd && <FromEdit onClose={handleClosePopup} onComfirmPassword={handlerComfirmPassword} handleChangePassword={handleChange} data={data} setdata={setdata} />
-            } */}
+            {
+                showPopupAdd && <FromEdit onClose={handleClosePopup}  handleChangePassword={handleChange} data={isPassword} setdata={setIsPassword} updatePassword={updatePassword}/>
+            } 
             <h1 className="text-3xl font-bold my-4">เพิ่มผู้ใช้งาน</h1>
             <div className="w-full h-full flex-row justify-center items-center gap-4 md:flex md:w-full">
                 <div className="w-full h-1/2 bg-white rounded-2xl shadow-2xl p-4 md:w-1/2">
@@ -85,7 +95,7 @@ export default function Page() {
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
                         <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" name="username" onChange={handleChange} value={data.username || ""}  placeholder="username1234" />
                     </div>
-                    {/* {
+                     {
                         data.password ? (<div>
                             <h1 className="text-[16px] font-bold">รหัสผ่าน</h1>
                             <div onClick={() => setShowPopupAdd(true)} className="bg-green-400 text-white border-[1px] rounded-[8px] p-1 w-1/2 flex justify-center items-center hover:bg-[#1E3A8A] hover:text-white"><svg className=" fill-current" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 26 26">
@@ -97,7 +107,7 @@ export default function Page() {
                                 <path d="M 16 0 C 13.789063 0 11.878906 0.917969 10.6875 2.40625 C 9.496094 3.894531 9 5.824219 9 7.90625 L 9 9 L 12 9 L 12 7.90625 C 12 6.328125 12.390625 5.085938 13.03125 4.28125 C 13.671875 3.476563 14.542969 3 16 3 C 17.460938 3 18.328125 3.449219 18.96875 4.25 C 19.609375 5.050781 20 6.308594 20 7.90625 L 20 9 L 23 9 L 23 7.90625 C 23 5.8125 22.472656 3.863281 21.28125 2.375 C 20.089844 0.886719 18.207031 0 16 0 Z M 9 10 C 7.34375 10 6 11.34375 6 13 L 6 23 C 6 24.65625 7.34375 26 9 26 L 23 26 C 24.65625 26 26 24.65625 26 23 L 26 13 C 26 11.34375 24.65625 10 23 10 Z M 16 15 C 17.105469 15 18 15.894531 18 17 C 18 17.738281 17.597656 18.371094 17 18.71875 L 17 21 C 17 21.550781 16.550781 22 16 22 C 15.449219 22 15 21.550781 15 21 L 15 18.71875 C 14.402344 18.371094 14 17.738281 14 17 C 14 15.894531 14.894531 15 16 15 Z"></path>
                             </svg></div>
                         </div>)
-                    } */}
+                    } 
                     <div>
                         <h1 className="text-[16px] font-bold">อีเมล</h1>
                         <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="email" name="email" onChange={handleChange} value={data.email || ""}  placeholder="user@Gmail.com" />

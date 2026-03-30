@@ -1,6 +1,6 @@
 import {  useState } from "react"
 
-export default function FromEdit({ onClose, onComfirmPassword, data, setdata }) {
+export default function FromEdit({ onClose, data, setdata, updatePassword }) {
     const [isPasswordValid, setIsPasswordValid] = useState(null)
     const [isComfirmPasswordValid, setIsComfirmPasswordValid] = useState(null)
     const [passwordTwo, setPasswordTwo] = useState("")
@@ -40,7 +40,7 @@ export default function FromEdit({ onClose, onComfirmPassword, data, setdata }) 
                         <div className="w-[70%] flex flex-col gap-2">
                             <h2>รหัสผ่าน (อย่างน้อย 6 ตัว)</h2>
                             <div className="flex gap-2 relative justify-center items-center">
-                                <input name="password" onChange={handleChangePassword} value={data.password  || ""} className="w-full h-13 p-3 border-2 rounded-xl" type="password" placeholder="รหัสผ่าน" required/>
+                                <input name="password" onChange={handleChangePassword}  className="w-full h-13 p-3 border-2 rounded-xl" type="password" placeholder="รหัสผ่าน" required/>
                                 {
                                     isPasswordValid !== null &&  (<img className=" absolute right-1 " src={isPasswordValid ? "/icons/icons8-checked-96.png" : "/icons/icons8-cross-96.png"} width={20} />) 
                                 }
@@ -57,7 +57,7 @@ export default function FromEdit({ onClose, onComfirmPassword, data, setdata }) 
                         </div>
                     </div>
                     <div className="flex justify-center items-center mt-4 w-[70%]">
-                        <button className={`py-3 px-4 rounded-xl w-full ${isFormValid ? (`bg-[#1E3A8A] text-white`) : ("bg-gray-400 text-black")}`} type="button" disabled={!isFormValid}  onClick={onComfirmPassword}>ยืนยัน</button>
+                        <button className={`py-3 px-4 rounded-xl w-full ${isFormValid ? (`bg-[#1E3A8A] text-white`) : ("bg-gray-400 text-black")}`} type="button" disabled={!isFormValid}  onClick={updatePassword}>อัปเดต</button>
                     </div>
                 </div>
             </div>
