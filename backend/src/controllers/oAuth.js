@@ -1,6 +1,26 @@
 const modelsOAuth = require("../models/auth")
 
 class controllersOAuth {
+    static async getRoleName(req, res) {
+        try {
+            const userId = req.params.id
+            if(!userId){
+                return res.status(500).json({
+                message: "Not Id"
+                })
+            }
+            const permission = await modelsOAuth.getRoleName(userId)
+            return res.status(200).json({
+                message: "Get Permission Successful!!",
+                data: permission
+            })
+        } catch (err) {
+            console.log("Message Error:", error)
+            return res.status(500).json({
+                message: "Server Error"
+            })
+        }
+    }
     static async AddRole(req, res) {
         try {
             const roleName = req.body

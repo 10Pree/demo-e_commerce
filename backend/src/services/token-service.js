@@ -9,9 +9,9 @@ async function createAccessToken(userId, email) {
     }
 }
 
-async function createRefreshToken(userId, email) {
+async function createRefreshToken(userId, email, role) {
     try {
-        const refresh_token = await jwt.sign({ userId , email  }, process.env.REFRESH_TOKEN_SECRET, { algorithm: 'HS256' })
+        const refresh_token = await jwt.sign({ userId , email, role  }, process.env.REFRESH_TOKEN_SECRET, { algorithm: 'HS256' })
         return refresh_token
     }catch(error){
         throw error

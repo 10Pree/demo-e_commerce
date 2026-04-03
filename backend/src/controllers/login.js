@@ -29,9 +29,13 @@ class controllersLogin {
             }
 
             const userId = user[0].id
-            // console.log(userId, user)
             
-            const refresh_token = await createRefreshToken(userId, email)
+            const role = await modelsAuth.getRoleName(userId)
+
+            // console.log(role[0].name)
+
+            
+            const refresh_token = await createRefreshToken(userId, email, role[0].name)
             const access_token = await createAccessToken(userId, email)
 
             await modlesRefreshToken.revokeAllByUserId(userId)
