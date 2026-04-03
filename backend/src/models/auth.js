@@ -1,7 +1,22 @@
 const { getDB } = require("../config/db");
 
 class modelsOAuth{
-    static async getPermission(userId){
+    static async getRoleName(userId){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query(`
+                SELECT r.name
+                FROM users u
+                JOIN map_roles mr ON mr.users_id = u.id
+                JOIN roles r ON r.id = mr.roles_id
+                WHERE u.id = ?
+                `, userId)
+                return results
+        }catch(error){
+            throw error
+        }
+    }
+        static async getPermission(userId){
         try{
             const conn = await getDB()
             const [results] = await conn.query(`
