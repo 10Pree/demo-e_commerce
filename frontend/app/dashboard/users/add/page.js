@@ -10,6 +10,7 @@ export default function Page() {
     const router = useRouter()
     const [urlImagePreview, seturlImagePreview] = useState(null)
     const [showPopupAdd, setShowPopupAdd] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [data, setdata] = useState({
         username: "",
         password: "",
@@ -21,6 +22,7 @@ export default function Page() {
     //! ข้อมูลส่งไปไม่ครบ
     const addUser = async (e) => {
         e.preventDefault();
+        setLoading(true)
         try {
             const formData = new FormData()
 
@@ -32,13 +34,15 @@ export default function Page() {
 
             formData.append('images', data.images[0])
             const res = await axios.post('http://localhost:8000/user', formData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } })
-            console.log("Success:", res.data);
+            // console.log("Success:", res.data);
             router.push("/dashboard/users")
             alert("บันทึกข้อมูลสำเร็จ!");
 
         } catch (err) {
             console.error("Error: ", err)
 
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -50,7 +54,7 @@ export default function Page() {
                 const previewUrl = URL.createObjectURL(files[0])
                 seturlImagePreview(previewUrl)
                 setdata({ ...data, images: files })
-                console.log("Preview URL:", previewUrl);
+                // console.log("Preview URL:", previewUrl);
             }
         } catch (err) {
             console.error("Error: ", err)
@@ -72,15 +76,15 @@ export default function Page() {
     const handlerComfirmPassword = () => {
         setShowPopupAdd(false)
     }
-    console.log(data)
+    // console.log(data)
     return (
-        <form onSubmit={addUser}>
+        <form onSubmit={addUser} className="flex flex-col gap-4">
             {
-                showPopupAdd && <FromAdd onClose={handleClosePopup} onComfirmPassword={handlerComfirmPassword} handleChangePassword={handleChange} data={data} setdata={setdata} />
+                showPopupAdd && <FromAdd onClose={handleClosePopup} onComfirmPassword={handlerComfirmPassword} data={data} setdata={setdata} />
             }
             <h1 className="text-3xl font-bold my-4">เพิ่มผู้ใช้งาน</h1>
-            <div className="w-full h-full flex-row justify-center items-center gap-4 md:flex md:w-full">
-                <div className="w-full h-1/2 bg-white rounded-2xl shadow-2xl p-4 md:w-1/2">
+            <div className="w-full h-full flex-row justify-center gap-4 md:flex md:w-full md:h-full">
+                <div className="w-full h-[100%] bg-white rounded-2xl shadow-2xl p-4 md:w-[40%] ">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
                         <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" name="username" onChange={handleChange} placeholder="username1234" />
@@ -111,8 +115,8 @@ export default function Page() {
                         <textarea className="bg-white border-[1px] rounded-[8px] p-1 w-full " name="address" onChange={handleChange} placeholder="44/2001 Thai....." />
                     </div>
                 </div>
-                <div className="flex justify-center items-center m-8 md:m-0">
-                    <div className="w-fit h-fit bg-[#F3F4F6]  rounded-2xl shadow-2xl p-4 flex flex-col justify-center gap-2">
+                <div className="flex justify-center items-center m-8 md:m-0 h-full">
+                    <div className="w-fit h-fit bg-white  rounded-2xl shadow-2xl p-4 flex flex-col justify-center gap-2">
                         <h1 className="text-[16px] font-bold">หน้าที่</h1>
                         <div className="flex gap-2">
                             <label className="inline-flex items-center gap-2 cursor-pointer select-none">
@@ -141,7 +145,7 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            <div className="text-end"><button type="submit" className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white">บันทึก</button></div>
+            <div className="text-end"><button type="submit" className="bg-[#1E3A8A] px-8 py-2 rounded-2xl text-white mt-0 md:mt-16 mr-0 md:mr-16">{ loading ? "เพิ่มข้อมูล..." : "เพิ่มข้อมูล"}</button></div>
         </form>
     )
 }
