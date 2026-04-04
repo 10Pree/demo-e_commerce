@@ -8,7 +8,9 @@ import FromEdit from "@/components/dashboard/popup/fromEdit"
 export default function Page() {
     const params = useParams()
     const [showPopupAdd, setShowPopupAdd] = useState(false)
+    const [passwordUpdate, setPasswordUpdata] = useState(false)
     const [urlImagePreview, setUrlImagePreview] = useState(false)
+    const [loading, setLoading] = useState(false)
     const userId = params.id
     const [isPassword, setIsPassword] = useState({password: ""})
     const [data, setData] = useState({
@@ -22,6 +24,7 @@ export default function Page() {
 
     const update = async(e) => {
         e.preventDefault();
+        setLoading(true)
         try{
             const fromData = new FormData()
             fromData.append('username', data.username)
@@ -37,12 +40,15 @@ export default function Page() {
             alert(`อัพเดต ID ${userId} แล้ว`)
         }catch(err){
             console.log("Massage Error: ", err)
+        } finally {
+            setLoading(false)
         }
     }
     const updatePassword = async() => {
         try{
             const res = await axios.put(`http://localhost:8000/user/password/${userId}`, isPassword, {withCredentials: true})
             alert(`อัพเดต รหัสผ่าน ID ${userId} แล้ว`)
+            setPasswordUpdata(true)
             setShowPopupAdd(false)
         }catch(err){
             console.log("Massage Error: ", err)
@@ -51,13 +57,13 @@ export default function Page() {
 
     const getData = async () => {
         try{
-            const res = await axios.get(`http://localhost:8000/user/${userId}`)
+            const res = await axios.get(`http://localhost:8000/user/${userId}`, {withCredentials:true})
             const {id, username,  email, phone, address, image_url, roles_id} = res.data.data[0]
             setData({username, email, phone, address, roles_id})
             setUrlImagePreview(image_url === null ? (`http://localhost:8000/uploads/users/image.png`) : (`http://localhost:8000${image_url}`))
             // console.log("image", image_url)
 
-            console.log("data: ",res.data.data[0].id)
+            console.log("data: ",res.data.data[0].password)
         }catch(err){
             console.log("Massage Error: ", err)
         }
@@ -78,19 +84,17 @@ export default function Page() {
     const handleClosePopup = () => {
         setShowPopupAdd(false)
     }
-    console.log(urlImagePreview)
-    console.log("data: ",isPassword)
+    // console.log(urlImagePreview)
+    // console.log("data: ",isPassword)
     useEffect(()=>{
-        if(userId){
-            getData()
-        }
+        if(userId) getData()
     },[userId])
     return (
         <form onSubmit={update}>
             {
-                showPopupAdd && <FromEdit onClose={handleClosePopup}  handleChangePassword={handleChange} data={isPassword} setdata={setIsPassword} updatePassword={updatePassword}/>
+                showPopupAdd && <FromEdit onClose={handleClosePopup}   data={isPassword} setdata={setIsPassword} updatePassword={updatePassword}/>
             } 
-            <h1 className="text-3xl font-bold my-4">เพิ่มผู้ใช้งาน</h1>
+            <h1 className="text-3xl font-bold my-4">แก้ไขผู้ใช้งาน</h1>
             <div className="w-full h-full flex-row justify-center gap-4 md:flex md:w-full md:h-full">
                 <div className="w-full h-[100%] bg-white rounded-2xl shadow-2xl p-4 md:w-[40%] ">
                     <div>
@@ -98,7 +102,7 @@ export default function Page() {
                         <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" name="username" onChange={handleChange} value={data.username || ""}  placeholder="username1234" />
                     </div>
                      {
-                        data.password ? (<div>
+                        passwordUpdate ? (<div>
                             <h1 className="text-[16px] font-bold">รหัสผ่าน</h1>
                             <div onClick={() => setShowPopupAdd(true)} className="bg-green-400 text-white border-[1px] rounded-[8px] p-1 w-1/2 flex justify-center items-center hover:bg-[#1E3A8A] hover:text-white"><svg className=" fill-current" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 26 26">
                                 <path d="M 16 0 C 13.789063 0 11.878906 0.917969 10.6875 2.40625 C 9.496094 3.894531 9 5.824219 9 7.90625 L 9 9 L 12 9 L 12 7.90625 C 12 6.328125 12.390625 5.085938 13.03125 4.28125 C 13.671875 3.476563 14.542969 3 16 3 C 17.460938 3 18.328125 3.449219 18.96875 4.25 C 19.609375 5.050781 20 6.308594 20 7.90625 L 20 9 L 23 9 L 23 7.90625 C 23 5.8125 22.472656 3.863281 21.28125 2.375 C 20.089844 0.886719 18.207031 0 16 0 Z M 9 10 C 7.34375 10 6 11.34375 6 13 L 6 23 C 6 24.65625 7.34375 26 9 26 L 23 26 C 24.65625 26 26 24.65625 26 23 L 26 13 C 26 11.34375 24.65625 10 23 10 Z M 16 15 C 17.105469 15 18 15.894531 18 17 C 18 17.738281 17.597656 18.371094 17 18.71875 L 17 21 C 17 21.550781 16.550781 22 16 22 C 15.449219 22 15 21.550781 15 21 L 15 18.71875 C 14.402344 18.371094 14 17.738281 14 17 C 14 15.894531 14.894531 15 16 15 Z"></path>
@@ -123,16 +127,16 @@ export default function Page() {
                         <textarea className="bg-white border-[1px] rounded-[8px] p-1 w-full " name="address" onChange={handleChange} value={data.address || ""}  placeholder="44/2001 Thai....." />
                     </div>
                 </div>
-                <div className="flex justify-center items-center m-8 md:m-0 h-full">
-                    <div className="w-fit h-fit bg-[#F3F4F6]  rounded-2xl shadow-2xl p-4 flex flex-col justify-center gap-2">
+                                <div className="flex justify-center items-center m-8 md:m-0 h-full">
+                    <div className="w-fit h-fit bg-white  rounded-2xl shadow-2xl p-4 flex flex-col justify-center gap-2">
                         <h1 className="text-[16px] font-bold">หน้าที่</h1>
                         <div className="flex gap-2">
                             <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                                <input type="radio" name="role" checked={data.roles_id === 1} onChange={(e)=> setData({...data, roles_id: Number(e.target.value)})} className=" peer hidden" />
+                                <input type="radio" name="role" value={1}  checked={data.roles_id === 1} onChange={(e)=> setData({...data, roles_id: Number(e.target.value)})} className=" peer hidden" />
                                 <span className="p-1 border rounded-[8px] shadow-xl bg-white cursor-pointer hover:bg-[#1E3A8A] hover:text-white peer-checked:bg-[#1E3A8A] peer-checked:text-white">admin</span>
                             </label>
                             <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                                <input type="radio" name="role" checked={data.roles_id === 2} onChange={(e)=> setData({...data, roles_id: Number(e.target.value)})}  className=" peer hidden" />
+                                <input type="radio" name="role" value={2}  checked={data.roles_id === 2} onChange={(e)=> setData({...data, roles_id: Number(e.target.value)})}  className=" peer hidden" />
                                 <span className="p-1 border rounded-[8px] shadow-xl bg-white cursor-pointer hover:bg-[#1E3A8A] hover:text-white peer-checked:bg-[#1E3A8A] peer-checked:text-white">user</span>
                             </label>
                         </div>
@@ -153,7 +157,7 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            <div className="text-end"><button type="submit" className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white">บันทึก</button></div>
+            <div className="text-end"><button type="submit" className="bg-[#1E3A8A] px-8 py-2 rounded-2xl text-white mt-0 md:mt-16 mr-0 md:mr-16">{ loading ? "กำลังโหลด..." : "บันทึก"}</button></div>
         </form>
     )
 }

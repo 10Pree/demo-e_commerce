@@ -7,7 +7,7 @@ export default function Page() {
     const [data, setData] = useState([])
     const getuser = async () => {
         try{
-            const res = await axios.get("http://localhost:8000/users")
+            const res = await axios.get("http://localhost:8000/users", { withCredentials: true})
             console.log(res.data)
             setData(res.data.data)
         }catch (err){
