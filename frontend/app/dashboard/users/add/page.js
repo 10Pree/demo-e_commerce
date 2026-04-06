@@ -3,6 +3,7 @@
 import FromAdd from "@/components/dashboard/popup/fromAdd"
 import axios from "axios"
 import Image from "next/image"
+import Swal from 'sweetalert2'
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -36,11 +37,20 @@ export default function Page() {
             const res = await axios.post('http://localhost:8000/user', formData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } })
             // console.log("Success:", res.data);
             router.push("/dashboard/users")
-            alert("บันทึกข้อมูลสำเร็จ!");
+            Swal.fire({
+                title: "เพิ่มข้อมูลสำเร็จ",
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            })
 
         } catch (err) {
             console.error("Error: ", err)
-
+            Swal.fire({
+                title: "เกิดข้อผิดพลาด",
+                text: "เพิ่มข้อมูลผู้ใช้งานไม่สำเร็จ กรุณาลองใหม่",
+                timer: 2000
+            })
         } finally {
             setLoading(false)
         }
@@ -58,7 +68,11 @@ export default function Page() {
             }
         } catch (err) {
             console.error("Error: ", err)
-
+                        Swal.fire({
+                title: "เกิดข้อผิดพลาด",
+                text: "อัพโหลดไม่สำเร็จ กรุณาลองใหม่",
+                timer: 2000
+            })
         }
     }
     // console.log(data)
@@ -71,7 +85,7 @@ export default function Page() {
 
     const handleClosePopup = () => {
         setShowPopupAdd(false)
-        setdata({...data, password: ""})
+        setdata({ ...data, password: "" })
     }
     const handlerComfirmPassword = () => {
         setShowPopupAdd(false)
@@ -145,7 +159,7 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            <div className="text-end"><button type="submit" className="bg-[#1E3A8A] px-8 py-2 rounded-2xl text-white mt-0 md:mt-16 mr-0 md:mr-16">{ loading ? "เพิ่มข้อมูล..." : "เพิ่มข้อมูล"}</button></div>
+            <div className="text-end"><button type="submit" className="bg-[#1E3A8A] px-8 py-2 rounded-2xl text-white mt-0 md:mt-16 mr-0 md:mr-16">{loading ? "เพิ่มข้อมูล..." : "เพิ่มข้อมูล"}</button></div>
         </form>
     )
 }
