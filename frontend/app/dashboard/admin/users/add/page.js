@@ -36,7 +36,7 @@ export default function Page() {
             formData.append('images', data.images[0])
             const res = await axios.post('http://localhost:8000/user', formData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } })
             // console.log("Success:", res.data);
-            router.push("/dashboard/users")
+            router.push("/dashboard/admin/users")
             Swal.fire({
                 title: "เพิ่มข้อมูลสำเร็จ",
                 icon: 'success',

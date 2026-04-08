@@ -8,7 +8,7 @@ export default function Page() {
     const getuser = async () => {
         try{
             const res = await axios.get("http://localhost:8000/users", { withCredentials: true})
-            console.log(res.data)
+            // console.log(res.data)
             setData(res.data.data)
         }catch (err){
             console.error("Error: ", err)
@@ -97,7 +97,7 @@ export default function Page() {
                                         <span className="p-2 bg-green-400 rounded-2xl border-green-800">{u.roles_name}</span>
                                     </td>
                                     <td className="py-4 text-center flex justify-center items-center gap-4">
-                                        <Link href={`/dashboard/users/edit/${u.id}`} className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</Link>
+                                        <Link href={`/dashboard/user/users/edit/${u.id}`} className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</Link>
                                         <button onClick={() => deleteUser(u.id)} className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</button>
                                     </td>
                                 </tr>

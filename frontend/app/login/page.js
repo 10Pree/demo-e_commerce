@@ -16,7 +16,7 @@ export default function Page() {
                 withCredentials: true
             }
         )
-            router.push("/dashboard/main")
+            router.push("/dashboard")
             alert("Login Successful!!")
         }catch(error){
             console.log("Message Error: ", error)

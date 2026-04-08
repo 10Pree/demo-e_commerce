@@ -21,6 +21,7 @@ export default function Page({ params }) {
         }
     )
 
+
     const getProduct = async () => {
         try {
             const res = await axios.get(`http://localhost:8000/product/${id}`)
@@ -34,7 +35,8 @@ export default function Page({ params }) {
     const getCategoryById = async () => {
         try {
             const res = await axios.get(`http://localhost:8000/categorie/${id}`)
-            setCategory(res.data.data[0].id)
+            setCategory(res.data.data[0])
+            console.log(res.data.data[0])
 
         } catch (error) {
             console.log("Message Error: ", error)

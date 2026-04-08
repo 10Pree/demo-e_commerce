@@ -24,7 +24,7 @@ export default function Page() {
         try {
             const res = await axios.post("http://localhost:8000/product", productData, { withCredentials: true})
             // alert("Create User Successful")
-            router.push("/dashboard/products")
+            router.push("/dashboard/admin/products")
         } catch (error) {
             console.log("Message Error: ", error)
         }
