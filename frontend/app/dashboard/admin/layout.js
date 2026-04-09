@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import SideBar from "@/components/dashboard/sidebar";
+import SideBar from "@/components/dashboard/sidebarAdmin";
 import Header from "@/components/dashboard/header";
 
 
@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }) {
     setOpenSidebar(prev => !prev)
   }
     return (
-        <div className="w-screen h-screen flex">
+        <div className="w-screen h-screen flex overflow-hidden">
             <SideBar open={openSidebar}/>
             <div className="flex flex-col w-full h-full">
                 <Header onToggleMenu={handleToggle} />

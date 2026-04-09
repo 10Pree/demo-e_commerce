@@ -60,7 +60,7 @@ export default function Page() {
     const updatePassword = async () => {
         try {
             const res = await axios.put(`http://localhost:8000/user/password/${userId}`, isPassword, { withCredentials: true })
-            alert(`อัพเดต รหัสผ่าน ID ${userId} แล้ว`)
+            // alert(`อัพเดต รหัสผ่าน ID ${userId} แล้ว`)
             setPasswordUpdata(true)
             setShowPopupAdd(false)
             Swal.fire({
