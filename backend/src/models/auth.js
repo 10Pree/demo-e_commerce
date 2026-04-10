@@ -72,6 +72,16 @@ class modelsOAuth{
             throw error
         }
     }
+    static async updateMapRoleUser(userId, data) {
+        try{
+            const conn = await getDB()
+            console.log(userId, data)
+            const [results] = await conn.query('UPDATE map_roles SET ? WHERE users_id = ?', [data, userId])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = modelsOAuth

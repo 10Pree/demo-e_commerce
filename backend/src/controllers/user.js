@@ -12,8 +12,8 @@ class controllersUser {
 
       const { username, password, email, phone, address, role } = req.body;
       const file_images = req.files
-        //     console.log("1. req.body:", req.body);
-        // console.log("2. req.files:", req.files); // เช็คว่าไฟล์มาถึงไหม
+      //     console.log("1. req.body:", req.body);
+      // console.log("2. req.files:", req.files); // เช็คว่าไฟล์มาถึงไหม
       // console.log("file_Image:", req.files)
       const hash_Password = await hashPassword(password);
       const userDate = {
@@ -39,14 +39,14 @@ class controllersUser {
         await modelsImages.createMap(rows)
       }
 
-      if(user){
-        try{
-        const data = {users_id: user.insertId, roles_id: role}
-        const map = await modelsOAuth.mapRoleUser(data)
-        }catch(error){
-        console.log(error)
+      if (user) {
+        try {
+          const data = { users_id: user.insertId, roles_id: role }
+          const map = await modelsOAuth.mapRoleUser(data)
+        } catch (error) {
+          console.log(error)
+        }
       }
-    }
       const actionUser = req.user.userId
       const newUserId = user.insertId
 
@@ -122,9 +122,8 @@ class controllersUser {
           message: "User Not Found",
         });
       }
-      const { username, email, phone, address } = req.body;
-      const userData = {
-      };
+      const { username, email, phone, address, role } = req.body;
+      const userData = {};
 
       if (username) userData.username = username;
       if (email) userData.email = email;
@@ -153,14 +152,19 @@ class controllersUser {
         await modelsImages.createMap(rows)
       }
 
+      const newData = null
+      if (Object.keys(userData).length > 0) {
+        newData = await modelsUser.update(userId, userData);
+      }
 
-      const newData = await modelsUser.update(userId, userData);
-      const actionUser = req.user.userId
-      const DataUserId = userId
+      if (role) {
+        const data = { roles_id: role }
+        console.log(userId, data)
+        const map = await modelsOAuth.updateMapRoleUser(userId, data)
+      }
 
-      // console.log(DataUserId)
       try {
-        await CreateLogAction(DataUserId, actionUser, "Update.User")
+        await CreateLogAction(userId, req.user.userId, "Update.User")
       } catch (error) {
         console.warn("Log failed:", error?.message || error)
       }
