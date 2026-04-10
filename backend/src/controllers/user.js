@@ -10,10 +10,10 @@ class controllersUser {
   static async Create(req, res) {
     try {
 
-      const { username, password, email, phone, address } = req.body;
+      const { username, password, email, phone, address, role } = req.body;
       const file_images = req.files
-            console.log("1. req.body:", req.body);
-        console.log("2. req.files:", req.files); // เช็คว่าไฟล์มาถึงไหม
+        //     console.log("1. req.body:", req.body);
+        // console.log("2. req.files:", req.files); // เช็คว่าไฟล์มาถึงไหม
       // console.log("file_Image:", req.files)
       const hash_Password = await hashPassword(password);
       const userDate = {
@@ -41,7 +41,7 @@ class controllersUser {
 
       if(user){
         try{
-        const data = {users_id: user.insertId, roles_id: 2}
+        const data = {users_id: user.insertId, roles_id: role}
         const map = await modelsOAuth.mapRoleUser(data)
         }catch(error){
         console.log(error)
