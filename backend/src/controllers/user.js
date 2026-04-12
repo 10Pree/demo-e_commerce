@@ -41,7 +41,7 @@ class controllersUser {
 
       if (user) {
         try {
-          const data = { users_id: user.insertId, roles_id: role }
+          const data = { users_id: user.insertId, roles_id: role || 2 }
           const map = await modelsOAuth.mapRoleUser(data)
         } catch (error) {
           console.log(error)
@@ -152,7 +152,7 @@ class controllersUser {
         await modelsImages.createMap(rows)
       }
 
-      const newData = null
+      let newData = null
       if (Object.keys(userData).length > 0) {
         newData = await modelsUser.update(userId, userData);
       }
