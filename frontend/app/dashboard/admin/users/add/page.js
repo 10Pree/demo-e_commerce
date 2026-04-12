@@ -18,7 +18,8 @@ export default function Page() {
         email: "",
         phone: 0,
         address: "",
-        images: []
+        images: [],
+        role: ""
     })
     //! ข้อมูลส่งไปไม่ครบ
     const addUser = async (e) => {
@@ -32,6 +33,8 @@ export default function Page() {
             formData.append('email', data.email)
             formData.append('phone', data.phone)
             formData.append('address', data.address)
+            formData.append('role', data.role)
+            
 
             formData.append('images', data.images[0])
             const res = await axios.post('http://localhost:8000/user', formData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } })
@@ -139,11 +142,11 @@ export default function Page() {
                                 <h1 className="text-[16px] font-bold">หน้าที่</h1>
                                 <div className="flex gap-2">
                                     <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                                        <input type="radio" name="role" value={"admin"} className=" peer hidden" />
+                                        <input type="radio" name="role" value={"1"} onChange={(e)=> setdata({...data, role: e.target.value})} className=" peer hidden" />
                                         <span className="p-1 border rounded-[8px] shadow-xl bg-white cursor-pointer hover:bg-[#1E3A8A] hover:text-white peer-checked:bg-[#1E3A8A] peer-checked:text-white">admin</span>
                                     </label>
                                     <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                                        <input type="radio" name="role" value={"user"} className=" peer hidden" />
+                                        <input type="radio" name="role" value={"2"} onChange={(e)=> setdata({...data, role: e.target.value})} className=" peer hidden" />
                                         <span className="p-1 border rounded-[8px] shadow-xl bg-white cursor-pointer hover:bg-[#1E3A8A] hover:text-white peer-checked:bg-[#1E3A8A] peer-checked:text-white">user</span>
                                     </label>
                                 </div>
