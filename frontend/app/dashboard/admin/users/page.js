@@ -58,7 +58,7 @@ export default function Page() {
             <h1 className="text-3xl font-bold my-4">ผู้ใช้งาน</h1>
             <div>
                 <div className=" text-end my-4">
-                    <Link href="/dashboard/users/add" className="p-2 bg-[#1E3A8A] font-bold text-white rounded-2xl">เพิ่มผู้ใช้งาน</Link>
+                    <Link href="/dashboard/admin/users/add" className="p-2 bg-[#1E3A8A] font-bold text-white rounded-2xl">เพิ่มผู้ใช้งาน</Link>
                 </div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
