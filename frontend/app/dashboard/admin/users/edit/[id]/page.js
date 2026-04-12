@@ -33,7 +33,8 @@ export default function Page() {
             fromData.append('email', data.email)
             fromData.append('phone', data.phone)
             fromData.append('address', data.address)
-
+            fromData.append('role', data.roles_id)
+            
             if (data.images && data.images[0]) {
                 fromData.append('images', data.images[0])
             }
@@ -108,7 +109,7 @@ export default function Page() {
         setShowPopupAdd(false)
     }
     // console.log(urlImagePreview)
-    // console.log("data: ",isPassword)
+    // console.log("data: ",data)
     useEffect(() => {
         if (userId) getData()
     }, [userId])
