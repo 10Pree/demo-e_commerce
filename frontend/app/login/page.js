@@ -3,6 +3,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function Page() {
     const router = useRouter()
@@ -17,7 +18,12 @@ export default function Page() {
             }
         )
             router.push("/dashboard")
-            alert("Login Successful!!")
+            Swal.fire({
+                icon: 'success',
+                title: "เข้าสู้ระบบสำเร็จ",
+                timer: 2000,
+                showConfirmButton: false
+            })
         }catch(error){
             console.log("Message Error: ", error)
         }
