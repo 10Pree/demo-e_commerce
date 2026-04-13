@@ -3,35 +3,45 @@ import axios from "axios";
 import { withCoalescedInvoke } from "next/dist/lib/coalesced-function";
 import Link from "next/link";
 import { useEffect, useState } from "react"
+import Swal from "sweetalert2";
 export default function Page() {
     const [data, setData] = useState([])
     const getuser = async () => {
-        try{
-            const res = await axios.get("http://localhost:8000/users", { withCredentials: true})
+        try {
+            const res = await axios.get("http://localhost:8000/users", { withCredentials: true })
             // console.log(res.data)
             setData(res.data.data)
-        }catch (err){
+        } catch (err) {
             console.error("Error: ", err)
         }
     }
 
     const deleteUser = async (id) => {
-        try{
-            console.log(id)
-            const res = await axios.delete(`http://localhost:8000/user/${id}`, {
-                withCredentials: true
+        try {
+            const confirmDelete = Swal.fire({
+                icon: 'success',
+                title: 'ลบผู้ใช้งานแล้ว',
+                timer: 2000,
+                showConfirmButton: true,
+                showCancelButton: true
+            })
+
+            if ((await confirmDelete).isConfirmed) {
+                const res = await axios.delete(`http://localhost:8000/user/${id}`, {
+                    withCredentials: true
+                }
+                )
+                // alert("ลบแล้ว")
+                getuser()
             }
-            )
-            alert("ลบแล้ว")
-            getuser()
-        }catch(err){
-        console.error("Error: ", err)
+        } catch (err) {
+            console.error("Error: ", err)
         }
     }
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         getuser()
-    },[])
+    }, [])
 
 
     const [currentPage, setCurrentPage] = useState(1)
