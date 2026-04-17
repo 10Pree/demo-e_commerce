@@ -1,6 +1,6 @@
 const { getDB } = require("../config/db")
 
-class modlesImages {
+class modlesImagesProducts {
     static async create(data) {
         try {
             const conn = await getDB()
@@ -106,4 +106,4 @@ class modlesImages {
     }
 }
 
-module.exports = modlesImages
+module.exports = modlesImagesProducts

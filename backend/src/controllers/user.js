@@ -1,4 +1,4 @@
-const modelsImages = require("../models/images_users");
+const modelsImagesUsers = require("../models/images_users");
 const modelsUser = require("../models/user");
 const path = require('path')
 const fs = require('fs')
@@ -12,9 +12,6 @@ class controllersUser {
 
       const { username, password, email, phone, address, role } = req.body;
       const file_images = req.files
-      //     console.log("1. req.body:", req.body);
-      // console.log("2. req.files:", req.files); // เช็คว่าไฟล์มาถึงไหม
-      // console.log("file_Image:", req.files)
       const hash_Password = await hashPassword(password);
       const userDate = {
         username,
@@ -31,12 +28,12 @@ class controllersUser {
         const imagsId = []
         for (const img of file_images) {
           const url = `/uploads/users/${img.filename}`
-          const row = await modelsImages.create(url)
+          const row = await modelsImagesUsers.create(url)
           imagsId.push(row.insertId)
         }
 
         const rows = imagsId.map(imgId => [user.insertId, imgId])
-        await modelsImages.createMap(rows)
+        await modelsImagesUsers.createMap(rows)
       }
 
       if (user) {
@@ -132,7 +129,7 @@ class controllersUser {
 
       if (Array.isArray(file_Images) && file_Images.length > 0) {
         const imagsId = []
-        const image = await modelsImages.getImgByIdUsers(userId)
+        const image = await modelsImagesUsers.getImgByIdUsers(userId)
 
         for (const img of image) {
           const fullPath = path.join(__dirname, '../../', img.image_url)
@@ -141,15 +138,15 @@ class controllersUser {
             fs.unlinkSync(fullPath)
           }
         }
-        await modelsImages.deleteImgByIdUsers(userId)
+        await modelsImagesUsers.deleteImgByIdUsers(userId)
         for (const img of file_Images) {
           const url = `/uploads/users/${img.filename}`
-          const row = await modelsImages.create(url)
+          const row = await modelsImagesUsers.create(url)
           imagsId.push(row.insertId)
         }
 
         const rows = imagsId.map(imgId => [userId, imgId])
-        await modelsImages.createMap(rows)
+        await modelsImagesUsers.createMap(rows)
       }
 
       let newData = null
