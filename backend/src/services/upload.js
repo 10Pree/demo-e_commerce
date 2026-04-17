@@ -28,6 +28,17 @@ const storageUsers = multer.diskStorage({
     }
 
 })
+const storageCustomers = multer.diskStorage({
+    destination: (req, File, cb) => {
+        cb(null, path_Users)
+    },
+    filename: (req, File, cb) => {
+        const ext = path.extname(File.originalname)
+        const name = Date.now() + "-" + Math.round(Math.random() * 1E9)
+        cb(null, name + ext)
+    }
+
+})
 
 const uploadProduct = multer({
     storage: storageProducts
@@ -39,6 +50,10 @@ const uploadUser = multer({
     // ,
     // limits: { fileSize: 5 * 1024 * 1024}
 })
+const uploadCustomers = multer({
+    storage: storageUsers
+    // ,
+    // limits: { fileSize: 5 * 1024 * 1024}
+})
 
-
-module.exports = { uploadProduct, uploadUser}
+module.exports = { uploadProduct, uploadUser, uploadCustomers}
