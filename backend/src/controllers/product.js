@@ -13,9 +13,9 @@ class controllerProduct {
         try {
             const { p_name, p_price, p_details, p_stock, categories_ids } = req.body || {};
             const image_url = req.files
-            console.log("CONTENT-TYPE:", req.headers['content-type']);
-            console.log("FILES:", req.files);
-            console.log("BODY:", req.body);
+            // console.log("CONTENT-TYPE:", req.headers['content-type']);
+            // console.log("FILES:", req.files);
+            // console.log("BODY:", req.body);
 
             const data = {};
             for (let i = 0; i < 3; i++) { // สุ่มใหม่ 3 ครั้ง
