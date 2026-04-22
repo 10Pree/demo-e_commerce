@@ -6,9 +6,34 @@ class modelsCustomers {
             const conn = await getDB()
             const [results] = await conn.query('INSERT INTO customers SET ?', [data])
             return results
-        } catch (error) {
-            console.log("Message Error:", error)
-            throw error
+        } catch (err) {
+            throw err
+        }
+    }
+    static async getCustomers() {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('SELECT id, username, email, phone, address FROM customers')
+            return results
+        }catch(err){
+            throw err
+        }
+    }
+    static async getCustomerById(id){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query(`SELECT id, username, email, phone, address FROM customers WHERE id = ?`, id)
+            return results
+        }catch(err){
+            throw err
+        }
+    }
+    static async update(id, newData){
+        try{
+            const conn  = await getDB()
+            const [results] = await conn.query('UPDATE customers SET ? WHERE id = ?',[newData, id] )
+        }catch(err){
+            throw err
         }
     }
 }
