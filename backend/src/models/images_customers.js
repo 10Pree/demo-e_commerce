@@ -30,15 +30,15 @@ class modlesImagesCustomers {
             throw error
         }
     }
-    static async getMapByIdUser(id) {
+    static async getMapByIdCustomer(id) {
         try {
             const conn = await getDB()
             const [resulte] = await conn.query(`
                 SELECT *
-                FROM users u
+                FROM customers c
                 JOIN map_image_customers miu ON u.id = miu.customers_id
                 JOIN images_customers iu ON iu.id = miu.images_id
-                WHERE u.id = ?
+                WHERE c.id = ?
                 `, id)
             return resulte
         } catch (error) {
@@ -54,24 +54,39 @@ class modlesImagesCustomers {
             throw error
         }
     }
-    static async getImgByIdUsers(id) {
+    static async getImgByIdCustomer(id) {
         try {
             const conn = await getDB()
             const [resulte] = await conn.query(`
-                SELECT i.*
-                FROM images_customers i
-                JOIN map_image_customers mi ON mi.images_id = i.id
-                WHERE mi.customers_id = ?
+                SELECT ic.*
+                FROM images_customers ic
+                JOIN map_image_customers mic ON mic.images_id = i.id
+                WHERE mic.customers_id = ?
                 `, id)
             return resulte
         } catch (error) {
             throw error
         }
     }
-    static async update(id, data) {
+static async updateImgByIdCustomer(id, data) {
+    try {
+        const conn = await getDB()
+        const [result] = await conn.query(`
+            UPDATE images_customers ic
+            JOIN map_images_customers mic ON mic.images_id = ic.id
+            SET ic.image_url = ? WHERE mic.customers_id = ?
+            `, [data, id])
+        
+        console.log("affectedRows:", result.affectedRows) // ✅ เช็คตรงนี้
+        return result
+    } catch (error) {
+        throw error
+    }
+}
+        static async update(id, data) {
         try {
             const conn = await getDB()
-            const [resulte] = await conn.query('UPDATE images_customers SET ? WHERE id = ?', [data, id])
+             const [resulte] = await conn.query('UPDATE images_customers SET ? WHERE id = ?', [data, id])
             return resulte
         } catch (error) {
             throw error
@@ -87,13 +102,13 @@ class modlesImagesCustomers {
             throw error
         }
     }
-    static async deleteImgByIdUsers(id) {
+    static async deleteImgByIdCustomer(id) {
         try {
             const conn = await getDB()
             const [resulte] = await conn.query(`
-                DELETE i
-                FROM images_customers i
-                JOIN map_image_customers mi ON mi.images_id = i.id
+                DELETE ic
+                FROM images_customers ic
+                JOIN map_images_customers mi ON mi.images_id = ic.id
                 WHERE mi.customers_id = ?
                 `, id)
             return resulte
@@ -110,10 +125,10 @@ class modlesImagesCustomers {
             throw error
         }
     }
-    static async createMap(data) {
+    static async createMapCustomer(data) {
         try {
             const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO map_image_customers  (customers_id, images_id) VALUES ?', [data])
+            const [resulte] = await conn.query('INSERT INTO map_images_customers  (customers_id, images_id) VALUES (?)', [data])
             return resulte
         } catch (error) {
             throw error
