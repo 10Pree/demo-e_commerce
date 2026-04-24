@@ -91,7 +91,7 @@ class controllerCustomers {
             }
             const newData = {}
             const checkCustomer = await modelsCustomers.getCustomerById(customerId)
-            if (checkCistomer.length <= 0) {
+            if (checkCustomer.length <= 0) {
                 return res.status(400).json({
                     message: "Customer ID Not Found"
                 })
@@ -109,7 +109,7 @@ class controllerCustomers {
                 const url = `/uploads/customers/${file_image.filename}`
                 const rowImg = await modlesImagesCustomers.getImgByIdCustomer(customerId)
                 // console.log(rowImg)
-                if(rowImg.length > 0){
+                if (rowImg.length > 0) {
                     await modlesImagesCustomers.deleteByMapId(customerId)
                     await modlesImagesCustomers.delete(rowImg[0].id)
                 }
@@ -123,6 +123,46 @@ class controllerCustomers {
                 message: "Update Data Customer Successful!!"
             })
 
+        } catch (err) {
+            console.log("Message Error:", err);
+            return res.status(500).json({
+                message: "Server Error",
+            });
+        }
+    }
+    static async deleted(req, res) {
+        try {
+            const customerId = req.params.id
+            const rowImg = await modlesImagesCustomers.getImgByIdCustomer(customerId)
+            // console.log(rowImg[0].id)
+            await modlesImagesCustomers.deleteByMapId(customerId)
+            await modlesImagesCustomers.delete(rowImg[0].id)
+
+            const image = await modelsCustomers.deleted(customerId)
+            return res.status(204).json({
+                message: "Deleted Customer Successful!!"
+            })
+        } catch (err) {
+            console.log("Message Error:", err);
+            return res.status(500).json({
+                message: "Server Error",
+            });
+        }
+    }
+    static async softdelete(req, res) {
+        try {
+            const customerId = req.params.id
+            const row = await modelsCustomers.getCustomerById(customerId)
+            if(customerId && row.length < 0){
+                return res.status.json({
+                    message: "Customer Not Found"
+                })
+            }
+            const image = await modelsCustomers.softdelete(customerId)
+             
+            return res.status(204).json({
+                message: "Deleted Customer Successful!!"
+            })
         } catch (err) {
             console.log("Message Error:", err);
             return res.status(500).json({
