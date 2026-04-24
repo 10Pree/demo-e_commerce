@@ -46,7 +46,7 @@ class controllerCustomers {
     static async GetCustomers(req, res) {
         try {
             const customers = await modelsCustomers.getCustomers()
-            return res.status(201).json({
+            return res.status(200).json({
                 message: "Get Customers Successful!!",
                 data: customers
             })
@@ -66,7 +66,7 @@ class controllerCustomers {
                 })
             }
             const customer = await modelsCustomers.getCustomerById(customerId)
-            return res.status(201).json({
+            return res.status(200).json({
                 message: "Get By ID Customer Successful!!",
                 data: customer
             })
@@ -81,34 +81,45 @@ class controllerCustomers {
         try {
             const customerId = req.params.id
             const { username, email, phone, address } = req.body
-            const file_image = res.file
-            console.log("id:",customerId)
-            console.log("image:",file_image)
-            const newData = {}
+            const file_image = req.file
+            // console.log("id:", customerId)
+            // console.log("image:", file_image)
             if (!customerId) {
                 return res.status(400).json({
                     message: "Customer ID Not Found"
                 })
             }
-            const checkCistomer = await modelsCustomers.getCustomerById(customerId)
+            const newData = {}
+            const checkCustomer = await modelsCustomers.getCustomerById(customerId)
             if (checkCistomer.length <= 0) {
                 return res.status(400).json({
                     message: "Customer ID Not Found"
                 })
             }
 
-            if(username) newData.username = username
-            if(email) newData.email = email
-            if(phone) newData.phone = phone
-            if(address) newData.address = address
-            // if(file_image){
+            if (username) newData.username = username
+            if (email) newData.email = email
+            if (phone) newData.phone = phone
+            if (address) newData.address = address
+            // console.log("DATA:", newData)
+            if (Object.keys(newData).length > 0) {
+                const newCustomer = await modelsCustomers.update(customerId, newData)
+            }
+            if (file_image) {
+                const url = `/uploads/customers/${file_image.filename}`
+                const rowImg = await modlesImagesCustomers.getImgByIdCustomer(customerId)
+                // console.log(rowImg)
+                if(rowImg.length > 0){
+                    await modlesImagesCustomers.deleteByMapId(customerId)
+                    await modlesImagesCustomers.delete(rowImg[0].id)
+                }
+                const image = await modlesImagesCustomers.create(url)
+                const map = await modlesImagesCustomers.createMapCustomer(customerId, image.insertId)
+            }
+            // console.log(newData)
 
-            // }
-            console.log(newData)
-    
-            const newCustomer = await modelsCustomers.update(customerId, newData)
 
-            return res.status(201).json({
+            return res.status(200).json({
                 message: "Update Data Customer Successful!!"
             })
 
