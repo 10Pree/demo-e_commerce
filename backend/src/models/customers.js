@@ -13,7 +13,7 @@ class modelsCustomers {
     static async getCustomers() {
         try{
             const conn = await getDB()
-            const [results] = await conn.query('SELECT id, username, email, phone, address FROM customers')
+            const [results] = await conn.query('SELECT id, username, email, phone, address FROM customers WHERE deleted_at IS NULL')
             return results
         }catch(err){
             throw err
@@ -22,7 +22,7 @@ class modelsCustomers {
     static async getCustomerById(id){
         try{
             const conn = await getDB()
-            const [results] = await conn.query(`SELECT id, username, email, phone, address FROM customers WHERE id = ?`, id)
+            const [results] = await conn.query(`SELECT id, username, email, phone, address FROM customers WHERE id = ? AND deleted_at IS NULL`, id)
             return results
         }catch(err){
             throw err
@@ -32,6 +32,24 @@ class modelsCustomers {
         try{
             const conn  = await getDB()
             const [results] = await conn.query('UPDATE customers SET ? WHERE id = ?',[newData, id] )
+        }catch(err){
+            throw err
+        }
+    }
+    static async deleted(id){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('DELETE FROM customers WHERE id = ?', id)
+            return results
+        }catch(err){
+            throw err
+        }
+    }
+    static async softdelete(id){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('UPDATE customers SET deleted_at = Now() WHERE id = ?', id)
+            return results
         }catch(err){
             throw err
         }
