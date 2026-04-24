@@ -60,7 +60,7 @@ class modlesImagesCustomers {
             const [resulte] = await conn.query(`
                 SELECT ic.*
                 FROM images_customers ic
-                JOIN map_image_customers mic ON mic.images_id = i.id
+                JOIN map_images_customers mic ON mic.images_id = ic.id
                 WHERE mic.customers_id = ?
                 `, id)
             return resulte
@@ -119,16 +119,16 @@ static async updateImgByIdCustomer(id, data) {
     static async deleteByMapId(id) {
         try {
             const conn = await getDB()
-            const [resulte] = await conn.query('DELETE FROM map_image_customers WHERE customers_id = ?', id)
+            const [resulte] = await conn.query('DELETE FROM map_images_customers WHERE customers_id = ?', id)
             return resulte
         } catch (error) {
             throw error
         }
     }
-    static async createMapCustomer(data) {
+    static async createMapCustomer(customerId, imageId) {
         try {
             const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO map_images_customers  (customers_id, images_id) VALUES (?)', [data])
+            const [resulte] = await conn.query('INSERT INTO map_images_customers  (customers_id, images_id) VALUES (?, ?)', [customerId, imageId])
             return resulte
         } catch (error) {
             throw error
