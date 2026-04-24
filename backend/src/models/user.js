@@ -25,7 +25,7 @@ class modelsUser {
         static async read(id) {
         try {
             const conn = await getDB()
-            const [results] = await conn.query('SELECT id, username, email, phone, address FROM users WHERE id = ?', id)
+            const [results] = await conn.query('SELECT id, username, email, phone, address FROM users WHERE id = ? AND deleted_at IS NULL', id)
             return results
         } catch (error) {
             console.log("Message Error:", error)
@@ -75,7 +75,7 @@ class modelsUser {
     static async getEmail(email){
         try{
             const conn = await getDB()
-            const [results] = await conn.query('SELECT id, email, password FROM users WHERE email = ? LIMIT 1', [email])
+            const [results] = await conn.query('SELECT id, email, password FROM users WHERE email = ? AND deleted_at IS NULL LIMIT 1', [email])
             return results
         }catch(error){
             console.log(error)
@@ -108,7 +108,7 @@ class modelsUser {
     static async getPassword(userId) {
         try{
             const conn = await getDB()
-            const [results] = await conn.query('SELECT password FROM users WHERE id = ?', userId)
+            const [results] = await conn.query('SELECT password FROM users WHERE id = ? AND deleted_at IS NULL', userId)
             return results
         }catch(error){
             console.log("Message Error:", error)

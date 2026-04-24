@@ -33,7 +33,7 @@ class moduleProduct {
     static async readCode(codeId){
         try{
             const conn = await getDB()
-            const [results] = await conn.query('SELECT * FROM products WHERE p_code = ?', codeId)
+            const [results] = await conn.query('SELECT * FROM products WHERE p_code = ? AND deleted_at IS NULL', codeId)
             return results
         }catch(error){
             throw error
