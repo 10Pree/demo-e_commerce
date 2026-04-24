@@ -36,7 +36,7 @@ class controllersOAuth {
                 })
             }
 
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Add Role Successful!!"
             })
         } catch (error) {
@@ -60,7 +60,7 @@ class controllersOAuth {
                     message: "Server Error"
                 })
             }
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Add Permission Successful!!"
             })
         } catch (error) {
@@ -83,7 +83,7 @@ class controllersOAuth {
 
             await modelsOAuth.addRole_permissions(data)
 
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Add Role and Permission Successful!!"
             })
         } catch (error) {
@@ -106,7 +106,7 @@ class controllersOAuth {
 
             const map = await modelsOAuth.mapRoleUser(data)
 
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Map User and Role Successful!!"
             })
         } catch (error) {

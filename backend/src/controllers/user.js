@@ -203,7 +203,7 @@ class controllersUser {
       const DataUserId = userId
 
       await CreateLogAction(DataUserId, actionUser, "Update.User")
-      return res.status(201).json({
+      return res.status(200).json({
         message: "Update Password Successful!!",
       });
     } catch (error) {
@@ -227,7 +227,7 @@ class controllersUser {
       await CreateLogAction(DataUserId, actionUser, "Delete.User")
 
       await modelsUser.softdelete(userId)
-      return res.status(200).json({
+      return res.status(204).json({
         message: "Delete Successful!!"
       })
     } catch (error) {

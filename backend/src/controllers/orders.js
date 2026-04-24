@@ -19,7 +19,7 @@ class controllerOrders {
 
             await moduleOrders.createOrder(data)
 
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Create Order Successful!!"
             })
         } catch (error) {
@@ -59,7 +59,7 @@ class controllerOrders {
 
 
 
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Create OrderItem  Successful!!"
             })
 

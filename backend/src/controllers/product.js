@@ -57,7 +57,7 @@ class controllerProduct {
             // console.log("product id", productId.insertId )
             const userId = req.user.userId
             await CreateLogProducts(product.insertId, userId, "Create.Product")
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Create Product Successful!!",
             });
         } catch (error) {
@@ -229,7 +229,7 @@ class controllerProduct {
             await CreateLogProducts(productId, userId, "Delete.Product")
 
 
-            return res.status(200).json({
+            return res.status(204).json({
                 message: "Delete Product Successful!!"
                 // data: product
             })

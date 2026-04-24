@@ -25,7 +25,7 @@ class controllerPayments {
             }
             await modelsPayments.createPayment(data)
 
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Create Payment Successful!!!"
             })
         } catch (error) {

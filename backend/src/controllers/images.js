@@ -8,7 +8,7 @@ class controllerImages {
 
             const image = await modlesImages.create(image_url);
 
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Create Image Successful!!",
             });
         } catch (error) {
@@ -98,7 +98,7 @@ class controllerImages {
             const rows = await modlesImages.getById(imageId)
             if(rows.length === 0) return res.status(400).json({ message: "Image Not Found" })
             const image = await modlesImages.delete(imageId)
-            return res.status(200).json({
+            return res.status(204).json({
                 message: "Delete Image Successful!!"
             })
         } catch (error) {

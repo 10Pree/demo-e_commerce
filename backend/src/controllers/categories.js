@@ -8,7 +8,7 @@ class controllerCategories {
 
       const categorie = await modelsCategories.create(name);
 
-      return res.status(200).json({
+      return res.status(201).json({
         message: "Create categorie Successful!!",
         // categorie
       });
@@ -83,7 +83,7 @@ class controllerCategories {
       // if(product.length === 0 || categorie.length === 0) return res.status(400).json({ message: "productId and categotieId Not Found"})
       const data = { products_id: products_id, categories_id: categories_id };
       await modelsCategories.createMap(data);
-      return res.status(200).json({
+      return res.status(201).json({
         message: "Create Map Categories Successful!!",
       });
     } catch (error) {
