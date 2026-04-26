@@ -4,7 +4,7 @@ class controllerImages {
     static async Create(req, res) {
         try {
             const image_url = req.body;
-            if (!image_url) return res.status(400).json({ message: "Not Image URL" });
+            if (!image_url) return res.status(404).json({ message: "Not Image URL" });
 
             const image = await modlesImages.create(image_url);
 
@@ -37,7 +37,7 @@ class controllerImages {
     static async getByID(req, res) {
         try {
             const imageId = req.params.id;
-            if (!imageId) return res.status(400).json({ message: "Image Not ID" });
+            if (!imageId) return res.status(404).json({ message: "Image Not ID" });
             const image = await modlesImages.getById(imageId);
 
             return res.status(200).json({
@@ -54,7 +54,7 @@ class controllerImages {
         static async getMapByIdUser(req, res) {
         try {
             const userId = req.params.id;
-            if (!userId) return res.status(400).json({ message: "User Not ID" });
+            if (!userId) return res.status(404).json({ message: "User Not ID" });
             const image = await modlesImages.getMapByIdUser(userId);
 
             return res.status(200).json({
@@ -72,10 +72,10 @@ class controllerImages {
         try {
             const imageId = req.params.id
             const image_url = req.body
-            if (!imageId || !image_url) return res.status(400).json({ message: "Image Not ID and url" })
+            if (!imageId || !image_url) return res.status(404).json({ message: "Image Not ID and url" })
 
             const images = await modlesImages.getById(imageId)
-            if (images.length === 0) return res.status(400).json({ message: "Image Not Found" })
+            if (images.length === 0) return res.status(404).json({ message: "Image Not Found" })
 
             // console.log(images, image_url)
             const update = await modlesImages.update(images[0].id, image_url)
@@ -93,10 +93,10 @@ class controllerImages {
     static async Delete(req, res) {
         try {
             const imageId = req.params.id
-            if (!imageId) return res.status(400).json({ message: "Image Not ID" })
+            if (!imageId) return res.status(404).json({ message: "Image Not ID" })
             
             const rows = await modlesImages.getById(imageId)
-            if(rows.length === 0) return res.status(400).json({ message: "Image Not Found" })
+            if(rows.length === 0) return res.status(404).json({ message: "Image Not Found" })
             const image = await modlesImages.delete(imageId)
             return res.status(204).json({
                 message: "Delete Image Successful!!"
@@ -112,7 +112,7 @@ class controllerImages {
       static async CreateMap(req, res) {
     try {
         const { products_id, images_id } = req.body
-        if(!products_id || !images_id) return res.status(400).json({ message: "Product and Image Not ID"})
+        if(!products_id || !images_id) return res.status(404).json({ message: "Product and Image Not ID"})
         
         const data = { products_id: products_id, images_id: images_id}
         const mapId = await modlesImages.createMap(data)

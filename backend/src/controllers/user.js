@@ -86,13 +86,13 @@ class controllersUser {
     try {
       const userId = req.params.id;
       if (userId === null) {
-        return res.status(400).json({
+        return res.status(404).json({
           message: "User Not found",
         });
       }
       const userData = await modelsUser.readById(userId);
       if (userData.length === 0) {
-        return res.status(400).json({
+        return res.status(404).json({
           message: "User Not found",
         });
       }
@@ -115,7 +115,7 @@ class controllersUser {
       const file_Images = req.files
       const user = await modelsUser.read(userId);
       if (user.length === 0) {
-        return res.status(400).json({
+        return res.status(404).json({
           message: "User Not Found",
         });
       }
@@ -185,7 +185,7 @@ class controllersUser {
       const newPassword = req.body.password || {};
       const user = await modelsUser.read(userId)
       if (user.Length === 0) {
-        return res.status(400).json({
+        return res.status(404).json({
           message: "User Not Found",
         });
       }

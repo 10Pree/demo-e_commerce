@@ -61,7 +61,7 @@ class controllerCustomers {
         try {
             const customerId = req.params.id
             if (!customerId) {
-                return res.status(400).json({
+                return res.status(404).json({
                     message: "Customer ID Not Found"
                 })
             }
@@ -92,7 +92,7 @@ class controllerCustomers {
             const newData = {}
             const checkCustomer = await modelsCustomers.getCustomerById(customerId)
             if (checkCustomer.length <= 0) {
-                return res.status(400).json({
+                return res.status(404).json({
                     message: "Customer ID Not Found"
                 })
             }
@@ -154,7 +154,7 @@ class controllerCustomers {
             const customerId = req.params.id
             const row = await modelsCustomers.getCustomerById(customerId)
             if(customerId && row.length < 0){
-                return res.status.json({
+                return res.status(404).json({
                     message: "Customer Not Found"
                 })
             }

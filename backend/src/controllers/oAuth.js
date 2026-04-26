@@ -5,7 +5,7 @@ class controllersOAuth {
         try {
             const userId = req.params.id
             if(!userId){
-                return res.status(500).json({
+                return res.status(404).json({
                 message: "Not Id"
                 })
             }
@@ -25,14 +25,14 @@ class controllersOAuth {
         try {
             const roleName = req.body
             if (!roleName) {
-                return res.status(401).json({
+                return res.status(404).json({
                     message: "Not Role"
                 })
             }
             const role = await modelsOAuth.addRole(roleName)
             if (!role) {
                 return res.status(401), json({
-                    message: "Server Error"
+                    message: "Unable to Add Role"
                 })
             }
 
@@ -50,14 +50,14 @@ class controllersOAuth {
         try {
             const key = req.body
             if (!key) {
-                return res.status(401).json({
+                return res.status(404).json({
                     message: "Not key"
                 })
             }
             const permission = await modelsOAuth.addPermission(key)
             if (!permission) {
-                return res.status(401).json({
-                    message: "Server Error"
+                return res.status(400).json({
+                    message: "Unable to add permissions."
                 })
             }
             return res.status(201).json({
@@ -75,7 +75,7 @@ class controllersOAuth {
         try {
             const { roles_id, permissions_id } = req.body
             if (!roles_id || !permissions_id) {
-                return res.status(401).json({
+                return res.status(404).json({
                     message: "Not Role and Permission"
                 })
             }
@@ -98,7 +98,7 @@ class controllersOAuth {
         try {
             const { users_id, roles_id } = req.body
             if (!users_id || !roles_id) {
-                return res.status(401).json({
+                return res.status(404).json({
                     message: "Not UserID and Role"
                 })
             }

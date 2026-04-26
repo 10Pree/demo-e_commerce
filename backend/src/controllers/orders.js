@@ -34,7 +34,7 @@ class controllerOrders {
         try {
             const { orders_id, products_id, qty } = req.body
             if (!orders_id && !products_id) {
-                return res.status(400).json({
+                return res.status(404).json({
                     message: "Not ProductId and OrderId"
                 })
             }

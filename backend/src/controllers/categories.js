@@ -4,7 +4,7 @@ class controllerCategories {
   static async Create(req, res) {
     try {
       const name = req.body;
-      if (!name) return res.status(400).json({ message: "categorie Not Name" });
+      if (!name) return res.status(404).json({ message: "categorie Not Name" });
 
       const categorie = await modelsCategories.create(name);
 
@@ -56,7 +56,7 @@ class controllerCategories {
       const categorieId = req.params.id;
       const { name } = req.body;
       if (!name || !categorieId)
-        return res.status(400).json({ message: "ID and categorie Not Name" });
+        return res.status(404).json({ message: "ID and categorie Not Name" });
       const data = { name: name };
       const categorie = await modelsCategories.update(categorieId, data);
       return res.status(200).json({

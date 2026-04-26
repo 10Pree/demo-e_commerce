@@ -6,7 +6,7 @@ class controllerPayments {
         try {
             const { orders_id } = req.body
             if (!orders_id) {
-                return res.status(400).json({
+                return res.status(404).json({
                     message: "orderID and amount Not Found"
                 })
             }
@@ -40,7 +40,7 @@ class controllerPayments {
         try {
             const { orders_id } = req.body
             if (!orders_id) {
-                return res.status(400).json({
+                return res.status(404).json({
                     message: "OrderID Not Fonud"
                 })
             }
