@@ -1,9 +1,11 @@
 const modelsAuth = require("../models/auth")
+const modelsOAuthCustomers = require("../models/auth_customers")
+const modelsCustomers = require("../models/customers")
 const modlesRefreshToken = require("../models/refresh_token")
 const modelsUser = require("../models/user")
 const CreateLogAction = require("../services/logAction")
 const { verifyPassword } = require("../services/password-service")
-const { createAccessToken, createRefreshToken } = require('../services/token-service')
+const { createAccessToken, createRefreshToken, createAccessTokenToCustomer, createRefreshTokenToCustomer } = require('../services/token-service')
 
 class controllersLogin {
     static async Login(req, res) {
@@ -29,18 +31,18 @@ class controllersLogin {
             }
 
             const userId = user[0].id
-            
+
             const role = await modelsAuth.getRoleName(userId)
 
             // console.log(role[0].name)
 
-            
+
             const refresh_token = await createRefreshToken(userId, email, role[0].name)
             const access_token = await createAccessToken(userId, email)
 
             await modlesRefreshToken.revokeAllByUserId(userId)
 
-            const data = {users_id:userId,token: refresh_token, status: 0}
+            const data = { users_id: userId, token: refresh_token, status: 0 }
             const token = await modlesRefreshToken.create(data)
 
             res.cookie('refresh_token', refresh_token, {
@@ -51,6 +53,47 @@ class controllersLogin {
             })
 
             // await CreateLogAction(userId,"login")
+            return res.status(200).json({
+                message: "Login Successful!!"
+            })
+        } catch (error) {
+            console.log("Server Error", error)
+            return res.status(500).json({
+                message: "Server Error",
+                error
+            })
+        }
+    }
+    static async LoginCustomer(req, res) {
+        try {
+            const { email, password } = req.body
+            console.log(email,password)
+
+            if (!email || !password) {
+                return res.status(404).json({
+                    message: "Email OR Password Not Found"
+                })
+            }
+
+            const row = await modelsCustomers.getCustomerByEmail(email)
+            const rowPassword = await verifyPassword(password, row[0].password)
+            if (row.length <= 0 || !rowPassword) {
+                return res.status(401).json({
+                    message: "Email and password are incorrect"
+                })
+            }
+            const access_token_customer = await createAccessTokenToCustomer(row[0].id, row[0].email)
+
+            const role = await modelsOAuthCustomers.getRoleName(row[0].id)
+            const refresh_token_customer = await createRefreshTokenToCustomer(row[0].id, row[0].email, role[0].name)
+
+            res.cookie('refresh_token', refresh_token_customer, {
+                maxAge: 3600000, httpOnly: true, sameSite: 'lax', secure: false
+            })
+            res.cookie('access_token', access_token_customer, {
+                maxAge: 60 * 1000, httpOnly: true, sameSite: 'lax', secure: false
+            })
+
             return res.status(200).json({
                 message: "Login Successful!!"
             })
