@@ -28,6 +28,15 @@ class modelsCustomers {
             throw err
         }
     }
+    static async getCustomerByEmail(email){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('SELECT id, email, password FROM customers WHERE email = ? AND deleted_at IS NULL', email)
+            return results
+        }catch(err){
+            throw err
+        }
+    }
     static async update(id, newData){
         try{
             const conn  = await getDB()
