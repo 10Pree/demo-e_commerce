@@ -13,11 +13,11 @@ export default function Page() {
         })
     const handleLogin = async() => {
         try{
-            const res = await axios.post("http://localhost:8000/login", loginData,{
+            const res = await axios.post("http://localhost:8000/login/customer", loginData,{
                 withCredentials: true
             }
         )
-            router.push("/dashboard")
+            router.push("/")
             Swal.fire({
                 icon: 'success',
                 title: "เข้าสู้ระบบสำเร็จ",
