@@ -15,6 +15,13 @@ export default function Page() {
             console.error("Error: ", err)
         }
     }
+    // const getCustomers = async() => {
+    //     try{
+    //         const res = await axios.get('')
+    //     }catch(err){
+    //         console.error("Error: ", err)
+    //     }
+    // }
 
     const deleteUser = async (id) => {
         try {
@@ -67,8 +74,16 @@ export default function Page() {
         <div className="w-full h-full">
             <h1 className="text-3xl font-bold my-4">ผู้ใช้งาน</h1>
             <div>
-                <div className=" text-end my-4">
-                    <Link href="/dashboard/admin/users/add" className="p-2 bg-[#1E3A8A] font-bold text-white rounded-2xl">เพิ่มผู้ใช้งาน</Link>
+                <div className=" flex gap-5 my-4">
+                    <Link href="/dashboard/admin/users/add" className="p-2 bg-[#1E3A8A] hover:bg-[#102150] font-bold text-white rounded-2xl">เพิ่มผู้ใช้งาน</Link>
+                    <div className="flex justify-center items-center gap-1 ">
+                        <div className="h-100% p-2 bg-[#1E3A8A] font-bold text-white rounded-l-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer">
+                            Users
+                        </div>
+                        <div className="h-100% p-2 bg-[#1E3A8A] font-bold text-white rounded-r-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer">
+                            Customers
+                        </div>
+                    </div>
                 </div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
