@@ -130,6 +130,37 @@ class controllerCustomers {
             });
         }
     }
+    static async UpdatePassword(req, res) {
+        try {
+            const userId = req.params.id 
+            const newPassword = req.body.password
+            const row = await modelsCustomers.getCustomerById(userId)
+
+            if(!userId && !newPassword){
+                return res.status(400).json({
+                    message: "Missing required fields"
+                })
+            }
+            if(!row){
+                return res.status(401).json({
+                    message: "customer Not Found"
+                })
+            }
+            
+            const newHash = await hashPassword(String(newPassword))
+            await modelsCustomers.updatePassword(userId, newHash)
+
+            return res.status(200).json({
+                message: "Update Customer Successful!!"
+            })
+
+        } catch (err) {
+            console.log("Message Error:", err);
+            return res.status(500).json({
+                message: "Server Error",
+            });
+        }
+    }
     static async deleted(req, res) {
         try {
             const customerId = req.params.id
@@ -153,13 +184,13 @@ class controllerCustomers {
         try {
             const customerId = req.params.id
             const row = await modelsCustomers.getCustomerById(customerId)
-            if(customerId && row.length < 0){
+            if (customerId && row.length < 0) {
                 return res.status(404).json({
                     message: "Customer Not Found"
                 })
             }
             const image = await modelsCustomers.softdelete(customerId)
-             
+
             return res.status(204).json({
                 message: "Deleted Customer Successful!!"
             })
