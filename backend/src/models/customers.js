@@ -45,6 +45,15 @@ class modelsCustomers {
             throw err
         }
     }
+    static async updatePassword(userid,newPassword){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('UPDATE customers SET password = ? WHERE id = ?', [newPassword , userid])
+            return results
+        }catch(err){
+            throw err
+        }
+    }
     static async deleted(id){
         try{
             const conn = await getDB()
