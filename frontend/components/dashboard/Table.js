@@ -1,7 +1,10 @@
 import { useState } from "react"
 import Link from "next/link"
+import Swal from "sweetalert2"
+import axios from "axios"
 
-export function DataTable({ data }) {
+
+export function DataTable({ data, onRefresh }) {
     const [currentPage, setCurrentPage] = useState(1)
     const itemPerPage = 10
 
@@ -27,7 +30,7 @@ export function DataTable({ data }) {
                     }
                     )
                     // alert("ลบแล้ว")
-                    getuser()
+                    onRefresh()
                 }
             } catch (err) {
                 console.error("Error: ", err)
