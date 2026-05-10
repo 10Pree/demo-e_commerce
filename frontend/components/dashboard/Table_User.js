@@ -1,5 +1,7 @@
 import { useState } from "react"
 import Link from "next/link"
+import Swal from "sweetalert2"
+import axios from "axios"
 
 export function DataTableUser({ data }) {
     const [currentPage, setCurrentPage] = useState(1)
