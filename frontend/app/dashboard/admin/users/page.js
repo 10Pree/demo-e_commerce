@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react"
 import { DataTable } from "@/components/dashboard/Table"
+import { DataTableCustomers } from "@/components/dashboard/Table_Customers"
 import { Pagination } from "@/components/dashboard/pagination";
 
 export default function Page() {
@@ -70,7 +71,9 @@ export default function Page() {
                             </tr>
                         </thead>
                         <tbody>
-                            <DataTable data={handleSwicthData ? dataCustomers : dataUsers}/>
+                            {
+                                handleSwicthData ? <DataTableCustomers data={dataCustomers} onRefresh={getCustomers}/> : <DataTable data={dataUsers} onRefresh={getuser}/>
+                            }
                         </tbody>
                     </table>
                     <Pagination data={handleSwicthData ? dataCustomers : dataUsers} />
