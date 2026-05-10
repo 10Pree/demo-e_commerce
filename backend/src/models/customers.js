@@ -22,7 +22,13 @@ class modelsCustomers {
     static async getCustomerById(id){
         try{
             const conn = await getDB()
-            const [results] = await conn.query(`SELECT id, username, email, phone, address FROM customers WHERE id = ? AND deleted_at IS NULL`, id)
+            const [results] = await conn.query(`
+                SELECT c.username, c.email, c.phone, c.address, ic.id AS img_id, ic.image_url, mrc.roles_id
+                FROM customers c 
+                LEFT JOIN map_images_customers mic ON c.id = mic.customers_id
+                LEFT JOIN images_customers ic ON ic.id = mic.images_id
+                LEFT JOIN map_roles_customers mrc ON c.id = mrc.customers_id
+                WHERE c.id = ? AND deleted_at IS NULL`, id)
             return results
         }catch(err){
             throw err
