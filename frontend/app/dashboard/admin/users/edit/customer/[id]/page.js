@@ -60,7 +60,7 @@ export default function Page() {
     }
     const updatePassword = async () => {
         try {
-            const res = await axios.put(`http://localhost:8000/user/password/${userId}`, isPassword, { withCredentials: true })
+            const res = await axios.put(`http://localhost:8000/customer/password/${userId}`, isPassword, { withCredentials: true })
             // alert(`อัพเดต รหัสผ่าน ID ${userId} แล้ว`)
             setPasswordUpdata(true)
             setShowPopupAdd(false)
@@ -82,10 +82,10 @@ export default function Page() {
 
     const getData = async () => {
         try {
-            const res = await axios.get(`http://localhost:8000/user/${userId}`, { withCredentials: true })
+            const res = await axios.get(`http://localhost:8000/customer/${userId}`, { withCredentials: true })
             const { id, username, email, phone, address, image_url, roles_id } = res.data.data[0]
             setData({ username, email, phone, address, roles_id })
-            setUrlImagePreview(image_url === null ? (`http://localhost:8000/uploads/users/image.png`) : (`http://localhost:8000${image_url}`))
+            setUrlImagePreview(image_url === null ? (`http://localhost:8000/uploads/customers/image.png`) : (`http://localhost:8000${image_url}`))
             // console.log("image", image_url)
             // console.log("data: ",res.data.data[0].password)
         } catch (err) {
