@@ -17,7 +17,7 @@ export default function Page() {
                 withCredentials: true
             }
         )
-            router.push("/dashboard")
+            router.push("/")
             Swal.fire({
                 icon: 'success',
                 title: "เข้าสู้ระบบสำเร็จ",
@@ -26,11 +26,19 @@ export default function Page() {
             })
         }catch(error){
             console.log("Message Error: ", error)
+            if(error.response?.status === 401){
+                Swal.fire({
+                    title: "รหัส หรือ อีเมล ไม่ถูกต้อง!!!",
+                    icon: 'warning',
+                    timer: 2000,
+                    showCancelButton: false
+                })
+            }
         }
     }
 
     return(
-        <div className="w-full h-screen flex justify-center items-center p-4 md:p-0">
+        <div className="w-full h-screen flex justify-center items-center p-4 md:p-0 bg-gray-200">
             <div className="w-full md:w-[477px] h-[500px] bg-white border border-gray-200 rounded-2xl shadow-lg flex flex-col items-center gap-4 p-4 md:p-0">
                 <Image src={"/images/logo.png"} width={130} height={130} alt="logo"/>
                 <div className="w-full md:w-[389px] flex flex-col gap-4">
