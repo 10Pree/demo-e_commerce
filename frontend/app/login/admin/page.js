@@ -33,12 +33,19 @@ export default function Page() {
                     timer: 2000,
                     showCancelButton: false
                 })
+            }else{
+                Swal.fire({
+                    title: "เกิดข้อผิดพลาด",
+                    icon: 'error',
+                    text: "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้!!!",
+                    confirmButtonText: "ตกลง"
+                })
             }
         }
     }
 
     return(
-        <div className="w-full h-screen flex justify-center items-center p-4 md:p-0 bg-gray-200">
+        <div className="w-full h-screen flex justify-center items-center p-4 md:p-0 bg-gray-100">
             <div className="w-full md:w-[477px] h-[500px] bg-white border border-gray-200 rounded-2xl shadow-lg flex flex-col items-center gap-4 p-4 md:p-0">
                 <Image src={"/images/logo.png"} width={130} height={130} alt="logo"/>
                 <div className="w-full md:w-[389px] flex flex-col gap-4">
