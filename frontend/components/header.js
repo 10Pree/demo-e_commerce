@@ -40,7 +40,7 @@ export default function Header() {
               <div className="flex gap-2">
                 <span className=" cursor-pointer hover:bg-[#]">Sing up</span>
                 <span>/</span>
-                <span className=" cursor-pointer">Login</span>
+                <Link href={"/login"} className=" cursor-pointer">Login</Link>
               </div>
               <Link href="/basket"><Image src="/icons/icons8-shopping-cart-48.png" alt="logo" width={20} height={20} /></Link>
             </div>
