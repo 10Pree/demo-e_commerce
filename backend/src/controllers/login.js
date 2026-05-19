@@ -70,7 +70,7 @@ class controllersLogin {
             console.log(email,password)
 
             if (!email || !password) {
-                return res.status(404).json({
+                return res.status(401).json({
                     message: "Email OR Password Not Found"
                 })
             }
