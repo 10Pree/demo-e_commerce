@@ -118,7 +118,7 @@ export default function Page() {
             {
                 showPopupAdd && <FromEdit onClose={handleClosePopup} data={isPassword} setdata={setIsPassword} updatePassword={updatePassword} />
             }
-            <h1 className="text-3xl font-bold my-4">แก้ไขผู้ใช้งาน</h1>
+            <h1 className="text-3xl font-bold my-4">แก้ไขข้อมูลลูกค้า</h1>
             <div className="flex flex-col justify-center items-center">
                 <div className="w-full md:w-[50%]">
                     <div className="flex justify-end mb-2">
@@ -158,7 +158,7 @@ export default function Page() {
                         </div>
                         <div className="flex justify-center items-center m-8 md:m-0 h-full">
                             <div className="w-fit h-fit bg-white  rounded-2xl shadow-2xl p-4 flex flex-col justify-center gap-2">
-                                <h1 className="text-[16px] font-bold">หน้าที่</h1>
+                                {/* <h1 className="text-[16px] font-bold">หน้าที่</h1>
                                 <div className="flex gap-2">
                                     <label className="inline-flex items-center gap-2 cursor-pointer select-none">
                                         <input type="radio" name="role" value={1} checked={data.roles_id === 1} onChange={(e) => setData({ ...data, roles_id: Number(e.target.value) })} className=" peer hidden" />
@@ -168,7 +168,7 @@ export default function Page() {
                                         <input type="radio" name="role" value={2} checked={data.roles_id === 2} onChange={(e) => setData({ ...data, roles_id: Number(e.target.value) })} className=" peer hidden" />
                                         <span className="p-1 border rounded-[8px] shadow-xl bg-white cursor-pointer hover:bg-[#1E3A8A] hover:text-white peer-checked:bg-[#1E3A8A] peer-checked:text-white">user</span>
                                     </label>
-                                </div>
+                                </div> */}
                                 <h1 className="text-[16px] font-bold">อัพโหลด</h1>
                                 <div className="w-fit h-fit bg-[#1E3A8A] rounded-[8px] flex justify-center items-center p-3">
                                     <label htmlFor="file-upload" className="cursor-pointer shadow-2xl h-full w-full">
