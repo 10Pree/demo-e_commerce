@@ -17,7 +17,7 @@ export default function Page() {
                 withCredentials: true
             }
         )
-            router.push("/")
+            router.push("/dashboard/admin/main")
             Swal.fire({
                 icon: 'success',
                 title: "เข้าสู้ระบบสำเร็จ",
