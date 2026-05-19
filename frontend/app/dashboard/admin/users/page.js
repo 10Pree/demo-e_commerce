@@ -13,18 +13,18 @@ export default function Page() {
 
     const getuser = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/users", { withCredentials: true})
+            const res = await axios.get("http://localhost:8000/users", { withCredentials: true })
             // console.log(res.data)
             setDataUsers(res.data.data)
         } catch (err) {
             console.error("Error: ", err)
         }
     }
-    const getCustomers = async() => {
-        try{
-            const res = await axios.get('http://localhost:8000/customers', { withCredentials: true})
+    const getCustomers = async () => {
+        try {
+            const res = await axios.get('http://localhost:8000/customers', { withCredentials: true })
             setDataCustomers(res.data.data)
-        }catch(err){
+        } catch (err) {
             console.error("Error: ", err)
         }
     }
@@ -38,14 +38,14 @@ export default function Page() {
         <div className="w-full h-full">
             <h1 className="text-3xl font-bold my-4">ผู้ใช้งาน</h1>
             <div>
-                <div className=" flex gap-5 my-4">
-                    <Link href="/dashboard/admin/users/add" className="p-2 bg-[#1E3A8A] hover:bg-[#102150] font-bold text-white rounded-2xl">เพิ่มผู้ใช้งาน</Link>
-                    <div className="flex justify-center items-center gap-1 ">
-                        <div onClick={(e) => setHandleSwicthData(false)} className={ handleSwicthData ? 'h-100% p-2 bg-[#1E3A8A] font-bold text-white rounded-l-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer' : 'h-100% p-2 bg-[#102150] font-bold text-white rounded-l-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer'}>
-                            Users
+                <div className="flex justify-between my-4">
+                    {handleSwicthData ? <Link href="/dashboard/admin/users/add"  className="p-2 bg-gray-400 font-bold text-white rounded-2xl pointer-events-none opacity-50 cursor-not-allowed">เพิ่มผู้ใช้งาน</Link> : <Link href="/dashboard/admin/users/add" className="p-2 bg-[#1E3A8A] hover:bg-[#102150] font-bold text-white rounded-2xl">เพิ่มผู้ใช้งาน</Link>}
+                    <div className="flex gap-1">
+                        <div onClick={(e) => setHandleSwicthData(false)} className={handleSwicthData ? 'h-100% p-2 bg-[#1E3A8A] font-bold text-white rounded-l-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer' : 'h-100% p-2 bg-[#102150] font-bold text-white rounded-l-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer'}>
+                            ผู้ใช้งาน
                         </div>
-                        <div onClick={(e) => setHandleSwicthData(true)} className={ handleSwicthData ? 'h-100% p-2 bg-[#102150] font-bold text-white rounded-r-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer' : 'h-100% p-2 bg-[#1E3A8A] font-bold text-white rounded-r-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer'}>
-                            Customers
+                        <div onClick={(e) => setHandleSwicthData(true)} className={handleSwicthData ? 'h-100% p-2 bg-[#102150] font-bold text-white rounded-r-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer' : 'h-100% p-2 bg-[#1E3A8A] font-bold text-white rounded-r-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer'}>
+                            ลูกค้า
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@ export default function Page() {
                         </thead>
                         <tbody>
                             {
-                                handleSwicthData ? <DataTableCustomers data={dataCustomers} onRefresh={getCustomers}/> : <DataTable data={dataUsers} onRefresh={getuser}/>
+                                handleSwicthData ? <DataTableCustomers data={dataCustomers} onRefresh={getCustomers} /> : <DataTable data={dataUsers} onRefresh={getuser} />
                             }
                         </tbody>
                     </table>
