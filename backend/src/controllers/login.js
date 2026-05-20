@@ -76,12 +76,19 @@ class controllersLogin {
             }
 
             const row = await modelsCustomers.getCustomerByEmail(email)
-            const rowPassword = await verifyPassword(password, row[0].password)
-            if (row.length <= 0 || !rowPassword) {
+            if (row.length <= 0 || !row) {
                 return res.status(401).json({
                     message: "Email and password are incorrect"
                 })
             }
+
+            const rowPassword = await verifyPassword(password, row[0].password)
+            if(!rowPassword){
+                return res.status(401).json({
+                    message: "Email and password are incorrect"
+                })
+            }
+
             const access_token_customer = await createAccessTokenToCustomer(row[0].id, row[0].email)
 
             const role = await modelsOAuthCustomers.getRoleName(row[0].id)
