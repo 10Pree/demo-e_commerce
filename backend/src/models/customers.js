@@ -72,7 +72,8 @@ class modelsCustomers {
     static async softdelete(id){
         try{
             const conn = await getDB()
-            const [results] = await conn.query('UPDATE customers SET deleted_at = Now() WHERE id = ?', id)
+            const timestamp = Date.now()
+            const [results] = await conn.query(`UPDATE customers SET deleted_at = Now(), email = CONCAT('deleted_', ?, '_', email)  WHERE id = ?`, [timestamp, id])
             return results
         }catch(err){
             throw err
