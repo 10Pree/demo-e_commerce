@@ -8,7 +8,7 @@ router.post('/customer', uploadCustomers.single('image',), controllerCustomers.C
 router.get('/customers', controllerCustomers.GetCustomers)
 router.get('/customer/:id', controllerCustomers.GetCustomerById)
 router.put('/customer/:id', uploadCustomers.single('image') , controllerCustomers.UpdateCustomer)
-router.put('/customer/updatepassword/:id', controllerCustomers.UpdatePassword)
+router.put('/customer/updatepassword/:id', uploadCustomers.single('image'), controllerCustomers.UpdatePassword)
 router.delete('/customer/:id', controllerCustomers.softdelete)
 
 module.exports = router
