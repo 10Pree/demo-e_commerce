@@ -1,7 +1,36 @@
 import React from "react";
 import Link from "next/link";
-export function DataTableProducts({ data }) {
+import axios from "axios";
+import Swal from "sweetalert2";
+export function DataTableProducts({ data, onRefresh }) {
 
+    const deleteProduct = async (id, name) => {
+        try {
+            const confirmDelete = await Swal.fire({
+                icon: 'warning',
+                title: `ลบ สินค้า ${name} หรือมั้ย`,
+                showConfirmButton: true,
+                showCancelButton: true
+            })
+
+if (confirmDelete.isConfirmed) {
+    console.log("1. เริ่มลบ")
+    await axios.delete(`http://localhost:8000/product/${id}`, { withCredentials: true })
+    console.log("2. ลบสำเร็จ")
+    await Swal.fire({
+        icon: 'success',
+        title: "ลบสินค้าแล้ว",
+        timer: 2000,
+        showConfirmButton: false
+    })
+    console.log("3. Swal ปิดแล้ว")
+    onRefresh()
+    console.log("4. Refresh แล้ว")
+}
+        } catch (err) {
+            console.log("Message:", err)
+        }
+    }
     return (
         <>
             {data.map((p) => (
@@ -20,7 +49,7 @@ export function DataTableProducts({ data }) {
                     </td>
                     <td className="py-4 text-center flex justify-center items-center gap-4">
                         <Link href={`/dashboard/admin/products/edit/${p.id}`} className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">Edit</Link>
-                        <Link href="#" className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</Link>
+                        <button onClick={(e) => deleteProduct(p.id, p.p_name)} className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</button>
                     </td>
                 </tr>
             ))}

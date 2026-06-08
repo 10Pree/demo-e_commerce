@@ -10,7 +10,7 @@ export default function Page() {
 
     const getProducts = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/products")
+            const res = await axios.get("http://localhost:8000/products", {withCredentials: true})
             setProduct(res.data.data)
         } catch (error) {
             console.log("Message Errer: ", error)
@@ -50,7 +50,7 @@ export default function Page() {
                             </tr>
                         </thead>
                         <tbody>
-                            <DataTableProducts data={product}/>
+                            <DataTableProducts data={product} onRefresh={getProducts}/>
                         </tbody>
                     </table>
                 </div>
