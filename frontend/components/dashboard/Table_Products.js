@@ -13,20 +13,16 @@ export function DataTableProducts({ data, onRefresh }) {
                 showCancelButton: true
             })
 
-if (confirmDelete.isConfirmed) {
-    console.log("1. เริ่มลบ")
-    await axios.delete(`http://localhost:8000/product/${id}`, { withCredentials: true })
-    console.log("2. ลบสำเร็จ")
-    await Swal.fire({
-        icon: 'success',
-        title: "ลบสินค้าแล้ว",
-        timer: 2000,
-        showConfirmButton: false
-    })
-    console.log("3. Swal ปิดแล้ว")
-    onRefresh()
-    console.log("4. Refresh แล้ว")
-}
+            if (confirmDelete.isConfirmed) {
+                await axios.delete(`http://localhost:8000/product/${id}`, { withCredentials: true })
+                await Swal.fire({
+                    icon: 'success',
+                    title: "ลบสินค้าแล้ว",
+                    timer: 2000,
+                    showConfirmButton: false
+                })
+                onRefresh()
+            }
         } catch (err) {
             console.log("Message:", err)
         }
