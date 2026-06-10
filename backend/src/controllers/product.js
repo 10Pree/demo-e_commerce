@@ -153,14 +153,14 @@ class controllerProduct {
                 const imgIds = []
                 const rows = await modlesImagesProducts.getImgByIdProduct(productId)
 
-                for(const img of rows){
+                for (const img of rows) {
                     const fullPath = path.join(__dirname, '../../', img.image_url)
 
-                    if(fs.existsSync(fullPath)){
+                    if (fs.existsSync(fullPath)) {
                         fs.unlinkSync(fullPath)
                     }
                 }
-                    
+
                 await modlesImagesProducts.deleteImgByIdProduct(productId)
                 for (const file of image_url) {
                     const url = `/uploads/products/${file.filename}`
@@ -188,9 +188,9 @@ class controllerProduct {
             })
 
         } catch (error) {
-        
-            if(req.files){
-                for(const file of req.files){
+
+            if (req.files) {
+                for (const file of req.files) {
                     fs.unlinkSync(file.path)
                 }
             }
@@ -205,8 +205,10 @@ class controllerProduct {
         try {
             const productId = req.params.id
             const checkProduct = await moduleProduct.read(productId)
-            if (checkProduct.length === 0) {
-                throw new Error("Product Not Found")
+            if (checkProduct.length === 0 || checkProduct[0].deleted_at !== null) {
+                return res.status(401).json({
+                    message: "Product Not Found"
+                })
             }
 
             // const rows = await modlesImages.getImgByIdProduct(productId)
@@ -218,18 +220,18 @@ class controllerProduct {
             //     }
             // }
 
-            
+
             // await modlesImages.deleteImgByIdProduct(productId)
-            
+
             // await modelsCategories.delete(productId)
-            
-            await moduleProduct.softDelete(productId)
+
 
             const userId = req.user.userId
             await CreateLogProducts(productId, userId, "Delete.Product")
 
+            await moduleProduct.softDelete(productId)
 
-            return res.status(204).json({
+            return res.status(200).json({
                 message: "Delete Product Successful!!"
                 // data: product
             })
