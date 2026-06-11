@@ -14,15 +14,29 @@ export default function Page() {
         p_price: 0,
         p_details: "",
         p_stock: 0,
-        p_image_url: [],
+        images: [],
         categories_ids: []
     })
 
-    console.log(productData)
+    console.log(productData, urlImagePreview)
+
 
     const handleCreateUser = async () => {
         try {
-            const res = await axios.post("http://localhost:8000/product", productData, { withCredentials: true })
+            const formData = new FormData()
+
+            formData.append('p_name', productData.p_name)
+            formData.append('p_price', productData.p_price)
+            formData.append('p_details', productData.p_details)
+            formData.append('p_stock', productData.p_stock)
+
+            productData.images.forEach(file => {
+                formData.append('images', file)
+            })
+
+            formData.append('categories_ids', productData.categories_ids)
+
+            const res = await axios.post("http://localhost:8000/product", formData, { withCredentials: true, headers: {'Content-Type': 'multipart/form-data'} })
             // alert("Create User Successful")
             router.push("/dashboard/admin/products")
         } catch (error) {
@@ -32,7 +46,7 @@ export default function Page() {
 
     const getCategories = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/categories")
+            const res = await axios.get("http://localhost:8000/categories", { withCredentials: true })
             setCategories(res.data.data)
             // console.log(res.data.data)
         } catch (error) {
@@ -43,9 +57,13 @@ export default function Page() {
     const handleUpload = (e) => {
         const files = [...e.target.files]
         const prevViewUrl = files.map(file => URL.createObjectURL(file))
-        const ImageName = files.map(file => "/uploads/products/" + file.name)
-        seturlImagePreview(prev => [...prev, ...prevViewUrl])
-        setProductData({ ...productData, p_image_url: ImageName })
+
+        const newPrevViewUrl = [...urlImagePreview, ...prevViewUrl]
+        const newFiles = [...productData.images, ...files]
+        // urlImagePreview แสดงให้ user เห็น
+        seturlImagePreview(newPrevViewUrl)
+        /// setProductData ส่งให้ Backend
+        setProductData({ ...productData, images: newFiles })
     }
     useEffect(() => {
         getCategories()
