@@ -14,9 +14,9 @@ class controllerProduct {
         try {
             const { p_name, p_price, p_details, p_stock, categories_ids } = req.body || {};
             const image_url = req.files
-            const parsedCategories = categories_ids.split(',').map(Number)
-            // console.log("CONTENT-TYPE:", req.headers['content-type']);
-            // console.log("FILES:", req.files);
+            // const parsedCategories = categories_ids.split(',').map(Number)
+            console.log("CONTENT-TYPE:", req.headers['content-type']);
+            console.log("FILES:", req.files);
             console.log("BODY:", req.body);
 
             const data = {};
@@ -49,9 +49,9 @@ class controllerProduct {
                 await modlesImagesProducts.createMap(rows)
             }
 
-            if (Array.isArray(parsedCategories) && parsedCategories.length > 0) {
-                const rows = parsedCategories.map(catId => [product.insertId, catId])
-                console.log(rows)
+            if (Array.isArray(categories_ids) && categories_ids.length > 0) {
+                const rows = categories_ids.map(catId => [product.insertId, catId])
+                // console.log(rows)
                 await modelsCategories.createMap(rows)
             }
 
