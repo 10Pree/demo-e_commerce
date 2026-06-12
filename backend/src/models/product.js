@@ -30,6 +30,23 @@ class moduleProduct {
         }
     }
 
+    static async readById(productId){
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query(`
+                SELECT p.* , GROUP_CONCAT(ip.image_url) AS images
+                FROM products p
+                LEFT JOIN map_images_products mip ON  p.id = mip.products_id
+                LEFT JOIN images_products ip ON ip.id = mip.images_id
+                WHERE p.id = ? AND deleted_at IS NULL`, productId)
+            return results.map(p => ({
+                ...p, images: p.images ? p.images.split('.') : []
+            }))
+        }catch(error){
+            throw error
+        }
+    }
+
     static async readCode(codeId){
         try{
             const conn = await getDB()

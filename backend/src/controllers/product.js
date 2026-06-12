@@ -90,7 +90,7 @@ class controllerProduct {
         try {
             const productId = req.params.id
 
-            const product = await moduleProduct.read(productId)
+            const product = await moduleProduct.readById(productId)
             if (product.length === 0) {
                 return res.status(401).json({
                     message: "Product Not Found"
