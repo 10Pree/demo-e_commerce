@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import axios from "axios"
 import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
 
 
 export default function Page() {
@@ -38,6 +39,12 @@ export default function Page() {
 
             const res = await axios.post("http://localhost:8000/product", formData, { withCredentials: true, headers: {'Content-Type': 'multipart/form-data'} })
             // alert("Create User Successful")
+            Swal.fire({
+                icon:'success',
+                title: "เพิ่มสินค้าแล้ว",
+                timer: 2000,
+                showConfirmButton: false
+            })
             router.push("/dashboard/admin/products")
         } catch (error) {
             console.log("Message Error: ", error)
