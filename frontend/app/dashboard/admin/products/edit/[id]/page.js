@@ -22,13 +22,17 @@ export default function Page({ params }) {
         }
     )
 
-    console.log(productData)
+
+    console.log(productData, urlImagePreview)
 
     const getProductById = async () => {
         try {
             const res = await axios.get(`http://localhost:8000/product/${id}`, { withCredentials: true })
-            const {p_name, p_price, p_details, p_stock} = res.data.data[0]
-            setProductData({p_name, p_price, p_details, p_stock})
+            const {p_name, p_price, p_details, p_stock,images, categories_ids} = res.data.data[0]
+
+            setProductData({p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || []})
+            seturlImagePreview(images.map(img => `http://localhost:8000${img}`))
+        
 
         } catch (error) {
             console.log("Message Error: ", error)
@@ -66,6 +70,11 @@ export default function Page({ params }) {
         setProductData({ ...productData, images: newFiles })
     }
 
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setProductData(prev => ({...prev, [name]: value}))
+    }
+
     const updateProduct = async () => {
         try {
             const formData = new FormData()
@@ -76,7 +85,7 @@ export default function Page({ params }) {
             formData.append('p_details', productData.p_details)
             formData.append('p_stock', productData.p_stock)
             
-            productData.forEach(file => {
+            productData.images.forEach(file => {
                 formData.append('images', file)
             });
 
@@ -112,11 +121,11 @@ export default function Page({ params }) {
                 <div className="w-full h-full md:w-1/3  bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 ">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" onChange={(e) => setProductData({ ...productData, p_name: e.target.value })} />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" name="p_name" onChange={handleChange} value={productData.p_name || ""} />
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ราคา</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" onChange={(e) => setProductData({ ...productData, p_price: e.target.value })} />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" name="p_price" onChange={handleChange} value={productData.p_price} />
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ประเภท</h1>
@@ -143,11 +152,11 @@ export default function Page({ params }) {
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">จำนวน</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" onChange={(e) => setProductData({ ...productData, p_stock: e.target.value })} />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" name="p_stock" onChange={handleChange} value={productData.p_stock} />
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">รายละเอียด</h1>
-                        <textarea className="w-full h-40 border rounded-[8px] p-2" onChange={(e) => setProductData({ ...productData, p_details: e.target.value })}></textarea>
+                        <textarea className="w-full h-40 border rounded-[8px] p-2" onChange={handleChange} name="p_details" value={productData.p_details}></textarea>
                     </div>
                 </div>
                 <div className="flex justify-center items-center m-8 md:m-0">
