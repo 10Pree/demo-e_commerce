@@ -14,10 +14,10 @@ class controllerProduct {
         try {
             const { p_name, p_price, p_details, p_stock, categories_ids } = req.body || {};
             const image_url = req.files
-            // const parsedCategories = categories_ids.split(',').map(Number)
-            console.log("CONTENT-TYPE:", req.headers['content-type']);
-            console.log("FILES:", req.files);
-            console.log("BODY:", req.body);
+            const parsedCategories = categories_ids.split(',').map(Number)
+            // console.log("CONTENT-TYPE:", req.headers['content-type']);
+            // console.log("FILES:", req.files);
+            // console.log("BODY:", req.body);
 
             const data = {};
             for (let i = 0; i < 3; i++) { // สุ่มใหม่ 3 ครั้ง
@@ -49,8 +49,8 @@ class controllerProduct {
                 await modlesImagesProducts.createMap(rows)
             }
 
-            if (Array.isArray(categories_ids) && categories_ids.length > 0) {
-                const rows = categories_ids.map(catId => [product.insertId, catId])
+            if (Array.isArray(parsedCategories) && parsedCategories.length > 0) {
+                const rows = parsedCategories.map(catId => [product.insertId, catId])
                 // console.log(rows)
                 await modelsCategories.createMap(rows)
             }
@@ -143,7 +143,12 @@ class controllerProduct {
             }
 
             const { p_name, p_price, p_details, p_stock, categories_ids } = req.body
+            const parsedCategories = categories_ids.split(',').map(Number)
             const image_url = req.files
+            console.log("CONTENT-TYPE:", req.headers['content-type']);
+            console.log("FILES:", req.files);
+            console.log("BODY:", req.body);
+            console.log("categories_ids:", parsedCategories);
             const newData = {}
             if (p_name) newData.p_name = p_name
             if (p_price) newData.p_price = p_price
@@ -177,10 +182,10 @@ class controllerProduct {
                 await modlesImagesProducts.createMap(mapImages)
             }
 
-            if (Array.isArray(categories_ids) && categories_ids.length > 0) {
+            if (Array.isArray(parsedCategories) && parsedCategories.length > 0) {
                 await modelsCategories.delete(productId)
 
-                const rows = categories_ids.map(catId => [productId, catId])
+                const rows = parsedCategories.map(catId => [productId, catId])
                 await modelsCategories.createMap(rows)
 
             }
