@@ -142,9 +142,10 @@ class controllerProduct {
                 })
             }
 
-            const { p_name, p_price, p_details, p_stock, categories_ids } = req.body
+            const { p_name, p_price, p_details, p_stock, categories_ids, old_images } = req.body
+            const parsedOldImages = old_images ? JSON.parse(old_images) : []
             const parsedCategories = categories_ids.split(',').map(Number)
-            const image_url = req.files
+            const newFiles = req.files
             console.log("CONTENT-TYPE:", req.headers['content-type']);
             console.log("FILES:", req.files);
             console.log("BODY:", req.body);
@@ -159,27 +160,35 @@ class controllerProduct {
                 await moduleProduct.update(productId, newData)
             }
 
-            if (Array.isArray(image_url) && image_url.length > 0) {
-                const imgIds = []
-                const rows = await modlesImagesProducts.getImgByIdProduct(productId)
+            // === จัดการรูปภาพ ===
+            const currentImages = await modlesImagesProducts.getImgByIdProduct(productId)
 
-                for (const img of rows) {
-                    const fullPath = path.join(__dirname, '../../', img.image_url)
+            // หารูปที่ต้องลบ = มีใน DB แต่ไม่อยู่ใน old_images ที่ user เก็บไว้
+            const imagesToDelete = currentImages.filter(
+                img => !parsedOldImages.includes(img.image_url)
+            )
+            for (const img of imagesToDelete) {
+                const fullPath = path.join(__dirname, '../../', img.image_url)
+                if (fs.existsSync(fullPath)) {
+                    fs.unlinkSync(fullPath)
+                }
+                await modlesImagesProducts.deleteImgById(img.id) 
+            }
+            
+            if (Array.isArray(newFiles) && newFiles.length > 0) {
 
-                    if (fs.existsSync(fullPath)) {
-                        fs.unlinkSync(fullPath)
+
+                // เพิ่มรูปใหม่ที่ upload เข้ามา
+                if (newFiles.length > 0) {
+                    const imgIds = []
+                    for (const file of newFiles) {
+                        const url = `/uploads/products/${file.filename}`
+                        const image = await modlesImagesProducts.create(url)
+                        imgIds.push(image.insertId)
                     }
+                    const mapImages = imgIds.map(imgid => [productId, imgid])
+                    await modlesImagesProducts.createMap(mapImages)
                 }
-
-                await modlesImagesProducts.deleteImgByIdProduct(productId)
-                for (const file of image_url) {
-                    const url = `/uploads/products/${file.filename}`
-                    const image = await modlesImagesProducts.create(url)
-                    imgIds.push(image.insertId)
-                }
-
-                const mapImages = imgIds.map(imgid => [productId, imgid])
-                await modlesImagesProducts.createMap(mapImages)
             }
 
             if (Array.isArray(parsedCategories) && parsedCategories.length > 0) {

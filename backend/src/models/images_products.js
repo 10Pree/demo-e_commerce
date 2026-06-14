@@ -86,6 +86,17 @@ class modlesImagesProducts {
             throw error
         }
     }
+    static async deleteImgById(imageId) {
+    try {
+        const conn = await getDB()
+        // ลบ map ก่อน (เพราะมี foreign key)
+        await conn.query(`DELETE FROM map_images_products WHERE images_id = ?`, imageId)
+        // แล้วลบตัวรูปจริง
+        await conn.query(`DELETE FROM images_products WHERE id = ?`, imageId)
+    } catch (error) {
+        throw error
+    }
+}
     static async deleteByMapId(id) {
         try {
             const conn = await getDB()
