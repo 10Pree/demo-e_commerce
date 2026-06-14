@@ -8,7 +8,7 @@ import Swal from "sweetalert2"
 export default function Page({ params }) {
     const router = useRouter()
     const { id } = use(params)
-    const [urlImagePreview, seturlImagePreview] = useState([])
+    const [urlImagePreview, setUrlImagePreview] = useState([])
     const [showCategory, setShowCategory] = useState([])
     const [allCategories, setAllCategories] = useState([])
     const [productData, setProductData] = useState(
@@ -23,16 +23,17 @@ export default function Page({ params }) {
     )
 
 
-    console.log(productData, urlImagePreview)
+    console.log("Products: ", productData)
+    console.log("urlImagePreview: ", urlImagePreview)
 
     const getProductById = async () => {
         try {
             const res = await axios.get(`http://localhost:8000/product/${id}`, { withCredentials: true })
-            const {p_name, p_price, p_details, p_stock,images, categories_ids} = res.data.data[0]
+            const { p_name, p_price, p_details, p_stock, images, categories_ids } = res.data.data[0]
 
-            setProductData({p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || []})
-            seturlImagePreview(images.map(img => `http://localhost:8000${img}`))
-        
+            setProductData({ p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || [] })
+            setUrlImagePreview(images.map(img => `http://localhost:8000${img}`))
+
 
         } catch (error) {
             console.log("Message Error: ", error)
@@ -65,37 +66,52 @@ export default function Page({ params }) {
         const newPrevViewUrl = [...urlImagePreview, ...prevViewUrl]
         const newFiles = [...productData.images, ...files]
         // urlImagePreview แสดงให้ user เห็น
-        seturlImagePreview(newPrevViewUrl)
+        setUrlImagePreview(newPrevViewUrl)
         /// setProductData ส่งให้ Backend
         setProductData({ ...productData, images: newFiles })
     }
 
     const handleChange = (e) => {
         const { name, value } = e.target
-        setProductData(prev => ({...prev, [name]: value}))
+        setProductData(prev => ({ ...prev, [name]: value }))
     }
+
+const handleDeleteimg = (index) => {
+    try {
+
+        setProductData(prev => ({...prev, images: prev.images.filter((_, i) => i !== index)}))
+        
+        // ลบ preview ด้วย ไม่งั้นรูปยังโชว์อยู่
+        setUrlImagePreview(prev => prev.filter((_, i) => i !== index))
+    } catch (err) {
+        console.log("Message Error: ", err)
+    }
+}
 
     const updateProduct = async () => {
         try {
             const formData = new FormData()
-            
+
 
             formData.append('p_name', productData.p_name)
             formData.append('p_price', productData.p_price)
             formData.append('p_details', productData.p_details)
             formData.append('p_stock', productData.p_stock)
-            
-            productData.images.forEach(file => {
-                formData.append('images', file)
-            });
 
             formData.append('categories_ids', productData.categories_ids)
+
+            const oldImages = productData.images.filter(img => typeof img === 'string')
+            const newImages = productData.images.filter(img => img instanceof File)
+
+            formData.append('old_images', JSON.stringify(oldImages)) // ส่งเป็น JSON
+            newImages.forEach(file => formData.append('images', file)) // ส่งเป็น File
 
             const res = await axios.put(`http://localhost:8000/product/${id}`, formData, {
                 withCredentials: true
 
             })
-            
+            console.log("oldImages:",oldImages)
+
             Swal.fire({
                 icon: 'success',
                 title: "อัพเดตสินค้าสำเร็จ",
@@ -168,9 +184,15 @@ export default function Page({ params }) {
                             </label>
                         </div>
                         <span>รูป</span>
-                        <div className="w-[300px] h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
+                        <div className="w-[300px] h-[300px] flex flex-nowrap justify-start items-center gap-2 overflow-x-scroll">
                             {
-                                urlImagePreview.length > 0 ? urlImagePreview.map((src, index) => <Image className="w-1/2 h-1/2 object-cover" unoptimized key={index} src={src} alt="icon upload" width={300} height={300} />) : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
+                                urlImagePreview.length > 0 ? urlImagePreview.map((src, index) =>
+                                    <div key={index} className="relative w-[150px] h-[150px] flex-shrink-0">
+                                        <Image className="w-full h-full object-cover" unoptimized src={src} alt="icon upload" width={300} height={300} />
+                                        <Image src={"/icons/icons8-delete-90.svg"} width={50} height={50} onClick={() => handleDeleteimg(index)} alt="image" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer opacity-70 hover:opacity-100" />
+                                    </div>)
+                                    :
+                                    <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
                             }
                         </div>
                     </div>
