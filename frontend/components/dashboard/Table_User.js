@@ -18,7 +18,6 @@ export function DataTableUser({ data }) {
                 const confirmDelete = Swal.fire({
                     icon: 'success',
                     title: 'ลบผู้ใช้งานแล้ว',
-                    timer: 2000,
                     showConfirmButton: true,
                     showCancelButton: true
                 })
