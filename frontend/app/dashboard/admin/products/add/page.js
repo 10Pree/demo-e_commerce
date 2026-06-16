@@ -19,7 +19,8 @@ export default function Page() {
         categories_ids: []
     })
 
-    console.log(productData, urlImagePreview)
+    // console.log("Products: ", productData)
+    // console.log("urlImagePreview: ", urlImagePreview)
 
 
     const handleCreateUser = async () => {
@@ -48,6 +49,15 @@ export default function Page() {
             router.push("/dashboard/admin/products")
         } catch (error) {
             console.log("Message Error: ", error)
+        }
+    }
+
+    const handleDeleteimg = (index) => {
+        try{
+            setProductData(prev => ({...prev, images: prev.images.filter((_, i) => i !== index)}))
+            seturlImagePreview(prev => prev.filter((_, i) => i !== index))
+        }catch(err){
+            console.log("Message Error: ", err)
         }
     }
 
@@ -131,7 +141,13 @@ export default function Page() {
                         <span>รูป</span>
                         <div className="w-[300px] h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
                             {
-                                urlImagePreview.length > 0 ? urlImagePreview.map((src, index) => <Image className="w-1/2 h-1/2 object-cover" unoptimized key={index} src={src} alt="icon upload" width={300} height={300} />) : <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
+                                urlImagePreview.length > 0 ? urlImagePreview.map((src, index) =>
+                                    <div key={index} className="relative w-[150px] h-[150px] flex-shrink-0">
+                                        <Image className="w-full h-full object-cover" unoptimized src={src} alt="icon upload" width={300} height={300} />
+                                        <Image src={"/icons/icons8-delete-90.svg"} width={50} height={50} onClick={() => handleDeleteimg(index)} alt="image" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer opacity-70 hover:opacity-100" />
+                                    </div>)
+                                    :
+                                    <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
                             }
                         </div>
                     </div>
