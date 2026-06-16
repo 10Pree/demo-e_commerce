@@ -23,8 +23,8 @@ export default function Page({ params }) {
     )
 
 
-    console.log("Products: ", productData)
-    console.log("urlImagePreview: ", urlImagePreview)
+    // console.log("Products: ", productData)
+    // console.log("urlImagePreview: ", urlImagePreview)
 
     const getProductById = async () => {
         try {

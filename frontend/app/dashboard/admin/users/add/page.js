@@ -21,7 +21,6 @@ export default function Page() {
         images: [],
         role: ""
     })
-    //! ข้อมูลส่งไปไม่ครบ
     const addUser = async (e) => {
         e.preventDefault();
         setLoading(true)
