@@ -227,6 +227,7 @@ class controllersUser {
       await CreateLogAction(DataUserId, actionUser, "Delete.User")
 
       await modelsUser.softdelete(userId)
+      
       return res.status(204).json({
         message: "Delete Successful!!"
       })
