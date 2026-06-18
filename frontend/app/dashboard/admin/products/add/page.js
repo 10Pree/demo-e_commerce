@@ -38,10 +38,10 @@ export default function Page() {
 
             formData.append('categories_ids', productData.categories_ids)
 
-            const res = await axios.post("http://localhost:8000/product", formData, { withCredentials: true, headers: {'Content-Type': 'multipart/form-data'} })
+            const res = await axios.post("http://localhost:8000/product", formData, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
             // alert("Create User Successful")
             Swal.fire({
-                icon:'success',
+                icon: 'success',
                 title: "เพิ่มสินค้าแล้ว",
                 timer: 2000,
                 showConfirmButton: false
@@ -53,10 +53,10 @@ export default function Page() {
     }
 
     const handleDeleteimg = (index) => {
-        try{
-            setProductData(prev => ({...prev, images: prev.images.filter((_, i) => i !== index)}))
+        try {
+            setProductData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }))
             seturlImagePreview(prev => prev.filter((_, i) => i !== index))
-        }catch(err){
+        } catch (err) {
             console.log("Message Error: ", err)
         }
     }
@@ -87,7 +87,12 @@ export default function Page() {
     }, [])
     return (
         <div>
-            <h1 className="text-3xl font-bold my-4">เพิ่มสินค้า</h1>
+            <div className="flex items-center mb-6">
+                <div>
+                    <h1 className="text-3xl font-bold text-[#111827]">เพิ่มสินค้า</h1>
+                    <p className="text-sm text-gray-500 mt-1">ฟอร์มเพิ่มสินค้า</p>
+                </div>
+            </div>
             <div className="flex-row justify-center items-center gap-4 md:flex">
                 <div className="w-full h-full md:w-1/3  bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 ">
                     <div>

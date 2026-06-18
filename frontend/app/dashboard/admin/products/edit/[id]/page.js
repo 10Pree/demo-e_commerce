@@ -76,17 +76,16 @@ export default function Page({ params }) {
         setProductData(prev => ({ ...prev, [name]: value }))
     }
 
-const handleDeleteimg = (index) => {
-    try {
+    const handleDeleteimg = (index) => {
+        try {
 
-        setProductData(prev => ({...prev, images: prev.images.filter((_, i) => i !== index)}))
-        
-        // ลบ preview ด้วย ไม่งั้นรูปยังโชว์อยู่
-        setUrlImagePreview(prev => prev.filter((_, i) => i !== index))
-    } catch (err) {
-        console.log("Message Error: ", err)
+            setProductData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }))
+
+            setUrlImagePreview(prev => prev.filter((_, i) => i !== index))
+        } catch (err) {
+            console.log("Message Error: ", err)
+        }
     }
-}
 
     const updateProduct = async () => {
         try {
@@ -110,7 +109,7 @@ const handleDeleteimg = (index) => {
                 withCredentials: true
 
             })
-            console.log("oldImages:",oldImages)
+            console.log("oldImages:", oldImages)
 
             Swal.fire({
                 icon: 'success',
@@ -132,7 +131,12 @@ const handleDeleteimg = (index) => {
     }, [])
     return (
         <div>
-            <h1 className="text-3xl font-bold my-4">แก้ไขสินค้า</h1>
+            <div className="flex items-center mb-6">
+                <div>
+                    <h1 className="text-3xl font-bold text-[#111827]">เพิ่มแก้ไขสินค้า</h1>
+                    <p className="text-sm text-gray-500 mt-1">ฟอร์มแก้ไขสินค้า</p>
+                </div>
+            </div>
             <div className="flex-row justify-center items-center gap-4 md:flex">
                 <div className="w-full h-full md:w-1/3  bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 ">
                     <div>
