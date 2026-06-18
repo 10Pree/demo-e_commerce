@@ -33,7 +33,7 @@ export default function Page() {
             formData.append('phone', data.phone)
             formData.append('address', data.address)
             formData.append('role', data.role)
-            
+
 
             formData.append('images', data.images[0])
             const res = await axios.post('http://localhost:8000/user', formData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } })
@@ -98,11 +98,16 @@ export default function Page() {
             {
                 showPopupAdd && <FromAdd onClose={handleClosePopup} onComfirmPassword={handlerComfirmPassword} data={data} setdata={setdata} />
             }
-            <h1 className="text-3xl font-bold my-4">เพิ่มผู้ใช้งาน</h1>
+            <div className="flex items-center mb-6">
+                <div>
+                    <h1 className="text-3xl font-bold text-[#111827]">เพิ่มผู้ใช้งาน</h1>
+                    <p className="text-sm text-gray-500 mt-1">ฟอร์มเพิ่มผู้ใช้งาน</p>
+                </div>
+            </div>
             <div className=" flex justify-center items-center">
                 <div className="w-full h-full md:w-[50%] ">
                     <div className="flex justify-end mb-2">
-                        <img src="/icons/icons8-arrow-right-90.png" width={50} onClick={(e)=> router.back()}/>
+                        <img src="/icons/icons8-arrow-right-90.png" width={50} onClick={(e) => router.back()} />
                     </div>
                     <div className="w-full h-full flex-row justify-center gap-4 md:flex md:w-full md:h-full">
                         <div className="w-full h-[100%] bg-white rounded-2xl shadow-2xl p-4  ">
@@ -141,11 +146,11 @@ export default function Page() {
                                 <h1 className="text-[16px] font-bold">หน้าที่</h1>
                                 <div className="flex gap-2">
                                     <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                                        <input type="radio" name="role" value={"1"} onChange={(e)=> setdata({...data, role: e.target.value})} className=" peer hidden" />
+                                        <input type="radio" name="role" value={"1"} onChange={(e) => setdata({ ...data, role: e.target.value })} className=" peer hidden" />
                                         <span className="p-1 border rounded-[8px] shadow-xl bg-white cursor-pointer hover:bg-[#1E3A8A] hover:text-white peer-checked:bg-[#1E3A8A] peer-checked:text-white">admin</span>
                                     </label>
                                     <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                                        <input type="radio" name="role" value={"2"} onChange={(e)=> setdata({...data, role: e.target.value})} className=" peer hidden" />
+                                        <input type="radio" name="role" value={"2"} onChange={(e) => setdata({ ...data, role: e.target.value })} className=" peer hidden" />
                                         <span className="p-1 border rounded-[8px] shadow-xl bg-white cursor-pointer hover:bg-[#1E3A8A] hover:text-white peer-checked:bg-[#1E3A8A] peer-checked:text-white">user</span>
                                     </label>
                                 </div>

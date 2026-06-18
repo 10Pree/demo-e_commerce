@@ -118,7 +118,12 @@ export default function Page() {
             {
                 showPopupAdd && <FromEdit onClose={handleClosePopup} data={isPassword} setdata={setIsPassword} updatePassword={updatePassword} />
             }
-            <h1 className="text-3xl font-bold my-4">แก้ไขข้อมูลลูกค้า</h1>
+                        <div className="flex items-center mb-6">
+                <div>
+                    <h1 className="text-3xl font-bold text-[#111827]">แก้ไขข้อมูลผู้ใช้บริการ</h1>
+                    <p className="text-sm text-gray-500 mt-1">ฟอร์มแก้ไขข้อมูลผู้ใช้บริการ</p>
+                </div>
+            </div>
             <div className="flex flex-col justify-center items-center">
                 <div className="w-full md:w-[50%]">
                     <div className="flex justify-end mb-2">

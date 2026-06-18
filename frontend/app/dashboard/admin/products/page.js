@@ -23,7 +23,13 @@ export default function Page() {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold my-4">สินค้า</h1>
+      {/* Header */}
+      <div className="flex items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-[#111827]">ตารางสินค้า</h1>
+          <p className="text-sm text-gray-500 mt-1">ตารางรวมสินค้าทั้งหมด</p>
+        </div>
+      </div>
             <div>
                 <div className=" text-end my-4">
                     <Link href="/dashboard/admin/products/add" className="p-2 bg-[#1E3A8A] font-bold text-white rounded-2xl">เพิ่มสินค้า</Link>

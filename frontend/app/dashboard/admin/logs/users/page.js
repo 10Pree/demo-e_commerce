@@ -37,7 +37,13 @@ export default function Page() {
 
     return (
         <div className="w-full h-full">
-            <h1 className="text-3xl font-bold my-4">LogUser</h1>
+                              {/* Header */}
+      <div className="flex items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-[#111827]">ตารางแสดงประวัติผู้ใช้งาน</h1>
+          <p className="text-sm text-gray-500 mt-1">ตารางรวมแสดงประวัติผู้ใช้งานทั้งหมด</p>
+        </div>
+      </div>
             <div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

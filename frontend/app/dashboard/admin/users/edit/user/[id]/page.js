@@ -34,7 +34,7 @@ export default function Page() {
             fromData.append('phone', data.phone)
             fromData.append('address', data.address)
             fromData.append('role', data.roles_id)
-            
+
             if (data.images && data.images[0]) {
                 fromData.append('images', data.images[0])
             }
@@ -118,7 +118,13 @@ export default function Page() {
             {
                 showPopupAdd && <FromEdit onClose={handleClosePopup} data={isPassword} setdata={setIsPassword} updatePassword={updatePassword} />
             }
-            <h1 className="text-3xl font-bold my-4">แก้ไขผู้ใช้งาน</h1>
+            {/* Header */}
+            <div className="flex items-center mb-6">
+                <div>
+                    <h1 className="text-3xl font-bold text-[#111827]">แก้ไขข้อมูลผู้ใช้งาน</h1>
+                    <p className="text-sm text-gray-500 mt-1">ฟอร์มแก้ไขข้อมูลผู้ใช้งาน</p>
+                </div>
+            </div>
             <div className="flex flex-col justify-center items-center">
                 <div className="w-full md:w-[50%]">
                     <div className="flex justify-end mb-2">

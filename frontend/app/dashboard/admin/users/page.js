@@ -36,10 +36,16 @@ export default function Page() {
 
     return (
         <div className="w-full h-full">
-            <h1 className="text-3xl font-bold my-4">ผู้ใช้งาน</h1>
+            {/* Header */}
+            <div className="flex items-center mb-6">
+                <div>
+                    <h1 className="text-3xl font-bold text-[#111827]">ตารางผู้ใช้งาน</h1>
+                    <p className="text-sm text-gray-500 mt-1">ตารางรวมผู้ใช้งาน และ ผู้ใช้บริการทั้งหมด</p>
+                </div>
+            </div>
             <div>
                 <div className="flex justify-between my-4">
-                    {handleSwicthData ? <Link href="/dashboard/admin/users/add"  className="p-2 bg-gray-400 font-bold text-white rounded-2xl pointer-events-none opacity-50 cursor-not-allowed">เพิ่มผู้ใช้งาน</Link> : <Link href="/dashboard/admin/users/add" className="p-2 bg-[#1E3A8A] hover:bg-[#102150] font-bold text-white rounded-2xl">เพิ่มผู้ใช้งาน</Link>}
+                    {handleSwicthData ? <Link href="/dashboard/admin/users/add" className="p-2 bg-gray-400 font-bold text-white rounded-2xl pointer-events-none opacity-50 cursor-not-allowed">เพิ่มผู้ใช้งาน</Link> : <Link href="/dashboard/admin/users/add" className="p-2 bg-[#1E3A8A] hover:bg-[#102150] font-bold text-white rounded-2xl">เพิ่มผู้ใช้งาน</Link>}
                     <div className="flex gap-1">
                         <div onClick={(e) => setHandleSwicthData(false)} className={handleSwicthData ? 'h-100% p-2 bg-[#1E3A8A] font-bold text-white rounded-l-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer' : 'h-100% p-2 bg-[#102150] font-bold text-white rounded-l-2xl hover:bg-[#102150] focus:bg-[#102150] cursor-pointer'}>
                             ผู้ใช้งาน
