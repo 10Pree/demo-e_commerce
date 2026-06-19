@@ -60,6 +60,21 @@ class moduleOrders {
             throw error
         }
     }
+    static async getOrdersAndpayments() {
+        try{
+            const conn = await getDB()
+            const [resulte] = await conn.query(`
+                SELECT 
+                    (SELECT COUNT(*) FROM orders) AS total_orders,
+                    (SELECT COUNT(*) FROM orders WHERE status = 'paid') AS paid_orders,
+                    (SELECT COUNT(*) FROM orders WHERE status = 'pending') AS pending_orders,
+                    (SELECT COUNT(amount) FROM payments WHERE status = 'paid') AS total_total_revenue
+                `)
+                return resulte
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = moduleOrders
