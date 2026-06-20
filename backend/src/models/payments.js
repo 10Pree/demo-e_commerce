@@ -28,6 +28,26 @@ class modelsPayments {
             throw error
         }
     }
+    static async getDailyIncome() {
+        try {
+            const conn = await getDB()
+            const [resulte] = await conn.query(`
+                SELECT
+                    DATE(paid_at) AS date,
+                    SUM(amount) AS revenue
+                    FROM payments
+                    GROUP BY DATE(paid_at)
+                    ORDER BY date ASC
+                `)
+            return resulte.map(r => ({
+                ...r,
+                date: r.date.toISOString().split('T')[0],
+                revenue: Number(r.revenue)
+            }))
+        } catch (error) {
+            throw error
+        }
+    }
 
 }
 

@@ -56,7 +56,7 @@ class controllerPayments {
                     message: "This order has been paid."
                 })
             }
-            if (payment[0].status  === 'failed') {
+            if (payment[0].status === 'failed') {
                 return res.status(409).json({
                     message: "This order has been failed."
                 })
@@ -69,6 +69,22 @@ class controllerPayments {
 
             res.status(200).json({
                 message: `Update Payment Order:${orders_id} Successful!!`
+            })
+        } catch (error) {
+            console.log("Server Error:", error)
+            return res.status(500).json({
+                message: "Server Error"
+            })
+        }
+    }
+
+    static async getDailyIncome(req, res) {
+        try {
+            const data = await modelsPayments.getDailyIncome()
+
+            return res.status(200).json({
+                message: "Get DailyIncome Successful!!",
+                data: data
             })
         } catch (error) {
             console.log("Server Error:", error)
