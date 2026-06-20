@@ -65,7 +65,23 @@ class controllerOrders {
 
         } catch (error) {
             console.log("Message Error:", error)
-           return res.status(500).json({
+            return res.status(500).json({
+                message: "Server Error"
+            })
+        }
+    }
+
+    static async getOrdersAndpayments(req, res) {
+        try {
+            const orders = await moduleOrders.getOrdersAndpayments()
+
+            return res.status(200).json({
+                message: "Get getOrdersAndpayments Successful!!",
+                data: orders
+            })
+        } catch (error) {
+            console.log("Message Error:", error)
+            return res.status(500).json({
                 message: "Server Error"
             })
         }

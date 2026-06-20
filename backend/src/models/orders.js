@@ -68,9 +68,12 @@ class moduleOrders {
                     (SELECT COUNT(*) FROM orders) AS total_orders,
                     (SELECT COUNT(*) FROM orders WHERE status = 'paid') AS paid_orders,
                     (SELECT COUNT(*) FROM orders WHERE status = 'pending') AS pending_orders,
-                    (SELECT COUNT(amount) FROM payments WHERE status = 'paid') AS total_total_revenue
+                    (SELECT SUM(amount) FROM payments WHERE status = 'paid') AS total_revenue
                 `)
-                return resulte
+                return resulte.map(r => ({
+                    ...r,
+                    total_revenue: Number(r.total_revenue || 0).toFixed(2)
+                }))
         }catch(error){
             throw error
         }
