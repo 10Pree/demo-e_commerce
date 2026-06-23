@@ -2,7 +2,7 @@ const express = require('express')
 const controllerPayments = require('../controllers/payments')
 const router = express.Router()
 
-router.get('/dailyIncome', controllerPayments.getDailyIncome)
+router.get('/payment/dailyIncome', controllerPayments.getDailyIncome)
 router.post('/payment', controllerPayments.CreatePayment)
 router.put('/payment',controllerPayments.UpdatePayment)
 

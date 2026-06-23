@@ -78,6 +78,25 @@ class moduleOrders {
             throw error
         }
     }
+
+    static async getDailyOrders() {
+        try{
+            const conn = await getDB()
+            const [resulte] = await conn.query(`
+                SELECT DATE(creates_at) AS date, COUNT(*) AS total_orders 
+                FROM orders 
+                WHERE creates_at >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) 
+                GROUP BY DATE(creates_at) 
+                ORDER BY date ASC
+                `)
+            return resulte.map(r => ({
+                ...r,
+                date: r.date.toISOString().split('T')[0]
+            }))
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = moduleOrders
