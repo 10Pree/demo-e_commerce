@@ -1,5 +1,6 @@
 
 const moduleOrders = require("../models/orders")
+const modelsPayments = require("../models/payments")
 
 class controllerOrders {
     static async createOrder(req, res) {
@@ -86,6 +87,24 @@ class controllerOrders {
             })
         }
     }
+    static async getDailyOrdersAndPayments(req, res) {
+        try {
+            const dataOrders = await moduleOrders.getDailyOrders()
+            const dataPayments = await modelsPayments.getDailyIncome()
+
+
+            return res.status(200).json({
+                message: "Get DailyOrders Successful!!",
+                data: dataOrders, dataPayments
+            })
+        } catch (error) {
+            console.log("Message Error:", error)
+            return res.status(500).json({
+                message: "Server Error"
+            })
+        }
+    }
+
 }
 
 module.exports = controllerOrders
