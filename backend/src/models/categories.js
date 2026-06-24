@@ -1,58 +1,78 @@
 const { getDB } = require("../config/db")
 
 class modelsCategories {
-    static async create(data){
-        try{
+    static async create(data) {
+        try {
             const conn = await getDB()
             const [results] = await conn.query('INSERT INTO categories SET ?', [data])
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
-    static async gets(){
-        try{
+    static async gets() {
+        try {
             const conn = await getDB()
             const [resulte] = await conn.query('SELECT * FROM categories')
             return resulte
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
-        static async getById(id){
-        try{
+    static async getById(id) {
+        try {
             const conn = await getDB()
             const [resulte] = await conn.query('SELECT * FROM categories WHERE id = ?', id)
             return resulte
-        }catch(error){
-            throw error
-        }
-    }
-    static async update(id,data){
-        try{
-            const conn = await getDB()
-            const [resulte] = await conn.query('UPDATE categories SET ? WHERE id = ?', [data, id])
-            return resulte
-        }catch(error){
-            throw error
-        }
-    }
-    static async delete(id){
-        try{
-            const conn = getDB()
-            const [resulte] = await conn.query('DELETE FROM map_categories WHERE products_id = ?', id)
-            return resulte
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
-    static async createMap(data){
-        try{
+    static async getProductsCategories() {
+        try {
+            const conn = await getDB()
+            const [resulte] = await conn.query(`
+                SELECT
+                c.name AS category,
+                SUM(p.p_stock) AS stock
+                FROM categories c
+                LEFT JOIN map_categories mc ON c.id = mc.categories_id
+                LEFT JOIN products p ON mc.products_id = p.id AND p.deleted_at IS NULL
+                GROUP BY c.id, c.name
+                ORDER BY c.id ASC
+                `)
+                return resulte
+        } catch (error) {
+            throw error
+        }
+    }
+
+    static async update(id, data) {
+        try {
+            const conn = await getDB()
+            const [resulte] = await conn.query('UPDATE categories SET ? WHERE id = ?', [data, id])
+            return resulte
+        } catch (error) {
+            throw error
+        }
+    }
+    static async delete(id) {
+        try {
+            const conn = getDB()
+            const [resulte] = await conn.query('DELETE FROM map_categories WHERE products_id = ?', id)
+            return resulte
+        } catch (error) {
+            throw error
+        }
+    }
+
+    static async createMap(data) {
+        try {
             const conn = await getDB()
             const [resulte] = await conn.query('INSERT INTO map_categories (products_id, categories_id) VALUES ?', [data])
             return resulte
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }

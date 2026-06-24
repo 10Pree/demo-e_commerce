@@ -1,4 +1,5 @@
 
+const modelsCategories = require("../models/categories")
 const moduleOrders = require("../models/orders")
 const modelsPayments = require("../models/payments")
 
@@ -91,11 +92,14 @@ class controllerOrders {
         try {
             const dataOrders = await moduleOrders.getDailyOrders()
             const dataPayments = await modelsPayments.getDailyIncome()
+            const dataCategoriesProduct = await modelsCategories.getProductsCategories()
 
 
             return res.status(200).json({
                 message: "Get DailyOrders Successful!!",
-                data: dataOrders, dataPayments
+                dataPayments,
+                dataOrders,
+                dataCategoriesProduct
             })
         } catch (error) {
             console.log("Message Error:", error)
