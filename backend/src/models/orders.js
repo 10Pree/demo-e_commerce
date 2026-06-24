@@ -66,6 +66,7 @@ class moduleOrders {
             const [resulte] = await conn.query(`
                 SELECT 
                     (SELECT COUNT(*) FROM orders) AS total_orders,
+                    (SELECT COUNT(*) FROM products) AS total_products,
                     (SELECT COUNT(*) FROM orders WHERE status = 'paid') AS paid_orders,
                     (SELECT COUNT(*) FROM orders WHERE status = 'pending') AS pending_orders,
                     (SELECT SUM(amount) FROM payments WHERE status = 'paid') AS total_revenue
