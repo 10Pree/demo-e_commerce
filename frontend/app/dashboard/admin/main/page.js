@@ -1,63 +1,61 @@
 "use client"
 import Image from "next/image"
 import { Graph1, Graph2, Graph3 } from "@/public/js/recharts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Page() {
 
   const [showGraph, setShowGraph] = useState(1)
+  const [dailyRevenue, setDailyRevenue] = useState([])
+  const [dailyOrders, setDailyOrders] = useState([])
+  const [categoryData, setCategoryData] = useState([])
+  const [summary, setSummary] = useState({
+    total_orders: 0,
+    total_products: 0,
+    paid_orders: 0,
+    pending_orders: 0,
+    total_revenue: 0
+  })
 
-  const revenueData = [
-    { name: "จันทร์", income: 12500 },
-    { name: "อังคาร", income: 15200 },
-    { name: "พุธ", income: 9800 },
-    { name: "พฤหัส", income: 20000 },
-    { name: "ศุกร์", income: 17500 },
-    { name: "เสาร์", income: 21000 },
-    { name: "อาทิตย์", income: 14000 },
-  ];
-
-  const orderData = [
-    { name: "จันทร์", orders: 45 },
-    { name: "อังคาร", orders: 60 },
-    { name: "พุธ", orders: 38 },
-    { name: "พฤหัส", orders: 80 },
-    { name: "ศุกร์", orders: 72 },
-    { name: "เสาร์", orders: 95 },
-    { name: "อาทิตย์", orders: 50 },
-  ];
-
-  const productData = [
-    { category: "Smartphone", stock: 320 },
-    { category: "ACCESSORIES SMARTPHONE", stock: 450 },
-    { category: "SMART WATCH", stock: 180 },
-    { category: "SMART LIFE & IOT", stock: 390 },
-    { category: "NOTEBOOK", stock: 220 },
-    { category: "ACCESSORIES NOTEBOOK", stock: 220 },
-    { category: "HEADSET", stock: 220 },
-    { category: "MICROPHONE", stock: 220 },
-    { category: "MICROPHONE111", stock: 220 },
-  ];
+  useEffect(() => {
+    const getData = async () => {
+      const [summary, daily] = await Promise.all([axios.get(`${process.env.NEXT_PUBLIC_URL}/order/summary`), axios.get(`${process.env.NEXT_PUBLIC_URL}/order/daily`)])
+      const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์']
+      setSummary(summary.data.data[0])
+      
+        setDailyRevenue(daily.data.dataPayments.map(item => ({
+            ...item,
+            name: dayNames[new Date(item.date).getDay()] 
+        })))
+      setDailyOrders(daily.data.dataOrders.map(item => ({
+        ...item,
+        name: dayNames[new Date(item.date).getDay()]
+      })))
+      setCategoryData(daily.data.dataCategoriesProduct)
+    }
+    getData()
+  }, [])
 
   const cards = [
     {
       id: 1,
       label: "รายได้วันนี้",
-      value: "+9,999",
+      value: summary?.total_revenue ?? 0,
       icon: "/icons/icons8-search-90.svg",
       change: "+12.4%",
     },
     {
       id: 2,
       label: "จำนวนออเดอร์",
-      value: "+9,999",
+      value: summary?.total_orders ?? 0,
       icon: "/icons/icons8-search-90.svg",
       change: "+8.1%",
     },
     {
       id: 3,
       label: "สินค้าทั้งหมด",
-      value: "+9,999",
+      value: summary?.total_products ?? 0,
       icon: "/icons/icons8-search-90.svg",
       change: "9 หมวดหมู่",
     },
@@ -151,15 +149,15 @@ export default function Page() {
 
         {/* Chart */}
         <div className="w-full overflow-x-scroll md:overflow-auto h-[340px]">
-          {showGraph === 1 && <Graph1 data={revenueData} />}
+          {showGraph === 1 && <Graph1 data={dailyRevenue} />}
           {showGraph === 2 && (
             <div className="w-[900px] md:w-full h-full">
-              <Graph2 data={orderData} />
+              <Graph2 data={dailyOrders} />
             </div>
           )}
           {showGraph === 3 && (
             <div className="w-[900px] md:w-full h-full">
-              <Graph3 data={productData} />
+              <Graph3 data={categoryData} />
             </div>
           )}
         </div>

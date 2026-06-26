@@ -15,7 +15,7 @@ export function Graph1({ data }) {
                 }}
             >
                 <CartesianGrid stroke="#aaa" strokeDasharray="5 5" />
-                <Line type="monotone" dataKey="income" stroke="purple" strokeWidth={2} name="รายได้ (บาท)" />
+                <Line type="monotone" dataKey="revenue" stroke="purple" strokeWidth={2} name="รายได้ (บาท)" />
                 <XAxis dataKey="name" />
                 <YAxis width="auto" label={{ value: 'บาท', position: 'insideLeft', angle: -90 }} />
                 <Legend align="right" />
@@ -39,7 +39,7 @@ export function Graph2({ data }) {
                 }}
             >
                 <CartesianGrid stroke="#aaa" strokeDasharray="5 5" />
-                <Line type="monotone" dataKey="orders" stroke="purple" strokeWidth={2} name="จำนวนออเดอร์" />
+                <Line type="monotone" dataKey="total_orders" stroke="purple" strokeWidth={2} name="จำนวนออเดอร์" />
                 <XAxis dataKey="name" />
                 <YAxis width="auto" label={{ value: 'orders', position: 'insideLeft', angle: -90 }} />
                 <Legend align="right" />
