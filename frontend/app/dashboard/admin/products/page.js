@@ -31,7 +31,8 @@ export default function Page() {
         </div>
       </div>
             <div>
-                <div className=" text-end my-4">
+                <div className=" text-end my-4 flex justify-between">
+                    <input type="text" className="bg-gray-200 border-2 border-[#1E3A8A] rounded-2xl p-2"/>
                     <Link href="/dashboard/admin/products/add" className="p-2 bg-[#1E3A8A] font-bold text-white rounded-2xl">เพิ่มสินค้า</Link>
                 </div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
