@@ -36,7 +36,7 @@ class modelsPayments {
                     DATE(paid_at) AS date,
                     SUM(amount) AS revenue
                     FROM payments
-                    WHERE status = 'paid' AND paid_at >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+                    WHERE status = 'paid' AND paid_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
                     GROUP BY DATE(paid_at)
                     ORDER BY date ASC
                 `)
