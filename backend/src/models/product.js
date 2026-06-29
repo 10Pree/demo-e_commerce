@@ -91,6 +91,15 @@ class moduleProduct {
             throw error
         }
     }
+    static async searchProduct(name) {
+        try{
+            const conn = await getDB()
+            const [resultes] = await conn.query(`SELECT * FROM products WHERE p_name LIKE ? AND deleted_at IS NULL `, [`%${name}%`])
+            return resultes
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = moduleProduct

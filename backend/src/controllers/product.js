@@ -172,9 +172,9 @@ class controllerProduct {
                 if (fs.existsSync(fullPath)) {
                     fs.unlinkSync(fullPath)
                 }
-                await modlesImagesProducts.deleteImgById(img.id) 
+                await modlesImagesProducts.deleteImgById(img.id)
             }
-            
+
             if (Array.isArray(newFiles) && newFiles.length > 0) {
 
 
@@ -255,6 +255,25 @@ class controllerProduct {
                 // data: product
             })
 
+        } catch (error) {
+            console.log("Message Error:", error.message);
+            return res.status(500).json({
+                message: "Server Error",
+            });
+        }
+    }
+
+    static async searchProduct(req,res) {
+        try {
+            const { name } = req.query
+            console.log(name)
+            if(!name) return res.status(400).json({ message: "กรุณาใส่คำค้นหา"})
+            const search = await moduleProduct.searchProduct(name)
+
+            return res.status(200).json({
+                message: "Search Product Successful!!",
+                data: search
+            })
         } catch (error) {
             console.log("Message Error:", error.message);
             return res.status(500).json({
