@@ -86,7 +86,7 @@ class moduleOrders {
             const [resulte] = await conn.query(`
                 SELECT DATE(creates_at) AS date, COUNT(*) AS total_orders 
                 FROM orders 
-                WHERE creates_at >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) 
+                WHERE creates_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) 
                 GROUP BY DATE(creates_at) 
                 ORDER BY date ASC
                 `)
