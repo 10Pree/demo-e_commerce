@@ -14,20 +14,18 @@ class controllersSearch {
                 `
             let params = []
             if (search) {
-                sqlBase += ` AND p.p_name LIKE ?`
+                sqlBase += ` AND p.p_name LIKE ? AND deleted_at IS NULL`
                 params.push(`%${search}%`)
             } 
             if (category) {
-                sqlBase += ` AND c.id = ?`
+                sqlBase += ` AND c.id = ? AND deleted_at IS NULL`
                 params.push(category)
             }
             if(search || category){
                  sql = sqlBase
             }else{
-                sql = `SELECT * FROM products`
+                sql = `SELECT * FROM products WHERE deleted_at IS NULL`
             }
-
-            // console.log(sql, params)
 
             const data = await modelsSearch.search(sql, params)
             return res.status(200).json({
