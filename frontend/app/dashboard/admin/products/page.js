@@ -9,6 +9,7 @@ export default function Page() {
     const [product, setProduct] = useState([])
     const [search, setSearch] = useState("")
     const [category, setCategory] = useState("")
+    const [showCategory, setShowCategory] = useState([])
 
     const getProducts = async () => {
         try {
@@ -18,13 +19,24 @@ export default function Page() {
             console.log("Message Errer: ", error)
         }
     }
+    const getCategory = async() => {
+        try{
+            const res = await axios.get('http://localhost:8000/categories', { withCredentials: true})
+            setShowCategory(res.data.data)
+        }catch(error){
+            console.log("Message Errer: ", error)
+        }
+    }
+    useEffect(() => {
+        getCategory()
+    })
     useEffect(() => {
         const timeOut = setTimeout(() => {
             getProducts()
         }, 500)
         return () => clearTimeout(timeOut)
     }, [search, category])
-
+    console.log(category)
     return (
         <div>
             {/* Header */}
@@ -35,8 +47,15 @@ export default function Page() {
                 </div>
             </div>
             <div>
-                <div className=" text-end my-4 flex justify-between">
-                    <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} className="bg-gray-200 border-2 border-[#1E3A8A] rounded-2xl p-2" />
+                <div className="flex flex-col md:flex-row justify-between gap-2 my-3">
+                    <div className="flex flex-col md:flex-row gap-2">
+                        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} className="bg-gray-200 border-1 border-[#1E3A8A] rounded-2xl p-2" />
+                        <select onChange={(e)=> setCategory(e.target.value)} className=" border border-[#1E3A8A] rounded-2xl p-2">
+                            {showCategory.map((c)=> (
+                                <option key={c.id} value={c.id} >{c.name}</option>
+                            ))}
+                        </select>
+                    </div>
                     <Link href="/dashboard/admin/products/add" className="p-2 bg-[#1E3A8A] font-bold text-white rounded-2xl">เพิ่มสินค้า</Link>
                 </div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
