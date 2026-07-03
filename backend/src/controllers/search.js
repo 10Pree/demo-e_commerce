@@ -39,6 +39,19 @@ class controllersSearch {
             })
         }
     }
+    static async searchUsers(req, res) {
+        try{
+            const { name } = req.body
+            const user = await modelsSearch.searchUser(name)
+
+            return res.status(200).json({
+                message: "Search User Successful!!",
+                data: user
+            })
+        }catch(error){
+            console.log("Message Error:",error)
+        }
+    }
 }
 
 module.exports = controllersSearch

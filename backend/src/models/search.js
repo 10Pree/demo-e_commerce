@@ -10,6 +10,15 @@ class modelsSearch {
             throw error
         }
     }
+    static async searchUser(name) {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query(`SELECT * FROM users WHERE username LIKE ? AND deleted_at IS NULL`, [`%${name}%`])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = modelsSearch
