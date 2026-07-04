@@ -36,7 +36,6 @@ export default function Page() {
         }, 500)
         return () => clearTimeout(timeOut)
     }, [search, category])
-    console.log(category)
     return (
         <div>
             {/* Header */}
@@ -54,6 +53,7 @@ export default function Page() {
                             {showCategory.map((c)=> (
                                 <option key={c.id} value={c.id} >{c.name}</option>
                             ))}
+                            <option  value={""} >-</option>
                         </select>
                     </div>
                     <Link href="/dashboard/admin/products/add" className="p-2 bg-[#1E3A8A] font-bold text-white rounded-2xl">เพิ่มสินค้า</Link>
