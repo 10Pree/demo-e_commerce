@@ -41,7 +41,7 @@ class controllersSearch {
     }
     static async searchUsers(req, res) {
         try{
-            const { name } = req.body
+            const { name } = req.query
             const user = await modelsSearch.searchUser(name)
 
             return res.status(200).json({
