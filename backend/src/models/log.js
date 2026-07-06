@@ -19,6 +19,15 @@ class modelsLog {
             throw error
         }
     }
+    static async getLog(){
+        try{
+            const conn = await getDB()
+            const [resulte] = await conn.query('SELECT * FROM log_action')
+            return resulte
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = modelsLog

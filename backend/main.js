@@ -12,6 +12,7 @@ const categories = require('./src/router/categories')
 const images = require('./src/router/images_user')
 const search = require('./src/router/search')
 const logout = require('./src/router/logout')
+const log = require('./src/router/log')
 const app = express()
 const port = process.env.POST
 const cors = require('cors')
@@ -37,6 +38,7 @@ app.use('/', categories)
 app.use('/', images)
 app.use('/', search)
 app.use('/', logout)
+app.use('/', log)
 
 const startServer = async() =>{
      await connectDB()
