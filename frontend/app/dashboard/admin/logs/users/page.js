@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { Pagination } from "@/components/dashboard/pagination";
-import { DataTableLogUser } from "@/components/dashboard/Table_LogUser";
+import { DataTableLogUsers } from "@/components/dashboard/Table_LogUsers";
 export default function Page() {
     const [logUser, setLogUser] = useState([])
 
@@ -18,7 +18,7 @@ export default function Page() {
     useEffect(() => {
         getLog()
     },[])
-    console.log(logUser)
+    // console.log(logUser)
 
 
     return (
@@ -50,7 +50,7 @@ export default function Page() {
                             </tr>
                         </thead>
                         <tbody>
-                            <DataTableLogUser data={logUser}/>
+                            <DataTableLogUsers data={logUser}/>
                         </tbody>
                     </table>
                     <Pagination data={logUser}/>

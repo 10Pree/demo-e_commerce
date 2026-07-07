@@ -1,9 +1,6 @@
 import { useState } from "react"
-import Link from "next/link"
-import Swal from "sweetalert2"
-import axios from "axios"
 
-export function DataTableLogUser({ data }) {
+export function DataTableLogUsers({ data }) {
     const [currentPage, setCurrentPage] = useState(1)
     const itemPerPage = 10
 
