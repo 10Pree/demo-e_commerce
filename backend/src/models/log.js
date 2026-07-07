@@ -19,10 +19,20 @@ class modelsLog {
             throw error
         }
     }
-    static async getLog(){
+    static async getLogUsers(){
         try{
             const conn = await getDB()
             const [resulte] = await conn.query('SELECT * FROM log_action')
+            return resulte
+        }catch(error){
+            throw error
+        }
+    }
+
+    static async getLogProducts() {
+        try{
+            const conn = await getDB()
+            const [resulte] = await conn.query('SELECT * FROM log_products')
             return resulte
         }catch(error){
             throw error
