@@ -3,9 +3,11 @@ const controllersOAuth = require('../controllers/oAuth')
 
 const router = express.Router()
 
-router.post('/role', controllersOAuth.AddRole )
-router.post('/permission', controllersOAuth.AddPermission )
-router.post('/role_permission', controllersOAuth.AddRole_Permission )
-router.post('/mapRole', controllersOAuth.MapRole)
+router.get('/roles/:id', controllersOAuth.getRoleName)
+// router.post('/role', controllersOAuth.AddRole )
+// router.post('/permission', controllersOAuth.AddPermission )
+// router.post('/role_permission', controllersOAuth.AddRole_Permission )
+// router.post('/mapRole', controllersOAuth.MapRole)
+
 
 module.exports = router
