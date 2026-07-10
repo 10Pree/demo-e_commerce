@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { DataTableLogUsers } from "@/components/dashboard/Table_LogUsers";
+
 export default function Page() {
     const [logUser, setLogUser] = useState([])
 
