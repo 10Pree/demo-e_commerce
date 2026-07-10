@@ -2,7 +2,7 @@
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react"
-import { DataTable } from "@/components/dashboard/Table"
+import { DataTableUsers } from "@/components/dashboard/Table_User"
 import { DataTableCustomers } from "@/components/dashboard/Table_Customers"
 import { Pagination } from "@/components/dashboard/pagination";
 
@@ -67,33 +67,9 @@ export default function Page() {
                     </div>
                 </div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs uppercase bg-gray-400 text-[#111827]">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">
-                                    ID
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Username
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Email
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Role
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-center">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
                             {
-                                handleSwicthData ? <DataTableCustomers data={dataCustomers} onRefresh={getCustomers} /> : <DataTable data={dataUsers} onRefresh={getUsers} />
+                                handleSwicthData ? <DataTableCustomers data={dataCustomers} onRefresh={getCustomers} /> : <DataTableUsers data={dataUsers} onRefresh={getUsers} />
                             }
-                        </tbody>
-                    </table>
-                    <Pagination data={handleSwicthData ? dataCustomers : dataUsers} />
                 </div>
             </div>
         </div>
