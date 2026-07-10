@@ -59,32 +59,8 @@ export default function Page() {
                     <Link href="/dashboard/admin/products/add" className="p-2 bg-[#1E3A8A] font-bold text-white rounded-2xl">เพิ่มสินค้า</Link>
                 </div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs uppercase bg-gray-400 text-[#111827]">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">
-                                    ID
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Name
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Price
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Stock
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-center">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <DataTableProducts data={product} onRefresh={getProducts} />
-                        </tbody>
-                    </table>
+                    <DataTableProducts data={product} onRefresh={getProducts} />
                 </div>
-                <Pagination data={product} />
             </div>
         </div>
     )
