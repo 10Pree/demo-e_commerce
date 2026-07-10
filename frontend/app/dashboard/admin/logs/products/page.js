@@ -2,7 +2,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { DataTableLogProducts } from "@/components/dashboard/Table_LogProducts"
-import { Pagination } from "@/components/dashboard/pagination"
 
 export default function Page() {
 
@@ -10,7 +9,7 @@ export default function Page() {
 
     const getLogProducts = async () => {
         try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/log/products`)
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/log/products`, { withCredentials: true})
             setDataLog(res.data.data)
         } catch (err) {
             console.log("Message Error:", err)
@@ -32,28 +31,7 @@ export default function Page() {
             </div>
             <div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs uppercase bg-gray-400 text-[#111827]">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">
-                                    ID
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Username
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Text
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Time
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <DataTableLogProducts data={dataLog}/>
-                        </tbody>
-                    </table>
-                    <Pagination data={d}/>
+                    <DataTableLogProducts data={dataLog}/>
                 </div>
 
             </div>
