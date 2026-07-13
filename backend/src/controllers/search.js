@@ -42,6 +42,7 @@ class controllersSearch {
     static async searchUsers(req, res) {
         try {
             const { name } = req.query
+
             const user = await modelsSearch.searchUser(name)
 
             return res.status(200).json({
@@ -59,7 +60,6 @@ class controllersSearch {
     static async searchCustomers(req, res) {
         try {
             const { name } = req.query
-            console.log("Name:", name)
             if (!name) {
                 return res.status(400).json({
                     message: "Missing required fields"
