@@ -60,11 +60,7 @@ class controllersSearch {
     static async searchCustomers(req, res) {
         try {
             const { name } = req.query
-            if (!name) {
-                return res.status(400).json({
-                    message: "Missing required fields"
-                })
-            }
+
             const customer = await modelsSearch.searchCustomers(name)
             return res.status(200).json({
                 message: "Search Customer Successful!!",
