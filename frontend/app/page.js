@@ -1,4 +1,5 @@
 import SwiperContainer from "@/components/Swiper";
+import Link from "next/link";
 import Image from 'next/image'
 import Header from "@/components/header";
 import Footer from "@/components/footer"
@@ -72,9 +73,12 @@ export default function Page() {
         <SwiperContainer />
       </section>
       <section className=" my-8">
-        <div className="flex my-8 mx-0 md:mx-32 justify-center md:justify-start">
-          <h1 className="text-2xl text-[#111827] font-bold">สินค้ายอดนิยม</h1>
+        <div className="flex my-8 mx-0 md:mx-32 justify-between">
+          <div className="flex">
+                      <h1 className="text-2xl text-[#111827] font-bold">สินค้ายอดนิยม</h1>
           <Image width="40" height="40" src={"/icons/icons8-trending-96-c111827.png"} alt="icon" />
+          </div>
+            <Link href={"/product"} className="text-[#1E3A8A] font-bold  hover:text-[#2563EB]">ดูทั้งหมด</Link>
         </div>
         <div className=" flex justify-center items-center">
           <div className=" grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-12 mx-2 md:mx-0">

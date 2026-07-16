@@ -15,7 +15,7 @@ export default function Header() {
   return (
     <div>
       <nav className="flex justify-around items-center px-3">
-        <div className="w-full flex flex-col md:flex-row justify-around items-center gap-2 md:gap-14 px-3 bg-amber-300">
+        <div className="w-full flex flex-col md:flex-row justify-around items-center gap-2 md:gap-14 px-3">
           <div>
             <Image src="/images/logo.png" alt="logo" width={80} height={80} />
           </div>
