@@ -28,6 +28,16 @@ class modelsSearch {
             throw err
         }
     }
+
+    static async searchProductsPublic(sql, params) {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query(sql, params)
+            return results
+        }catch (err) {
+            throw err
+        }
+    }
 }
 
 module.exports = modelsSearch
