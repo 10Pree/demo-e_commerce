@@ -79,7 +79,7 @@ class controllersSearch {
             const { search, category } = req.query
             let sql
             let sqlBase = `
-                SELECT DISTINCT  p.code, p.p_name, p.p_price, p.details, p_stock, ip.image_url AS image_url
+                SELECT DISTINCT  p.p_code, p.p_name, p.p_price, p.p_details, p.p_stock, ip.image_url AS image_url
                 FROM products p 
                 LEFT JOIN map_categories mc ON mc.products_id = p.id
                 LEFT JOIN categories c ON c.id = mc.categories_id
