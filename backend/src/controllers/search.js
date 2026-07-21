@@ -77,32 +77,35 @@ class controllersSearch {
     static async searchProductsPublic(req, res) {
         try {
             const { search, category } = req.query
-            let sql
-            let sqlBase = `
-                SELECT DISTINCT  p.p_code, p.p_name, p.p_price, p.p_details, p.p_stock, ip.image_url AS image_url
+            let sql = `
+                SELECT p.p_code, p.p_name, p.p_price, p.p_details, p.p_stock,
+                    (
+                        SELECT ip.image_url 
+                        FROM map_images_products mip
+                        LEFT JOIN images_products ip ON ip.id = mip.images_id
+                        WHERE mip.products_id = p.id
+                        ORDER BY mip.id ASC
+                        LIMIT 1 
+                    ) AS image_url
                 FROM products p 
                 LEFT JOIN map_categories mc ON mc.products_id = p.id
                 LEFT JOIN categories c ON c.id = mc.categories_id
-                LEFT JOIN map_images_products mip ON mip.products_id = p.id
-                LEFT JOIN images_products ip ON ip.id = mip.images_id
-                WHERE 1=1
+                WHERE p.deleted_at IS NULL
                 `
             let params = []
             if (search) {
-                sqlBase += ` AND p.p_name LIKE ? AND deleted_at IS NULL`
+                sql += ` AND p.p_name LIKE ?`
                 params.push(`%${search}%`)
             }
             if (category) {
-                sqlBase += ` AND c.id = ? AND deleted_at IS NULL`
+                sql += ` AND c.id = ?`
                 params.push(category)
             }
-            if (search || category) {
-                sql = sqlBase
-            } else {
-                sql = `SELECT * FROM products WHERE deleted_at IS NULL`
-            }
+
+            sql += `GROUP BY p.id`
 
             const data = await modelsSearch.searchProductsPublic(sql, params)
+
             return res.status(200).json({
                 message: "Search Successful!!",
                 data: data
