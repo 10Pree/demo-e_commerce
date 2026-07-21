@@ -12,6 +12,7 @@ export default function Header() {
     if(!text) return
     router.push(`/product/?keyword=${text}`)
   }
+
   return (
     <div>
       <nav className="flex justify-around items-center px-3">
