@@ -15,12 +15,7 @@ export default function Page() {
   useEffect(() => {
     const getDataProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/search", {
-          params: {
-            search: search,
-            category: category
-          }
-        })
+        const res = await axios.get(`http://localhost:8000/search/products?search=${search}&category=${category}`)
         setapiProducts(res.data.data)
       } catch (error) {
         console.log(error)
@@ -57,9 +52,9 @@ export default function Page() {
         <div className="w-full flex justify-center items-center mt-12 mb-[80px] md:mb-0 py-4">
           <div className="w-full md:w-fit grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 mx-2 md:mx-0">
             {apiProducts.length > 0 && (
-              apiProducts.map((p) => (
-                <Link key={p.id} href={`/product/${p.p_code}`} className="w-full h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
-                  <div className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 duration-300 ease-in">
+              apiProducts.map((p, index) => (
+                <Link key={index} href={`/product/${p.p_code}`} className="w-full h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
+                  <div key={index} className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 duration-300 ease-in">
                     <Image className="object-contain" src={"/images/iphone-card-40-17pro.png"}  alt="image product" fill />
                   </div>
                   <div className="p-3 flex flex-col gap-1 text-[#111827]">
