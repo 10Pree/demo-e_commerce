@@ -1,298 +1,2087 @@
 {
-	"info": {
-		"_postman_id": "14406c72-2687-4ace-bb64-9ced7b1d2018",
-		"name": "E_commerce",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38755750"
-	},
-	"item": [
-		{
-			"name": "CRUD",
-			"item": [
-				{
-					"name": "Reads",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/user/8",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"user",
-								"8"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/user/8",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"user",
-								"8"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"1234\",\r\n    \"email\": \"user2@gmail.com\",\r\n    \"phone\": \"0892039342\",\r\n    \"address\": \"10/3 ho thai\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/user",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "EditPassword",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"1234\",\r\n    \"email\": \"user@gmail.com\",\r\n    \"phone\": \"0892039342\",\r\n    \"address\": \"10/3 ho thai\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/user/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"user",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Edit",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"1234\",\r\n    \"email\": \"user@gmail.com\",\r\n    \"phone\": \"0892039342\",\r\n    \"address\": \"10/3 ho thai\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/user/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"user",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Permission",
-			"item": [
-				{
-					"name": "addRole_Permission",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"roles_id\": 1,\r\n    \"permissions_id\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/role_permission",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"role_permission"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "addRole",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"roles_id\": 1,\r\n    \"permissions_id\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/role",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"role"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "addPermission",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"key\": \"project.create\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/permission",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"permission"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Login",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"user1111\",\r\n    \"password\": \"1111\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8000/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"login"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "14406c72-2687-4ace-bb64-9ced7b1d2018",
+    "name": "E_commerce",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38755750"
+  },
+  "item": [
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Product",
+          "item": [
+            {
+              "name": "Create",
+              "protocolProfileBehavior": {
+                "disabledSystemHeaders": {}
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "p_name",
+                      "value": "ทดสอบ5",
+                      "type": "text",
+                      "uuid": "bd85135a-d040-495b-b117-c35c3a7eb12b"
+                    },
+                    {
+                      "key": "p_price",
+                      "value": "5555",
+                      "type": "text",
+                      "uuid": "9aa781b0-3bb6-475d-ace0-b5d5eaac309d"
+                    },
+                    {
+                      "key": "p_details",
+                      "value": "5555555555555555555555555555555",
+                      "type": "text",
+                      "uuid": "4ccc3ea6-b33f-40ee-abd9-fd5e31a7c76b"
+                    },
+                    {
+                      "key": "p_stock",
+                      "value": "555",
+                      "type": "text",
+                      "uuid": "366e3042-2254-473b-9da0-fb7ebdc2ec53"
+                    },
+                    {
+                      "key": "categories_ids",
+                      "value": "1,2,3",
+                      "type": "text",
+                      "uuid": "0ae6d8af-08b3-4a97-92ed-dc1f78f2cf6d"
+                    },
+                    {
+                      "key": "categories_ids",
+                      "value": "2",
+                      "type": "text",
+                      "uuid": "114415ee-aa34-45a4-92b3-cbd7d4ced84f",
+                      "disabled": true
+                    },
+                    {
+                      "key": "images",
+                      "type": "file",
+                      "uuid": "549e7a3b-9d0d-4447-a2b3-4da6ad4afe66",
+                      "src": [
+                        "/C:/Users/ROG/Downloads/5ebf29e85bf249498c6ee43a5ad73bda~tplv-jj85edgx6n-image-origin.jpeg",
+                        "/C:/Users/ROG/Downloads/Screenshot 2025-05-11 214140.png"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reads",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"p_code\": \"P001\",\r\n  \"p_name\": \"Mouse\",\r\n  \"p_rice\": 199,\r\n  \"p_details\": \"Wireless\",\r\n  \"p_stock\": 50,\r\n  \"p_image_url\": \"https://...\"\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ReadById",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"p_code\": \"P001\",\r\n  \"p_name\": \"Mouse\",\r\n  \"p_rice\": 199,\r\n  \"p_details\": \"Wireless\",\r\n  \"p_stock\": 50,\r\n  \"p_image_url\": \"https://...\"\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/25",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "25"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"p_code\": \"P001\",\r\n  \"p_name\": \"Mouse111\",\r\n  \"p_price\": 199,\r\n  \"p_details\": \"Wireless\",\r\n  \"p_stock\": 50,\r\n  \"p_image_url\": \"https://...\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update",
+              "protocolProfileBehavior": {
+                "disabledSystemHeaders": {}
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "p_name",
+                      "value": "product44",
+                      "type": "text",
+                      "uuid": "bd85135a-d040-495b-b117-c35c3a7eb12b"
+                    },
+                    {
+                      "key": "p_price",
+                      "value": "4444",
+                      "type": "text",
+                      "uuid": "9aa781b0-3bb6-475d-ace0-b5d5eaac309d"
+                    },
+                    {
+                      "key": "p_details",
+                      "value": "444444",
+                      "type": "text",
+                      "uuid": "4ccc3ea6-b33f-40ee-abd9-fd5e31a7c76b"
+                    },
+                    {
+                      "key": "p_stock",
+                      "value": "444",
+                      "type": "text",
+                      "uuid": "366e3042-2254-473b-9da0-fb7ebdc2ec53"
+                    },
+                    {
+                      "key": "categories_ids",
+                      "value": "1,2",
+                      "type": "text",
+                      "uuid": "0ae6d8af-08b3-4a97-92ed-dc1f78f2cf6d"
+                    },
+                    {
+                      "key": "images",
+                      "type": "file",
+                      "uuid": "43491cee-d348-472c-aa23-65ab7d27e932",
+                      "src": [
+                        "/C:/Users/ROG/OneDrive/รูปภาพ/Screenshots/Screenshot 2024-10-07 100356.png",
+                        "/C:/Users/ROG/OneDrive/รูปภาพ/Screenshots/Screenshot 2024-10-04 145353.png"
+                      ],
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/28",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "28"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/product/2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "searchProduct",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"users_id\": 1\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/search?name=iPhone",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "search"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "iPhone"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Search",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n    \"search\": \"\",\r\n    \"category\": \"\"\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/search",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "search"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Permission",
+          "item": [
+            {
+              "name": "addRole_Permission",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"roles_id\": 1,\r\n    \"permissions_id\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/role_permission",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "role_permission"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addRole",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"roles_id\": 1,\r\n    \"permissions_id\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/role",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "role"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addPermission",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"key\": \"project.create\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/permission",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "permission"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "mapRole",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"users_id\": 1,\r\n    \"roles_id\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/mapRole",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "mapRole"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Role Permission",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/roles/3",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "roles",
+                    "3"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "mapRole Copy",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"users_id\": 1,\r\n    \"roles_id\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/mapRole",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "mapRole"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "CRUD",
+          "item": [
+            {
+              "name": "Reads",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Read",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/user/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "user",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/user/25",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "user",
+                    "25"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "username",
+                      "value": "admin4",
+                      "type": "text",
+                      "uuid": "c6d9d0da-8111-4c5f-b100-81ad1a4cf390"
+                    },
+                    {
+                      "key": "password",
+                      "value": "12345",
+                      "type": "text",
+                      "uuid": "f681c43f-0a6f-4d22-9cc9-5407b6064a0c"
+                    },
+                    {
+                      "key": "email",
+                      "value": "admin4@gmail.co",
+                      "type": "text",
+                      "uuid": "3aa2a5f6-bfaf-48e9-a974-74ac254ec6e6"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "0972173698",
+                      "type": "text",
+                      "uuid": "ef01d306-7527-4286-ae6a-60109427520b"
+                    },
+                    {
+                      "key": "address",
+                      "value": "test: wloekfgop[kweop[kfgowk[opkfw",
+                      "type": "text",
+                      "uuid": "9f57b6b2-227e-419f-9c40-407eac5afbe1"
+                    },
+                    {
+                      "key": "images",
+                      "type": "file",
+                      "uuid": "1b2975eb-c6b3-498b-ad72-fab9648f8c85",
+                      "src": "/C:/Users/ROG/Downloads/New folder/img (2).png"
+                    },
+                    {
+                      "key": "role",
+                      "value": "1",
+                      "type": "text",
+                      "uuid": "960bb77f-7a37-4f30-82d3-d4e6a7c3f961"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8000/user",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "user"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "update",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "username",
+                      "value": "user40401",
+                      "type": "text",
+                      "uuid": "c6d9d0da-8111-4c5f-b100-81ad1a4cf390",
+                      "disabled": true
+                    },
+                    {
+                      "key": "password",
+                      "value": "12345",
+                      "type": "text",
+                      "uuid": "f681c43f-0a6f-4d22-9cc9-5407b6064a0c",
+                      "disabled": true
+                    },
+                    {
+                      "key": "email",
+                      "value": "user40401@gmail.com",
+                      "type": "text",
+                      "uuid": "3aa2a5f6-bfaf-48e9-a974-74ac254ec6e6",
+                      "disabled": true
+                    },
+                    {
+                      "key": "phone",
+                      "value": "0972173698",
+                      "type": "text",
+                      "uuid": "ef01d306-7527-4286-ae6a-60109427520b",
+                      "disabled": true
+                    },
+                    {
+                      "key": "address",
+                      "value": "test: wloekfgop[kweop[kfgowk[opkfw",
+                      "type": "text",
+                      "uuid": "9f57b6b2-227e-419f-9c40-407eac5afbe1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "images",
+                      "type": "file",
+                      "uuid": "1b2975eb-c6b3-498b-ad72-fab9648f8c85",
+                      "src": "/C:/Users/ROG/Downloads/New folder/img (5).jpg",
+                      "disabled": true
+                    },
+                    {
+                      "key": "role",
+                      "value": "1",
+                      "type": "text",
+                      "uuid": "7d333ad9-b77d-4fbf-bc04-89eec9106c1a"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8000/user/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "user",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "EditPassword",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"1234\",\r\n    \"email\": \"user@gmail.com\",\r\n    \"phone\": \"0892039342\",\r\n    \"address\": \"10/3 ho thai\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/user/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "user",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Edit",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"1234\",\r\n    \"email\": \"user@gmail.com\",\r\n    \"phone\": \"0892039342\",\r\n    \"address\": \"10/3 ho thai\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/user/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "user",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "searchUser",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n        \"name\": \"user\"\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/search/user?name=user",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "search",
+                    "user"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "user"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Orders",
+          "item": [
+            {
+              "name": "Order",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"users_id\": 1\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/order",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "order"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "OrderItme",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"orders_id\": 2,\r\n  \"products_id\": 1,\r\n  \"qty\": 100\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/order/itme",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "order",
+                    "itme"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Payments",
+          "item": [
+            {
+              "name": "CreatePayment",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"orders_id\": 1\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/payment",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "payment"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CreatePayment",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"orders_id\": 1\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/payment",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "payment"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetDailyIncome",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"users_id\": 1\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/dailyIncome",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "dailyIncome"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Categories",
+          "item": [
+            {
+              "name": "Create",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"MICROPHONE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/categorie",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "categorie"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetById",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:8000/categorie/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "categorie",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/categories",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Smartphone1\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/categorie/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "categorie",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CreateMap",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"products_id\": 1,\r\n    \"categories_id\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/categorie/map",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "categorie",
+                    "map"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Images",
+          "item": [
+            {
+              "name": "Create",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"image_url\": \"https://i.pinimg.com/736x/18/84/24/1884248df0286062436ea23d29ef5183.jpg\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/image",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "image"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Gets",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"MICROPHONE\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/image",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "image"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetById",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"MICROPHONE\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/image/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "image",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/image/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "image",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"image_url\": \"https://i.pinimg.com/736x/18/84/24/1884248df0286062436ea23d29ef5183.jpg\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/image/2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "image",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "MapId",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"products_id\": 3,\r\n    \"images_id\": 3\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/image/map",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "image",
+                    "map"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Customers",
+          "item": [
+            {
+              "name": "create",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "username",
+                      "value": "customer25",
+                      "type": "text",
+                      "uuid": "c6d9d0da-8111-4c5f-b100-81ad1a4cf390"
+                    },
+                    {
+                      "key": "password",
+                      "value": "12345",
+                      "type": "text",
+                      "uuid": "f681c43f-0a6f-4d22-9cc9-5407b6064a0c"
+                    },
+                    {
+                      "key": "email",
+                      "value": "customer25@gmail.com",
+                      "type": "text",
+                      "uuid": "3aa2a5f6-bfaf-48e9-a974-74ac254ec6e6"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "0972173698",
+                      "type": "text",
+                      "uuid": "ef01d306-7527-4286-ae6a-60109427520b"
+                    },
+                    {
+                      "key": "address",
+                      "value": "test: customer",
+                      "type": "text",
+                      "uuid": "9f57b6b2-227e-419f-9c40-407eac5afbe1"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "uuid": "5a60a890-bb7e-448f-b73f-d3f3de441c44",
+                      "src": "/C:/Users/ROG/Downloads/NTE_Hethereau_Residents_Guide.png"
+                    },
+                    {
+                      "key": "role",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "7f6e1cfc-fd3e-4f0b-bd9a-f1559f5b0160",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8000/customer",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "customer"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetCustomers",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "username",
+                      "value": "customer18",
+                      "type": "text",
+                      "uuid": "c6d9d0da-8111-4c5f-b100-81ad1a4cf390"
+                    },
+                    {
+                      "key": "password",
+                      "value": "12345",
+                      "type": "text",
+                      "uuid": "f681c43f-0a6f-4d22-9cc9-5407b6064a0c"
+                    },
+                    {
+                      "key": "email",
+                      "value": "customer18@gmail.com",
+                      "type": "text",
+                      "uuid": "3aa2a5f6-bfaf-48e9-a974-74ac254ec6e6"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "0972173698",
+                      "type": "text",
+                      "uuid": "ef01d306-7527-4286-ae6a-60109427520b"
+                    },
+                    {
+                      "key": "address",
+                      "value": "test: customer",
+                      "type": "text",
+                      "uuid": "9f57b6b2-227e-419f-9c40-407eac5afbe1"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "uuid": "1b2975eb-c6b3-498b-ad72-fab9648f8c85",
+                      "src": "/C:/Users/ROG/Downloads/155927582_470813733946096_401663915898775916_n.jpg"
+                    },
+                    {
+                      "key": "role",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "7f6e1cfc-fd3e-4f0b-bd9a-f1559f5b0160",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8000/customers",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "customers"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetByID",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "username",
+                      "value": "customer18",
+                      "type": "text",
+                      "uuid": "c6d9d0da-8111-4c5f-b100-81ad1a4cf390"
+                    },
+                    {
+                      "key": "password",
+                      "value": "12345",
+                      "type": "text",
+                      "uuid": "f681c43f-0a6f-4d22-9cc9-5407b6064a0c"
+                    },
+                    {
+                      "key": "email",
+                      "value": "customer18@gmail.com",
+                      "type": "text",
+                      "uuid": "3aa2a5f6-bfaf-48e9-a974-74ac254ec6e6"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "0972173698",
+                      "type": "text",
+                      "uuid": "ef01d306-7527-4286-ae6a-60109427520b"
+                    },
+                    {
+                      "key": "address",
+                      "value": "test: customer",
+                      "type": "text",
+                      "uuid": "9f57b6b2-227e-419f-9c40-407eac5afbe1"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "uuid": "1b2975eb-c6b3-498b-ad72-fab9648f8c85",
+                      "src": "/C:/Users/ROG/Downloads/155927582_470813733946096_401663915898775916_n.jpg"
+                    },
+                    {
+                      "key": "role",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "7f6e1cfc-fd3e-4f0b-bd9a-f1559f5b0160",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8000/customer/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "customer",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "update",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "username",
+                      "value": "customerBB",
+                      "type": "text",
+                      "uuid": "c6d9d0da-8111-4c5f-b100-81ad1a4cf390"
+                    },
+                    {
+                      "key": "password",
+                      "value": "12345",
+                      "type": "text",
+                      "uuid": "f681c43f-0a6f-4d22-9cc9-5407b6064a0c",
+                      "disabled": true
+                    },
+                    {
+                      "key": "email",
+                      "value": "customerBB@gmail.com",
+                      "type": "text",
+                      "uuid": "3aa2a5f6-bfaf-48e9-a974-74ac254ec6e6",
+                      "disabled": true
+                    },
+                    {
+                      "key": "phone",
+                      "value": "0972173698",
+                      "type": "text",
+                      "uuid": "ef01d306-7527-4286-ae6a-60109427520b",
+                      "disabled": true
+                    },
+                    {
+                      "key": "address",
+                      "value": "test: customer",
+                      "type": "text",
+                      "uuid": "9f57b6b2-227e-419f-9c40-407eac5afbe1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "uuid": "1b2975eb-c6b3-498b-ad72-fab9648f8c85",
+                      "src": "/C:/Users/ROG/Downloads/155927582_470813733946096_401663915898775916_n.jpg",
+                      "disabled": true
+                    },
+                    {
+                      "key": "role",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "7f6e1cfc-fd3e-4f0b-bd9a-f1559f5b0160",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8000/customer/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "customer",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Deleted",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "username",
+                      "value": "customer18",
+                      "type": "text",
+                      "uuid": "c6d9d0da-8111-4c5f-b100-81ad1a4cf390"
+                    },
+                    {
+                      "key": "password",
+                      "value": "12345",
+                      "type": "text",
+                      "uuid": "f681c43f-0a6f-4d22-9cc9-5407b6064a0c"
+                    },
+                    {
+                      "key": "email",
+                      "value": "customer18@gmail.com",
+                      "type": "text",
+                      "uuid": "3aa2a5f6-bfaf-48e9-a974-74ac254ec6e6"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "0972173698",
+                      "type": "text",
+                      "uuid": "ef01d306-7527-4286-ae6a-60109427520b"
+                    },
+                    {
+                      "key": "address",
+                      "value": "test: customer",
+                      "type": "text",
+                      "uuid": "9f57b6b2-227e-419f-9c40-407eac5afbe1"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "uuid": "1b2975eb-c6b3-498b-ad72-fab9648f8c85",
+                      "src": "/C:/Users/ROG/Downloads/155927582_470813733946096_401663915898775916_n.jpg"
+                    },
+                    {
+                      "key": "role",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "7f6e1cfc-fd3e-4f0b-bd9a-f1559f5b0160",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8000/customer/4",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "customer",
+                    "4"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updatePassword",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"passwors\": 11111\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/customers/password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "customers",
+                    "password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "searchCustomers",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n        \"name\": \"\"\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/search/customer/?name=",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "search",
+                    "customer",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Main Dashboard",
+          "item": [
+            {
+              "name": "getDailyOrdersAndPayment",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"users_id\": 1\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/order/daily",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "order",
+                    "daily"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "summary",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"users_id\": 1\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/order/ordersAndpayments",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "order",
+                    "ordersAndpayments"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Log",
+          "item": [
+            {
+              "name": "Get Log Users",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n        \"name\": \"\"\r\n    }\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/log/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "log",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "sss",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Log Products",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/log/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "log",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Page",
+      "item": [
+        {
+          "name": "Products",
+          "item": [
+            {
+              "name": "ReadCode",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/product/code/PRD-202606-0001",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "code",
+                    "PRD-202606-0001"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Search",
+          "item": [
+            {
+              "name": "products",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n    \"search\": \"\",\r\n    \"category\": \"\"\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/search/products?search=&category=",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "search",
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    },
+                    {
+                      "key": "category",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "Login_Customer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"customer25aa@gmail.com\",\r\n    \"password\": \"11111\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/login/customer",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "login",
+                "customer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin1@gmail.com\",\r\n    \"password\": \"111111\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/login/admin",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "login",
+                "admin"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Logout",
+      "item": [
+        {
+          "name": "logout",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/logout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
 }
