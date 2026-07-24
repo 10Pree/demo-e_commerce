@@ -55,7 +55,14 @@ class moduleProduct {
     static async readCode(codeId) {
         try {
             const conn = await getDB()
-            const [results] = await conn.query('SELECT * FROM products WHERE p_code = ? AND deleted_at IS NULL', codeId)
+            const [results] = await conn.query(`
+                SELECT p.p_code, p.p_name, p.p_details, p.p_price, p.p_stock, GROUP_CONCAT(DISTINCT ip.image_url) AS images, GROUP_CONCAT(DISTINCT c.name) AS categories
+                FROM products p
+                LEFT JOIN map_images_products mip ON p.id = mip.products_id
+                LEFT JOIN images_products ip ON ip.id = mip.images_id
+                LEFT JOIN map_categories mc ON p.id = mc.products_id
+                LEFT JOIN categories c ON mc.categories_id = c.id
+                WHERE p_code = ? AND deleted_at IS NULL`, codeId)
             return results
         } catch (error) {
             throw error
