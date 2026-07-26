@@ -10,7 +10,7 @@ export default function Header() {
 
   const searchToinput = () => {
     if(!text) return
-    router.push(`/product/?keyword=${text}`)
+    router.push(`/product/?search=${text}`)
   }
 
   return (
