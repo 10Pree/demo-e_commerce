@@ -1,58 +1,30 @@
-"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import HeaderProduct  from "@/components/headerProduct";
 
-export default function Page() {
+export default async function Page({ searchParams }) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
-  const searchParams = useSearchParams()
-  const searchValue = searchParams.get("keyword") || ""
-  const [category, setCategory] = useState("")
-  const [search, setSearch] = useState(searchValue)
-  const [apiProducts, setapiProducts] = useState([])
+  const params = await searchParams
+  const search = params?.search || ""
+  const category = params?.category || ""
 
-  useEffect(() => {
-    const getDataProducts = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/search/products?search=${search}&category=${category}`)
-        setapiProducts(res.data.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    const timeOut = setTimeout(() => {
-      getDataProducts()
-    }, 500)
-    return () => clearTimeout(timeOut)
-  }, [search, category])
+  let productsData = null
+  try {
+    const res = await axios.get(`${API_URL}/search/products?search=${search}&category=${category}`)
+    productsData = res.data.data
+  } catch (error) {
+    console.log(error)
+  }
   return (
     <>
       <div className=" flex flex-col justify-center items-center my-4">
-        <div className="flex flex-col justify-center items-center">
-          <div className="w-[280px] md:w-[480px] h-[38px] bg-[#F3F4F6] rounded-[8px] relative">
-            <input value={search} onChange={(e) => setSearch(e.target.value)} className=" absolute w-full h-full pl-10 focus:" type="text" />
-            <Image className="absolute top-2 left-2 invert" src={"/icons/icons8-search-60.svg"} width={25} height={25} alt="icon" />
-          </div>
-          <div className="w-[280px] md:w-[480px] h-[38px] flex gap-2 mt-2">
-            <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-[50%] h-[38px] bg-[#F3F4F6] rounded-[8px]">
-              <option value="">เลือก</option>
-              <option value="1">Smartphone</option>
-              <option value="2">ACCESSORIES SMARTPHONE</option>
-              <option value="3">SMART WATCH</option>
-              <option value="4">SMART LIFE & IOT</option>
-              <option value="5">NOTEBOOK</option>
-              <option value="6">ACCESSORIES NOTEBOOK</option>
-              <option value="7">HEADSET</option>
-              <option value="8">MICROPHONE</option>
-            </select>
-          </div>
-        </div>
+        <HeaderProduct keyword={search} />
         <div className="w-full flex justify-center items-center mt-12 mb-[80px] md:mb-0 py-4">
           <div className="w-full md:w-fit grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 mx-2 md:mx-0">
-            {apiProducts.length > 0 && (
-              apiProducts.map((p, index) => (
+            {productsData && productsData.length > 0 && (
+              productsData.map((p, index) => (
                 <Link key={index} href={`/product/${p.p_code}`} className="w-full h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
                   <div key={index} className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 duration-300 ease-in">
                     <Image className="object-contain" src={p.image_url ? `${API_URL}${p.image_url}` : "/images/iphone-card-40-17pro.png"} alt="image product" fill />
@@ -66,7 +38,7 @@ export default function Page() {
               ))
             )
             }
-            {apiProducts.length === 0 && (
+            {productsData && productsData.length === 0 && (
               <div className="w-screen h-screen flex justify-center items-center">
                 <div className="flex flex-col justify-center items-center opacity-50">
                   <Image src="/images/logo.png" alt="logo" width={100} height={100} />
@@ -74,7 +46,7 @@ export default function Page() {
                 </div>
               </div>
             )}
-          </div>
+          </div>        
         </div>
       </div>
     </>
