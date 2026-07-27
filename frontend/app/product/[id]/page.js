@@ -2,7 +2,6 @@ import BuyButton from "@/components/buyButton"
 import axios from "axios"
 import Image from "next/image"
 
-
 export default async function Page({ params }) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     const { id } = await params
@@ -10,7 +9,6 @@ export default async function Page({ params }) {
     try{
         const res = await axios.get(`${API_URL}/product/code/${id}`)
         productData =  res.data.data[0]
-        console.log(productData)
     }catch(error){
         console.log(error)
     }
@@ -19,8 +17,8 @@ export default async function Page({ params }) {
         <div className="w-full min-h-screen">
             <div className="flex flex-col gap-24 justify-center items-center my-4 md:my-24 px-4">
                 <div className="flex flex-col md:flex-row gap-9 px-8">
-                    <div>
-                        <Image src={"/images/iphone-card-40-17pro.png"} width={500} height={600} alt="image product" />
+                    <div className="relative w-full h-[300px] md:w-[400px] md:h-[400px] bg-[#F3F4F6] rounded-xl flex justify-center items-center">
+                        <Image className="object-contain" src={productData?.image_url ? `${API_URL}${productData.image_url}` : "/images/ImageNotFound-RB.svg"} alt="image product" fill />
                     </div>
                     <div className="flex flex-col gap-4">
                         <h1 className="text-4xl font-bold">{ productData?.p_name || "ชื่อสินค้าไม่สามารถแสดงได้"}</h1>

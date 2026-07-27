@@ -27,7 +27,7 @@ export default async function Page({ searchParams }) {
               productsData.map((p, index) => (
                 <Link key={index} href={`/product/${p.p_code}`} className="w-full h-[300px] md:w-[230px] md:h-[300px] shadow-2xl rounded-xl bg-white cursor-pointer border border-gray-300 group ">
                   <div key={index} className=" relative bg-[#F3F4F6] h-36 w-full flex justify-center items-center rounded-t-xl group-hover:bg-gray-200 duration-300 ease-in">
-                    <Image className="object-contain" src={p.image_url ? `${API_URL}${p.image_url}` : "/images/iphone-card-40-17pro.png"} alt="image product" fill />
+                    <Image className="object-contain" src={p.image_url ? `${API_URL}${p.image_url}` : "/images/ImageNotFound-RB.svg"} alt="image product" fill />
                   </div>
                   <div className="p-3 flex flex-col gap-1 text-[#111827]">
                     <span className="font-bold line-clamp-1">{p.p_name}</span>
