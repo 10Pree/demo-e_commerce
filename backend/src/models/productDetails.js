@@ -30,6 +30,16 @@ class ModelsProductDetails {
             throw error
         }
     }
+
+    static async CreateMap_Variant_Attribute_Values(data) {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('INSERT INTO map_variant_attribute_values SET ?', [data])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = ModelsProductDetails

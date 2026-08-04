@@ -39,6 +39,19 @@ class ControllerProductDetails {
             res.status(500).json({ message: error.message })
         }
     }
+
+    static async createMap_Variant_Attribute_Values(req, res){
+        try{
+            const { product_variants_id, product_attribute_values_id } = req.body
+            if(!product_variants_id || !product_attribute_values_id) {
+                return res.status(400).json({ message: "Product Variant ID and Product Attribute Value ID are required" })
+            }
+            const map = await ModelsProductDetails.CreateMap_Variant_Attribute_Values({ product_variants_id, product_attribute_values_id })
+            res.status(201).json({ message: "Create Map Variant Attribute Value Successful!!", data: map })
+        }catch(error){
+            res.status(500).json({ message: error.message })
+        }
+    }
 }
 
 module.exports = ControllerProductDetails
