@@ -20,6 +20,16 @@ class ModelsProductDetails {
             throw error
         }
     }
+
+    static async createProductVariants (data) {
+        try{
+            const conn = await getDB()
+            const [results] = await conn.query('INSERT INTO product_variants SET ?', [data])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = ModelsProductDetails
