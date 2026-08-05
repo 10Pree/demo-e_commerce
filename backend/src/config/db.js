@@ -1,9 +1,9 @@
 require("dotenv").config();
 const mysql = require('mysql2/promise');
 
-let conn = null;
+let pool = null;
 const connectDB = async () => {
-  const pool = await mysql.createPool({
+  const newPool = await mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
@@ -13,19 +13,26 @@ const connectDB = async () => {
   });
   
   try{
-  await pool.query('SELECT 1')
-  conn = pool
+    await newPool.query('SELECT 1')
+    pool = newPool
   
   }catch(error){
-    await pool.end().catch(()=>{})
+    await newPool.end().catch(()=>{})
     console.log("DB Not Connect");
   }
 };
 
 const getDB = () => {
-  if (!conn) {
+  if (!pool) {
     throw new Error("DB Not Connect");
   }
-  return conn;
+  return pool;
 };
+
+const getConnection = async () => {
+  if(!pool){
+    throw new Error("DB Not Connect");
+  }
+  return await pool.getConnection();
+}
 module.exports = { connectDB, getDB };
