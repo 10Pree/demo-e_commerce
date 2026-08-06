@@ -35,4 +35,4 @@ const getConnection = async () => {
   }
   return await pool.getConnection();
 }
-module.exports = { connectDB, getDB };
+module.exports = { connectDB, getDB, getConnection };
