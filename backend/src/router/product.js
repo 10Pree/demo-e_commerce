@@ -6,7 +6,7 @@ const { uploadProduct } = require('../services/upload')
 const router = express.Router()
 // router.use(express.json())
 
-router.post('/product', Authorize("project.create"), uploadProduct.array('images', 12),controllerProduct.Create);
+router.post('/product', Authorize("project.create"), uploadProduct.array('images', 12),controllerProduct.Create2);
 router.get('/product/code/:code', controllerProduct.ReadCode)
 router.get('/products',Authorize("project.read"), controllerProduct.Reads)
 router.get('/product/:id',Authorize("project.read"), controllerProduct.Read)

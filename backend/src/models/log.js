@@ -10,10 +10,10 @@ class modelsLog {
             throw error
         }
     }
-        static async createLogProduct(data){
+        static async createLogProduct(data, conn){
         try{
-            const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO log_products SET ?', [data])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('INSERT INTO log_products SET ?', [data])
             return resulte
         }catch(error){
             throw error

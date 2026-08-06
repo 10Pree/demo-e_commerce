@@ -1,4 +1,4 @@
-const { getDB } = require("../config/db");
+const { getDB, getConnection  } = require("../config/db");
 const fs = require('fs')
 const modelsCategories = require("../models/categories");
 const modlesImagesProducts = require("../models/images_products");
@@ -14,7 +14,7 @@ class controllerProduct {
         try {
             const { p_name, p_price, p_details, p_stock, categories_ids } = req.body || {};
             const image_url = req.files
-            const parsedCategories = categories_ids.split(',').map(Number)
+            const parsedCategories = categories_ids ? categories_ids.split(',').map(Number) : []
             // console.log("CONTENT-TYPE:", req.headers['content-type']);
             // console.log("FILES:", req.files);
             // console.log("BODY:", req.body);
@@ -68,6 +68,71 @@ class controllerProduct {
             return res.status(500).json({
                 message: "Server Error",
             });
+        }
+    }
+
+    static async Create2(req, res) {
+        const conn = await getConnection()
+        try {
+            await conn.beginTransaction()
+            const { p_name, p_price, p_details, p_stock, categories_ids, variants} = req.body || {};
+            const image_url = req.files
+            const parsedCategories = categories_ids.split(',').map(Number) || []
+            const parsedVariants = variants ? JSON.parse(variants) : []
+
+            const data = {};
+            for (let i = 0; i < 3; i++) { // สุ่มใหม่ 3 ครั้ง
+                const code = genProductCode('PRD', 6);
+                const dup = await moduleProduct.isCodeExists(code, conn);
+                if (dup.length === 0) { data.p_code = code; break; }
+            }
+            if (!data.p_code) throw new Error("สร้างรหัสไม่สำเร็จ ลองใหม่อีกครั้ง");
+            if (p_name) data.p_name = p_name;
+            if (p_price) data.p_price = p_price;
+            if (p_details) data.p_details = p_details;
+            if (p_stock) data.p_stock = p_stock;
+
+            const product = await moduleProduct.create(data, conn);
+
+            if (Array.isArray(image_url) && image_url.length > 0) {
+                const imageIds = []
+
+                for (const file of image_url) {
+                    const url = `/uploads/products/${file.filename}`
+                    const image = await modlesImagesProducts.create(url, conn)
+                    imageIds.push(image.insertId)
+                }
+
+                const rows = imageIds.map(imgId => [product.insertId, imgId])
+                await modlesImagesProducts.createMap(rows, conn)
+            }
+
+            if (Array.isArray(parsedCategories) && parsedCategories.length > 0) {
+                const rows = parsedCategories.map(catId => [product.insertId, catId])
+                // console.log(rows)
+                await modelsCategories.createMap(rows, conn)
+            }
+
+            // if(parsedVariants && Array.isArray(parsedVariants) && parsedVariants.length > 0){ {
+
+            // }
+
+            const userId = req.user.userId
+            await CreateLogProducts(product.insertId, userId, "Create.Product", conn)
+
+            await conn.commit()
+
+            return res.status(201).json({
+                message: "Create Product Successful!!",
+            });
+        } catch (error) {
+            await conn.rollback()
+            console.log("Message Error:", error);
+            return res.status(500).json({
+                message: "Server Error",
+            });
+        } finally {
+            conn.release()
         }
     }
 

@@ -41,7 +41,7 @@ const CreateLogAction = async (newUserId, actionUser, text) => {
     }
 }
 
-const CreateLogProducts = async (productID, userid, text) => {
+const CreateLogProducts = async (productID, userid, text, conn) => {
     try {
         if (!process.env.ACCESS_TOKEN_SECRET) throw new Error("ACCESS_TOKEN_SECRET is not set");
         if (!productID) throw new Error("productId is required");
@@ -51,8 +51,8 @@ const CreateLogProducts = async (productID, userid, text) => {
         const userId = userid
         const textAction = String(text).slice(0, 1000).trim()
 
-        const user = await modelsUser.read(userId)
-        const product = await moduleProduct.read(productID)
+        const user = await modelsUser.read(userId, conn)
+        const product = await moduleProduct.read(productID, conn)
         if (product.length === 0 || user.length === 0) {
             throw new Error("Product and User Not Found")
         }
@@ -69,7 +69,7 @@ const CreateLogProducts = async (productID, userid, text) => {
             text: textAction+`.${productName}`
         }
         try {
-            const log = await modelsLog.createLogProduct(data)
+            const log = await modelsLog.createLogProduct(data, conn)
             return log
         } catch (error) {
             throw error

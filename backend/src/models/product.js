@@ -1,10 +1,10 @@
 const { getDB } = require("../config/db")
 
 class moduleProduct {
-    static async create(data) {
+    static async create(data, conn) {
         try {
-            const conn = await getDB()
-            const [results] = await conn.query(`INSERT INTO products SET ?`, [data])
+            const executer = conn || getDB()
+            const [results] = await executer.query(`INSERT INTO products SET ?`, [data])
             return results
         } catch (error) {
             throw error
@@ -20,10 +20,10 @@ class moduleProduct {
         }
     }
 
-    static async read(productId) {
+    static async read(productId, conn) {
         try {
-            const conn = await getDB()
-            const [results] = await conn.query('SELECT * FROM products WHERE id = ? AND deleted_at IS NULL', productId)
+            const executer = conn || await getDB()
+            const [results] = await executer.query('SELECT * FROM products WHERE id = ? AND deleted_at IS NULL', productId)
             return results
         } catch (error) {
             throw error
@@ -52,10 +52,10 @@ class moduleProduct {
         }
     }
 
-    static async readCode(codeId) {
+    static async readCode(codeId, conn) {
         try {
-            const conn = await getDB()
-            const [results] = await conn.query(`
+            const executor  = conn || getDB();
+            const [results] = await executor.query(`
                 SELECT p.p_code, p.p_name, p.p_details, p.p_price, p.p_stock, GROUP_CONCAT(DISTINCT ip.image_url) AS image_url, GROUP_CONCAT(DISTINCT c.name) AS categories
                 FROM products p
                 LEFT JOIN map_images_products mip ON p.id = mip.products_id
@@ -65,6 +65,16 @@ class moduleProduct {
                 WHERE p_code = ? AND deleted_at IS NULL`, codeId)
             return results
         } catch (error) {
+            throw error
+        }
+    }
+
+    static async isCodeExists(codeId, conn) {
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query("SELECT id FROM products WHERE p_code = ? AND deleted_at IS NULL", [codeId])
+            return results
+        }catch(error){
             throw error
         }
     }

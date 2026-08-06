@@ -22,10 +22,10 @@ class modelsUser {
             throw error
         }
     }
-        static async read(id) {
+        static async read(id, conn) {
         try {
-            const conn = await getDB()
-            const [results] = await conn.query('SELECT id, username, email, phone, address FROM users WHERE id = ? AND deleted_at IS NULL', id)
+            const executer = conn || await getDB()
+            const [results] = await executer.query('SELECT id, username, email, phone, address FROM users WHERE id = ? AND deleted_at IS NULL', id)
             return results
         } catch (error) {
             console.log("Message Error:", error)

@@ -1,10 +1,10 @@
 const { getDB } = require("../config/db")
 
 class modlesImagesProducts {
-    static async create(data) {
+    static async create(data, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO images_products (image_url) VALUES (?)', [data])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('INSERT INTO images_products (image_url) VALUES (?)', [data])
             return resulte
         } catch (error) {
             throw error
@@ -106,10 +106,10 @@ class modlesImagesProducts {
             throw error
         }
     }
-    static async createMap(data) {
+    static async createMap(data, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO map_images_products (products_id, images_id) VALUES ?', [data])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('INSERT INTO map_images_products (products_id, images_id) VALUES ?', [data])
             return resulte
         } catch (error) {
             throw error

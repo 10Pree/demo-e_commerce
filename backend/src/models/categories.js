@@ -67,10 +67,10 @@ class modelsCategories {
         }
     }
 
-    static async createMap(data) {
+    static async createMap(data, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO map_categories (products_id, categories_id) VALUES ?', [data])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('INSERT INTO map_categories (products_id, categories_id) VALUES ?', [data])
             return resulte
         } catch (error) {
             throw error
