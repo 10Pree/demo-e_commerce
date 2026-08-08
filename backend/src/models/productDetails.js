@@ -1,40 +1,40 @@
 const { getDB } = require("../config/db")
 
 class ModelsProductDetails {
-    static async createProductAttributes(data) {
+    static async createProductAttributes(data, conn) {
         try{
-            const conn = await getDB()
-            const [results] = await conn.query('INSERT INTO product_attributes SET ?', [data])
+            const executer = conn || getDB()
+            const [results] = await executer.query('INSERT INTO product_attributes SET ?', [data])
             return results
         }catch(error){
             throw error
         }
     }
 
-    static async createProductAttributesValues(id, value) {
+    static async createProductAttributesValues(id, value, conn) {
         try{
-            const conn = await getDB()
-            const [results] = await conn.query('INSERT INTO product_attribute_values (value, product_attributes_id) VALUES (?, ?)', [value, id])
+            const executer = conn || getDB()
+            const [results] = await executer.query('INSERT INTO product_attribute_values (value, product_attributes_id) VALUES (?, ?)', [value, id])
             return results
         }catch(error){
             throw error
         }
     }
 
-    static async createProductVariants (data) {
+    static async createProductVariants (data, conn) {
         try{
-            const conn = await getDB()
-            const [results] = await conn.query('INSERT INTO product_variants SET ?', [data])
+            const executer = conn || getDB()
+            const [results] = await executer.query('INSERT INTO product_variants SET ?', [data])
             return results
         }catch(error){
             throw error
         }
     }
 
-    static async CreateMap_Variant_Attribute_Values(data) {
+    static async CreateMap_Variant_Attribute_Values(data, conn) {
         try{
-            const conn = await getDB()
-            const [results] = await conn.query('INSERT INTO map_variant_attribute_values SET ?', [data])
+            const executer = conn || getDB()
+            const [results] = await executer.query('INSERT INTO map_variant_attribute_values SET ?', [data])
             return results
         }catch(error){
             throw error
