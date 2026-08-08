@@ -34,7 +34,7 @@ class ModelsProductDetails {
     static async CreateMap_Variant_Attribute_Values(data, conn) {
         try{
             const executer = conn || getDB()
-            const [results] = await executer.query('INSERT INTO map_variant_attribute_values SET ?', [data])
+            const [results] = await executer.query('INSERT INTO map_variant_attribute_values (product_variants_id, product_attribute_values_id) VALUES ?', [data])
             return results
         }catch(error){
             throw error

@@ -1,8 +1,9 @@
-const { getDB, getConnection  } = require("../config/db");
+const { getDB, getConnection } = require("../config/db");
 const fs = require('fs')
 const modelsCategories = require("../models/categories");
 const modlesImagesProducts = require("../models/images_products");
 const moduleProduct = require("../models/product");
+const modelsProductDetails = require("../models/productDetails");
 const genProductCode = require("../services/genProductCode");
 const { CreateLogProducts } = require("../services/logAction");
 const path = require("path");
@@ -75,7 +76,7 @@ class controllerProduct {
         const conn = await getConnection()
         try {
             await conn.beginTransaction()
-            const { p_name, p_price, p_details, p_stock, categories_ids, variants} = req.body || {};
+            const { p_name, p_price, p_details, p_stock, categories_ids, variants } = req.body || {};
             const image_url = req.files
             const parsedCategories = categories_ids.split(',').map(Number) || []
             const parsedVariants = variants ? JSON.parse(variants) : []
@@ -113,9 +114,21 @@ class controllerProduct {
                 await modelsCategories.createMap(rows, conn)
             }
 
-            // if(parsedVariants && Array.isArray(parsedVariants) && parsedVariants.length > 0){ {
+            if (parsedVariants && Array.isArray(parsedVariants) && parsedVariants.length > 0) {
+                for (const variant of parsedVariants) {
+                    const { sku, price, stock, attribute_value_ids } = variant
+                    console.log("variant:", variant)
+                    const productVariants = await modelsProductDetails.createProductVariants({ products_id: product.insertId, sku, price, stock }, conn)
 
-            // }
+                    const variantId = productVariants.insertId
+
+                    if(Array.isArray(attribute_value_ids) && attribute_value_ids.length > 0){
+                        const mapData = attribute_value_ids.map(attrValueID => ([ variantId, attrValueID ]))
+                        await modelsProductDetails.CreateMap_Variant_Attribute_Values(mapData, conn)
+                    }
+
+                }
+            }
 
             const userId = req.user.userId
             await CreateLogProducts(product.insertId, userId, "Create.Product", conn)
@@ -328,11 +341,11 @@ class controllerProduct {
         }
     }
 
-    static async searchProduct(req,res) {
+    static async searchProduct(req, res) {
         try {
             const { name } = req.query
             console.log(name)
-            if(!name) return res.status(400).json({ message: "กรุณาใส่คำค้นหา"})
+            if (!name) return res.status(400).json({ message: "กรุณาใส่คำค้นหา" })
             const search = await moduleProduct.searchProduct(name)
 
             return res.status(200).json({
