@@ -1,14 +1,16 @@
 const { getDB, getConnection } = require("../config/db");
-const fs = require('fs')
+const { CreateLogProducts } = require("../services/logAction");
+const { json } = require("stream/consumers");
+const genProductCode = require("../services/genProductCode");
+const multer = require('multer')
 const modelsCategories = require("../models/categories");
 const modlesImagesProducts = require("../models/images_products");
 const moduleProduct = require("../models/product");
 const modelsProductDetails = require("../models/productDetails");
-const genProductCode = require("../services/genProductCode");
-const { CreateLogProducts } = require("../services/logAction");
+const fs = require('fs/promises')
 const path = require("path");
-const { json } = require("stream/consumers");
-
+const storageProducts = multer.memoryStorage()
+const path_Products = path.join(__dirname, '../../uploads/products')
 
 class controllerProduct {
     static async Create(req, res) {
@@ -78,8 +80,18 @@ class controllerProduct {
             await conn.beginTransaction()
             const { p_name, p_price, p_details, p_stock, categories_ids, variants } = req.body || {};
             const image_url = req.files
-            const parsedCategories = categories_ids.split(',').map(Number) || []
+            const parsedCategories = categories_ids ? categories_ids.split(',').map(Number) : []
             const parsedVariants = variants ? JSON.parse(variants) : []
+
+            const preparedImages = (Array.isArray(image_url) ? image_url : []).map(file => {
+                const filename = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname)
+                const url = `/uploads/products/${filename}`
+                return {
+                    filename,
+                    buffer: file.buffer,
+                    url
+                }
+            })
 
             const data = {};
             for (let i = 0; i < 3; i++) { // สุ่มใหม่ 3 ครั้ง
@@ -88,6 +100,9 @@ class controllerProduct {
                 if (dup.length === 0) { data.p_code = code; break; }
             }
             if (!data.p_code) throw new Error("สร้างรหัสไม่สำเร็จ ลองใหม่อีกครั้ง");
+                    if (!p_name) {
+            throw new Error("กรุณาระบุชื่อสินค้า (p_name)");
+        }
             if (p_name) data.p_name = p_name;
             if (p_price) data.p_price = p_price;
             if (p_details) data.p_details = p_details;
@@ -95,12 +110,11 @@ class controllerProduct {
 
             const product = await moduleProduct.create(data, conn);
 
-            if (Array.isArray(image_url) && image_url.length > 0) {
+            if (preparedImages.length > 0) {
                 const imageIds = []
 
-                for (const file of image_url) {
-                    const url = `/uploads/products/${file.filename}`
-                    const image = await modlesImagesProducts.create(url, conn)
+                for (const file of preparedImages) {
+                    const image = await modlesImagesProducts.create(file.url, conn)
                     imageIds.push(image.insertId)
                 }
 
@@ -117,13 +131,12 @@ class controllerProduct {
             if (parsedVariants && Array.isArray(parsedVariants) && parsedVariants.length > 0) {
                 for (const variant of parsedVariants) {
                     const { sku, price, stock, attribute_value_ids } = variant
-                    console.log("variant:", variant)
                     const productVariants = await modelsProductDetails.createProductVariants({ products_id: product.insertId, sku, price, stock }, conn)
 
                     const variantId = productVariants.insertId
 
-                    if(Array.isArray(attribute_value_ids) && attribute_value_ids.length > 0){
-                        const mapData = attribute_value_ids.map(attrValueID => ([ variantId, attrValueID ]))
+                    if (Array.isArray(attribute_value_ids) && attribute_value_ids.length > 0) {
+                        const mapData = attribute_value_ids.map(attrValueID => ([variantId, attrValueID]))
                         await modelsProductDetails.CreateMap_Variant_Attribute_Values(mapData, conn)
                     }
 
@@ -134,6 +147,10 @@ class controllerProduct {
             await CreateLogProducts(product.insertId, userId, "Create.Product", conn)
 
             await conn.commit()
+
+                for (const file of preparedImages) {
+                    await fs.writeFile(path.join(path_Products, file.filename), file.buffer);
+                }
 
             return res.status(201).json({
                 message: "Create Product Successful!!",
