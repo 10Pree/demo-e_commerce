@@ -39,10 +39,10 @@ class modlesImagesProducts {
             throw error
         }
     }
-    static async getImgByIdProduct(id) {
+    static async getImgByIdProduct(id, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query(`
+            const executer = conn || getDB()
+            const [resulte] = await executer.query(`
                 SELECT i.*
                 FROM images_products i
                 JOIN map_images_products mi ON mi.images_id = i.id
@@ -86,21 +86,21 @@ class modlesImagesProducts {
             throw error
         }
     }
-    static async deleteImgById(imageId) {
+    static async deleteImgById(imageId, conn) {
     try {
-        const conn = await getDB()
+        const executer = conn || getDB()
         // ลบ map ก่อน (เพราะมี foreign key)
-        await conn.query(`DELETE FROM map_images_products WHERE images_id = ?`, imageId)
+        await executer.query(`DELETE FROM map_images_products WHERE images_id = ?`, imageId)
         // แล้วลบตัวรูปจริง
-        await conn.query(`DELETE FROM images_products WHERE id = ?`, imageId)
+        await executer.query(`DELETE FROM images_products WHERE id = ?`, imageId)
     } catch (error) {
         throw error
     }
 }
-    static async deleteByMapId(id) {
+    static async deleteByMapId(id, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('DELETE FROM map_images_products WHERE products_id = ?', id)
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('DELETE FROM map_images_products WHERE products_id = ?', id)
             return resulte
         } catch (error) {
             throw error
