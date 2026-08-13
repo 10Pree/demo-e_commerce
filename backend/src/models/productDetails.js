@@ -40,6 +40,16 @@ class ModelsProductDetails {
             throw error
         }
     }
+
+    static async updateProductAttributes(data, conn){
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE product_attributes SET ? WHERE id = ?', [data, data.id])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = ModelsProductDetails

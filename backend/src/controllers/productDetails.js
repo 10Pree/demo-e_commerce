@@ -52,6 +52,19 @@ class ControllerProductDetails {
             res.status(500).json({ message: error.message })
         }
     }
+
+    static async updateProductAttributes(req, res){
+        try{
+            const { id, name} = req.body
+            if(!id || !name){
+                return res.status(400).json({ message: "Id and Name are required" })
+            }
+            const attributes = await ModelsProductDetails.updateProductAttributes({ id, name })
+            return res.status(200).json({ message: "Update Product Attribute Successful!!", data: attributes })
+        }catch(error){
+            
+        }
+    }
 }
 
 module.exports = ControllerProductDetails
