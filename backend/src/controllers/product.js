@@ -234,9 +234,10 @@ class controllerProduct {
             const productId = req.params.id
             const checkProduct = await moduleProduct.read(productId, conn)
             if (checkProduct.length === 0) throw new Error("Product Not Found")
-            const { p_name, p_price, p_details, p_stock, categories_ids, old_images } = req.body
+            const { p_name, p_price, p_details, p_stock, variants, categories_ids, old_images } = req.body
             const parsedOldImages = old_images ? JSON.parse(old_images) : []
             const parsedCategories = categories_ids ? categories_ids.split(',').map(Number) : []
+            const parsedVariants = variants ? JSON.parse(variants) : []
             const newFiles = req.files
             const newData = {}
 
@@ -246,8 +247,23 @@ class controllerProduct {
             if (p_stock) newData.p_stock = p_stock
 
             if (Object.keys(newData).length > 0) {
-                await moduleProduct.update(productId, newData, conn)
+                const product = await moduleProduct.update(productId, newData, conn)
             }
+
+            // if (parsedVariants && Array.isArray(parsedVariants) && parsedVariants.length > 0) {
+            //     for (const variant of parsedVariants) {
+            //         const { sku, price, stock, attribute_value_ids } = variant
+            //         const productVariants = await modelsProductDetails.createProductVariants({ products_id: productId, sku, price, stock }, conn)
+
+            //         const variantId = productVariants.insertId
+
+            //         if (Array.isArray(attribute_value_ids) && attribute_value_ids.length > 0) {
+            //             const mapData = attribute_value_ids.map(attrValueID => ([variantId, attrValueID]))
+            //             await modelsProductDetails.CreateMap_Variant_Attribute_Values(mapData, conn)
+            //         }
+
+            //     }
+            // }
 
             // === จัดการรูปภาพ ===
             const currentImages = await modlesImagesProducts.getImgByIdProduct(productId, conn)
