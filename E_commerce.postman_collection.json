@@ -28,25 +28,25 @@
                   "formdata": [
                     {
                       "key": "p_name",
-                      "value": "ทดสอบ5",
+                      "value": "Apple iPhone 16",
                       "type": "text",
                       "uuid": "bd85135a-d040-495b-b117-c35c3a7eb12b"
                     },
                     {
                       "key": "p_price",
-                      "value": "5555",
+                      "value": "26500",
                       "type": "text",
                       "uuid": "9aa781b0-3bb6-475d-ace0-b5d5eaac309d"
                     },
                     {
                       "key": "p_details",
-                      "value": "5555555555555555555555555555555",
+                      "value": "iPhone 16 ขอแนะนำตัวควบคุมกล้องให้คุณเข้าถึงเครื่องมือของกล้องได้อย่างรวดเร็ว และพบกับปุ่มแอ็คชั่น แค่กดค้างไว้ก็เรียกใช้สิ่งที่คุณต้องการได้ทันที ไม่ว่าจะเป็นไฟฉาย เสียงบันทึก โหมดปิดเสียง และอีกมากมาย",
                       "type": "text",
                       "uuid": "4ccc3ea6-b33f-40ee-abd9-fd5e31a7c76b"
                     },
                     {
                       "key": "p_stock",
-                      "value": "555",
+                      "value": "160",
                       "type": "text",
                       "uuid": "366e3042-2254-473b-9da0-fb7ebdc2ec53"
                     },
@@ -57,20 +57,16 @@
                       "uuid": "0ae6d8af-08b3-4a97-92ed-dc1f78f2cf6d"
                     },
                     {
-                      "key": "categories_ids",
-                      "value": "2",
-                      "type": "text",
-                      "uuid": "114415ee-aa34-45a4-92b3-cbd7d4ced84f",
-                      "disabled": true
-                    },
-                    {
                       "key": "images",
                       "type": "file",
                       "uuid": "549e7a3b-9d0d-4447-a2b3-4da6ad4afe66",
-                      "src": [
-                        "/C:/Users/ROG/Downloads/5ebf29e85bf249498c6ee43a5ad73bda~tplv-jj85edgx6n-image-origin.jpeg",
-                        "/C:/Users/ROG/Downloads/Screenshot 2025-05-11 214140.png"
-                      ]
+                      "src": "/C:/Users/ROG/OneDrive/รูปภาพ/Screenshots/Screenshot 2026-08-08 163116.png"
+                    },
+                    {
+                      "key": "variants",
+                      "value": "[{\"sku\":\"IP16-REDS-203\",\"price\":26900,\"stock\":20,\"attribute_value_ids\":[2,1]}]",
+                      "type": "text",
+                      "uuid": "86d62980-0ba3-491d-a3db-4c234f4aa926"
                     }
                   ]
                 },
@@ -1903,6 +1899,270 @@
               "response": []
             }
           ]
+        },
+        {
+          "name": "ProductDetails",
+          "item": [
+            {
+              "name": "Create_Attribute_Name",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n    \"name\": \"create test product attribute name\"\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/attribute/name",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "attribute",
+                    "name"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create_Atttibute_Value",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n    \"id\" : 1,\r\n    \"value\": \"128 GB\"\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/attribute/value",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "attribute",
+                    "value"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create_Product_Variant",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n    \"products_id\" : 65,\r\n    \"sku\": \"128 GB\",\r\n    \"price\": 199,\r\n    \"stock\": 99\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/variant",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "variant"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create_Map_Variant_Attribute_Values",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n    \"product_variants_id\" : 2,\r\n    \"product_attribute_values_id\" : 1\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/variant/attribute/value",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "variant",
+                    "attribute",
+                    "value"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update_Attribute_Name",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"สี\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/attribute/name",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "attribute",
+                    "name"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update_Attribute_Value",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": 1,\r\n    \"value\": \"แดง\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/attribute/value",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "attribute",
+                    "value"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create_Product_Variant",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n        \"id\": 2,\r\n        \"products_id\" : 78,\r\n        \"sku\": \"IP15-RED-128\",\r\n        \"price\": 100,\r\n        \"stock\": 12\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/variant/attribute",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "variant",
+                    "attribute"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create_Map_Variant_Attribute_Values",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {\r\n        \"id\": 2,\r\n        \"pvid\" : 2,\r\n        \"pavid\" : 2\r\n    }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/product/variant/attribute/value",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "product",
+                    "variant",
+                    "attribute",
+                    "value"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
         }
       ]
     },
@@ -1921,7 +2181,7 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:8000/product/code/PRD-202606-0001",
+                  "raw": "http://localhost:8000/product/code/PRD-202607-N3RR23",
                   "protocol": "http",
                   "host": [
                     "localhost"
@@ -1930,7 +2190,7 @@
                   "path": [
                     "product",
                     "code",
-                    "PRD-202606-0001"
+                    "PRD-202607-N3RR23"
                   ]
                 }
               },
