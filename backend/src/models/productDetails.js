@@ -50,6 +50,36 @@ class ModelsProductDetails {
             throw error
         }
     }
+
+    static async updateProductAttributesValues(data, id, conn){
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE product_attribute_values SET ? WHERE id = ?', [data, id])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+
+    static async updateProductVariants(data, id, conn){
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE product_variants SET ? WHERE id = ?', [data, id])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+
+    static async updateMap_Variant_Attribute_Values(data, id, conn){
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE map_variant_attribute_values SET ? WHERE id = ?', [data, id])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = ModelsProductDetails
