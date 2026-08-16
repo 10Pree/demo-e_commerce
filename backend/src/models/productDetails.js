@@ -80,6 +80,16 @@ class ModelsProductDetails {
             throw error
         }
     }
+
+        static async deleteMap_Variant_Attribute_Values(id, conn){
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('DELETE FROM map_variant_attribute_values WHERE product_variants_id = ?', [id])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = ModelsProductDetails

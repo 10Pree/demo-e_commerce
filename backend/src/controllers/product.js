@@ -250,20 +250,28 @@ class controllerProduct {
                 const product = await moduleProduct.update(productId, newData, conn)
             }
 
-            // if (parsedVariants && Array.isArray(parsedVariants) && parsedVariants.length > 0) {
-            //     for (const variant of parsedVariants) {
-            //         const { sku, price, stock, attribute_value_ids } = variant
-            //         const productVariants = await modelsProductDetails.createProductVariants({ products_id: productId, sku, price, stock }, conn)
+            if (parsedVariants && Array.isArray(parsedVariants) && parsedVariants.length > 0) {
+                for (const variant of parsedVariants) {
+                    const { variant_id, sku, price, stock, attribute_value_ids } = variant
+                    let currentVariantId = variant_id
 
-            //         const variantId = productVariants.insertId
+                    if(variant_id){
+                        const productVariants = await modelsProductDetails.updateProductVariants({ products_id: productId, sku, price, stock }, variant_id, conn)
 
-            //         if (Array.isArray(attribute_value_ids) && attribute_value_ids.length > 0) {
-            //             const mapData = attribute_value_ids.map(attrValueID => ([variantId, attrValueID]))
-            //             await modelsProductDetails.CreateMap_Variant_Attribute_Values(mapData, conn)
-            //         }
+                        if(productVariants.affectedRows === 0) throw new Error(`Product Variant ID ${variant_id} Not Found`)
+                    }else{
+                        const productVariants = await modelsProductDetails.createProductVariants({ products_id: productId, sku, price, stock }, conn)
+                        currentVariantId = productVariants.insertId
+                    }
 
-            //     }
-            // }
+                    if (Array.isArray(attribute_value_ids) && attribute_value_ids.length > 0) {
+                        await modelsProductDetails.deleteMap_Variant_Attribute_Values(currentVariantId, conn)
+                        const mapData = attribute_value_ids.map(attrValueID => ([currentVariantId, attrValueID]))
+                        await modelsProductDetails.CreateMap_Variant_Attribute_Values(mapData, conn)
+                    }
+
+                }
+            }
 
             // === จัดการรูปภาพ ===
             const currentImages = await modlesImagesProducts.getImgByIdProduct(productId, conn)
