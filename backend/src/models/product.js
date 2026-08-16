@@ -79,10 +79,10 @@ class moduleProduct {
         }
     }
 
-    static async update(productId, data) {
+    static async update(productId, data, conn) {
         try {
-            const conn = await getDB()
-            const [results] = await conn.query('UPDATE products SET ? WHERE id = ?', [data, productId])
+            const executer = conn || await getDB()
+            const [results] = await executer.query('UPDATE products SET ? WHERE id = ?', [data, productId])
             return results
         } catch (error) {
             throw error
