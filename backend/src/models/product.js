@@ -89,29 +89,29 @@ class moduleProduct {
         }
     }
 
-    static async delete(productId) {
+    static async delete(productId, conn) {
         try {
-            const conn = await getDB()
-            const [results] = await conn.query('DELETE FROM products WHERE id = ?', productId)
+            const executer = conn || getDB()
+            const [results] = await executer.query('DELETE FROM products WHERE id = ?', productId)
             return results
         } catch (error) {
             throw error
         }
     }
 
-    static async softDelete(productId) {
+    static async softDelete(productId, conn) {
         try {
-            const conn = await getDB()
-            const [results] = await conn.query('UPDATE products SET deleted_at = Now() WHERE id = ?', productId)
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE products SET deleted_at = Now() WHERE id = ?', productId)
             return results
         } catch (error) {
             throw error
         }
     }
-    static async searchProduct(name) {
+    static async searchProduct(name, conn) {
         try{
-            const conn = await getDB()
-            const [resultes] = await conn.query(`SELECT * FROM products WHERE p_name LIKE ? AND deleted_at IS NULL `, [`%${name}%`])
+            const executer = conn || getDB()
+            const [resultes] = await executer.query(`SELECT * FROM products WHERE p_name LIKE ? AND deleted_at IS NULL `, [`%${name}%`])
             return resultes
         }catch(error){
             throw error
