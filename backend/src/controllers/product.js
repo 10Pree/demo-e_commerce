@@ -348,52 +348,40 @@ class controllerProduct {
     }
 
     static async Delete(req, res) {
+        const conn = await getConnection()
         try {
+            await conn.beginTransaction()
             const productId = req.params.id
-            const checkProduct = await moduleProduct.read(productId)
+            const checkProduct = await moduleProduct.read(productId, conn)
             if (checkProduct.length === 0 || checkProduct[0].deleted_at !== null) {
                 return res.status(401).json({
                     message: "Product Not Found"
                 })
             }
 
-            // const rows = await modlesImages.getImgByIdProduct(productId)
-
-            // for(const img of rows){
-            //     const fullPath = path.join(__dirname,'../../',img.image_url)
-            //     if(fs.existsSync(fullPath)){
-            //         fs.unlinkSync(fullPath)
-            //     }
-            // }
-
-
-            // await modlesImages.deleteImgByIdProduct(productId)
-
-            // await modelsCategories.delete(productId)
-
-
             const userId = req.user.userId
-            await CreateLogProducts(productId, userId, "Delete.Product")
+            await CreateLogProducts(productId, userId, "Delete.Product", conn)
 
-            await moduleProduct.softDelete(productId)
-
+            await moduleProduct.softDelete(productId, conn)
+            
+            await conn.commit()
             return res.status(200).json({
                 message: "Delete Product Successful!!"
-                // data: product
             })
-
         } catch (error) {
             console.log("Message Error:", error.message);
             return res.status(500).json({
                 message: "Server Error",
             });
+            await conn.rollback()
+        } finally {
+            conn.release()
         }
     }
 
     static async searchProduct(req, res) {
         try {
             const { name } = req.query
-            console.log(name)
             if (!name) return res.status(400).json({ message: "กรุณาใส่คำค้นหา" })
             const search = await moduleProduct.searchProduct(name)
 
