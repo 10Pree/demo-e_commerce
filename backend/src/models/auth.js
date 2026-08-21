@@ -63,10 +63,10 @@ class modelsOAuth {
         }
     }
 
-    static async mapRoleUser(data) {
+    static async mapRoleUser(data, conn) {
         try {
-            const conn = await getDB()
-            const [results] = await conn.query('INSERT INTO map_roles SET ?', [data])
+            const executer = conn || getDB()
+            const [results] = await executer.query('INSERT INTO map_roles SET ?', [data])
             return results
         } catch (error) {
             throw error
