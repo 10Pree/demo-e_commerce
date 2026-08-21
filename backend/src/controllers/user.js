@@ -1,17 +1,28 @@
 const modelsImagesUsers = require("../models/images_users");
 const modelsUser = require("../models/user");
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs/promises')
 const { CreateLogAction } = require("../services/logAction");
 const { hashPassword } = require("../services/password-service");
 const modelsOAuth = require("../models/auth");
+const { getConnection } = require("../config/db");
+const path_Users = path.join(__dirname, '../../uploads/users')
 
 class controllersUser {
   static async Create(req, res) {
+    const conn = await getConnection()
     try {
-
+      await conn.beginTransaction()
       const { username, password, email, phone, address, role } = req.body;
-      const file_images = req.files
+      const file_images = req.files.map(file => {
+        const filename = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname)
+        const url = `/uploads/users/${filename}`
+        return {
+          filename,
+          buffer: file.buffer,
+          url
+        }
+      })
       const hash_Password = await hashPassword(password);
       const userDate = {
         username,
@@ -21,37 +32,40 @@ class controllersUser {
         address,
       };
 
-      const user = await modelsUser.create(userDate);
+      const user = await modelsUser.create(userDate, conn);
 
 
       if (Array.isArray(file_images) && file_images.length > 0) {
         const imagsId = []
         for (const img of file_images) {
-          const url = `/uploads/users/${img.filename}`
-          const row = await modelsImagesUsers.create(url)
+          const row = await modelsImagesUsers.create(img.url, conn)
           imagsId.push(row.insertId)
         }
 
         const rows = imagsId.map(imgId => [user.insertId, imgId])
-        await modelsImagesUsers.createMap(rows)
+        await modelsImagesUsers.createMap(rows, conn)
       }
 
       if (user) {
         try {
           const data = { users_id: user.insertId, roles_id: role || 2 }
-          const map = await modelsOAuth.mapRoleUser(data)
+          const map = await modelsOAuth.mapRoleUser(data, conn)
         } catch (error) {
-          console.log(error)
+          throw new Error("Failed to map user and role: " + error.message)
         }
       }
       const actionUser = req.user.userId
       const newUserId = user.insertId
 
       try {
-        await CreateLogAction(newUserId, actionUser, "Create.User")
+        await CreateLogAction(newUserId, actionUser, "Create.User", conn)
       } catch (error) {
-        console.warn("Log failed:", error?.message || error);
+        throw new Error("Failed to create log action: " + error.message)
       }
+
+      await conn.commit()
+
+      await fs.writeFile(path.join(path_Users, file_images[0].filename), file_images[0].buffer)
 
       return res.status(201).json({
         message: "Create User Successful!!",
@@ -61,9 +75,12 @@ class controllersUser {
         return res.status(409).json({ message: "Duplicate entry (username or email already exists)" })
       }
       console.log("Message Error:", error);
+      await conn,rollback()
       return res.status(500).json({
         message: "Server Error",
       });
+    } finally {
+      conn.release()
     }
   }
 
