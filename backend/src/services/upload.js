@@ -8,17 +8,8 @@ const path_Customers = path.join(__dirname, '../../uploads/customers')
 
 const storageProducts = multer.memoryStorage();
 
-const storageUsers = multer.diskStorage({
-    destination: (req, File, cb) => {
-        cb(null, path_Users)
-    },
-    filename: (req, File, cb) => {
-        const ext = path.extname(File.originalname)
-        const name = Date.now() + "-" + Math.round(Math.random() * 1E9)
-        cb(null, name + ext)
-    }
+const storageUsers = multer.memoryStorage()
 
-})
 const storageCustomers = multer.diskStorage({
     destination: (req, File, cb) => {
         cb(null, path_Customers)
