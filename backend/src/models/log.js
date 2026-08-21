@@ -1,10 +1,10 @@
 const { getDB } = require("../config/db")
 
 class modelsLog {
-    static async createLogAction(data){
+    static async createLogAction(data, conn){
         try{
-            const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO log_action SET ?', [data])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('INSERT INTO log_action SET ?', [data])
             return resulte
         }catch(error){
             throw error
