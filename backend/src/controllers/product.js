@@ -299,7 +299,7 @@ class controllerProduct {
                         imgIds.push(image.insertId)
 
                         filesToWriteAfterCommit.push({
-                            fillPath: path.join(path_Products, filename),
+                            fullPath: path.join(path_Products, filename),
                             buffer: file.buffer
                         })
                     }
@@ -327,8 +327,8 @@ class controllerProduct {
                         if (error.code !== "ENOENT") console.log("ลบไฟล์เก่าไม่สำเร็จ:", filePath, error)
                     }
                 }
-                for (const { fillPath, buffer } of filesToWriteAfterCommit) {
-                    await fs.writeFile(fillPath, buffer)
+                for (const { fullPath, buffer } of filesToWriteAfterCommit) {
+                    await fs.writeFile(fullPath, buffer)
                 }
             } catch (fileError) {
                 console.log("File operation error after commit (DB already saved):", fileError)
