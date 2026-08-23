@@ -81,11 +81,11 @@ class modelsOAuth {
             throw error
         }
     }
-    static async updateMapRoleUser(userId, data) {
+    static async updateMapRoleUser(userId, data, conn) {
         try {
-            const conn = await getDB()
+            const executer = conn || getDB()
             console.log(userId, data)
-            const [results] = await conn.query('UPDATE map_roles SET ? WHERE users_id = ?', [data, userId])
+            const [results] = await executer.query('UPDATE map_roles SET ? WHERE users_id = ?', [data, userId])
             return results
         } catch (error) {
             throw error

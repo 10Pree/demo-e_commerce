@@ -54,10 +54,10 @@ class modlesImagesUsers {
             throw error
         }
     }
-    static async getImgByIdUsers(id) {
+    static async getImgByIdUsers(id, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query(`
+            const exeuter = conn || getDB()
+            const [resulte] = await exeuter.query(`
                 SELECT i.*
                 FROM images_users i
                 JOIN map_image_users mi ON mi.images_id = i.id
@@ -87,10 +87,10 @@ class modlesImagesUsers {
             throw error
         }
     }
-    static async deleteImgByIdUsers(id) {
+    static async deleteImgByIdUsers(id, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query(`
+            const executer = conn || getDB()
+            const [resulte] = await executer.query(`
                 DELETE i
                 FROM images_users i
                 JOIN map_image_users mi ON mi.images_id = i.id

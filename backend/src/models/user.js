@@ -83,10 +83,10 @@ class modelsUser {
         }
     }
 
-    static async update(userId, userData) {
+    static async update(userId, userData, conn) {
         try{
-            const conn = await getDB()
-            const [results] = await conn.query('UPDATE users SET ? WHERE id = ?', [userData, userId])
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE users SET ? WHERE id = ?', [userData, userId])
             return results
         }catch(error){
             console.log("Message Error:", error)
