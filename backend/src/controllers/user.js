@@ -14,7 +14,8 @@ class controllersUser {
     try {
       await conn.beginTransaction()
       const { username, password, email, phone, address, role } = req.body;
-      const file_images = req.files.map(file => {
+      const newFiles = req.files || [];
+      const file_images = newFiles.map(file => {
         const filename = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname)
         const url = `/uploads/users/${filename}`
         return {
@@ -75,7 +76,7 @@ class controllersUser {
         return res.status(409).json({ message: "Duplicate entry (username or email already exists)" })
       }
       console.log("Message Error:", error);
-      await conn,rollback()
+      await conn, rollback()
       return res.status(500).json({
         message: "Server Error",
       });
@@ -127,14 +128,25 @@ class controllersUser {
   }
 
   static async Update(req, res) {
+    const conn = await getConnection()
+    const filesToDeleteAfterCommit = []   // เก็บ path ไฟล์เก่าที่รอลบ
+    const filesToWriteAfterCommit = []    // เก็บ buffer ไฟล์ใหม่ที่รอเขียน
     try {
+      await conn.beginTransaction()
       const userId = req.params.id
-      const file_Images = req.files
-      const user = await modelsUser.read(userId);
+      const newFiles = req.files || []
+      const file_Images = newFiles.map(file => {
+        const filename = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname)
+        const url = `/uploads/users/${filename}`
+        return {
+          filename,
+          buffer: file.buffer,
+          url
+        }
+      })
+      const user = await modelsUser.read(userId, conn);
       if (user.length === 0) {
-        return res.status(404).json({
-          message: "User Not Found",
-        });
+        throw new Error("User Not Found");
       }
       const { username, email, phone, address, role } = req.body;
       const userData = {};
@@ -146,53 +158,72 @@ class controllersUser {
 
       if (Array.isArray(file_Images) && file_Images.length > 0) {
         const imagsId = []
-        const image = await modelsImagesUsers.getImgByIdUsers(userId)
+        const image = await modelsImagesUsers.getImgByIdUsers(userId, conn)
 
         for (const img of image) {
           const fullPath = path.join(__dirname, '../../', img.image_url)
-
-          if (fs.existsSync(fullPath)) {
-            fs.unlinkSync(fullPath)
-          }
+          filesToDeleteAfterCommit.push(fullPath)
         }
-        await modelsImagesUsers.deleteImgByIdUsers(userId)
+        await modelsImagesUsers.deleteImgByIdUsers(userId, conn)
         for (const img of file_Images) {
           const url = `/uploads/users/${img.filename}`
-          const row = await modelsImagesUsers.create(url)
+          const row = await modelsImagesUsers.create(url, conn)
           imagsId.push(row.insertId)
+          filesToWriteAfterCommit.push({
+            fullPath: path.join(path_Users, img.filename),
+            buffer: img.buffer
+          })
         }
 
         const rows = imagsId.map(imgId => [userId, imgId])
-        await modelsImagesUsers.createMap(rows)
+        await modelsImagesUsers.createMap(rows, conn)
       }
 
       let newData = null
       if (Object.keys(userData).length > 0) {
-        newData = await modelsUser.update(userId, userData);
+        newData = await modelsUser.update(userId, userData, conn);
       }
 
       if (role) {
         const data = { roles_id: role }
         console.log(userId, data)
-        const map = await modelsOAuth.updateMapRoleUser(userId, data)
+        const map = await modelsOAuth.updateMapRoleUser(userId, data, conn)
       }
 
       try {
-        await CreateLogAction(userId, req.user.userId, "Update.User")
+        await CreateLogAction(userId, req.user.userId, "Update.User", conn)
       } catch (error) {
-        console.warn("Log failed:", error?.message || error)
+        throw new Error("Failed to create log action: " + error.message)
       }
 
+      await conn.commit()
+      for (const img of filesToDeleteAfterCommit) {
+        try {
+          await fs.unlink(img)
+        } catch (error) {
+          if (error.code !== "ENOENT") console.log("ลบไฟล์เก่าไม่สำเร็จ:", img, error)
+        }
+      }
+      for (const { fullPath, buffer } of filesToWriteAfterCommit) {
+        try {
+          await fs.writeFile(fullPath, buffer)
+        } catch (error) {
+          console.log("เขียนไฟล์ใหม่ไม่สำเร็จ:", fullPath, error)
+        }
+      }
       return res.status(200).json({
         message: "Update Successful!!",
         data: newData,
       });
     } catch (error) {
+      await conn.rollback()
       if (error?.code === 'ER_DUP_ENTRY') {
         return res.status(409).json({ message: "Duplicate entry (username or email already exists)" });
       }
       console.log("Message Error:", error);
       return res.status(500).json({ message: "Server Error" });
+    } finally {
+      conn.release()
     }
   }
 
@@ -244,7 +275,7 @@ class controllersUser {
       await CreateLogAction(DataUserId, actionUser, "Delete.User")
 
       await modelsUser.softdelete(userId)
-      
+
       return res.status(204).json({
         message: "Delete Successful!!"
       })
