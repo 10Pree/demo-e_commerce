@@ -263,27 +263,33 @@ class controllersUser {
   }
 
   static async Delete(req, res) {
+    const conn = await getConnection()
     try {
+      await conn.beginTransaction()
       const userId = req.params.id
-      const rows = await modelsUser.read(userId)
+      const rows = await modelsUser.read(userId, conn)
       if (rows.length === 0) {
         throw new Error("User Not Found")
       }
 
       const actionUser = req.user.userId
       const DataUserId = userId
-      await CreateLogAction(DataUserId, actionUser, "Delete.User")
+      await CreateLogAction(DataUserId, actionUser, "Delete.User", conn)
 
-      await modelsUser.softdelete(userId)
+      await modelsUser.softdelete(userId, conn)
+      await conn.commit()
 
-      return res.status(204).json({
+      return res.status(200).json({
         message: "Delete Successful!!"
       })
     } catch (error) {
       console.log("Message Error", error);
+      await conn.rollback()
       return res.status(500).json({
         message: "Server Error",
       });
+    } finally {
+      conn.release()
     }
   }
 
