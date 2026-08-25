@@ -126,11 +126,11 @@ class modelsUser {
             throw error
         }
     }
-        static async softdelete(userId) {
+        static async softdelete(userId, conn) {
         try{
             const timestamp = Date.now()
-            const conn = await getDB()
-            const [results] = await conn.query(`UPDATE users SET deleted_at = Now(), email = CONCAT('deleted_', ?, '_', email ), username = CONCAT('deleted_', ?, '_', username) WHERE id = ? `, [timestamp, timestamp, userId])
+            const executer = conn || getDB()
+            const [results] = await executer.query(`UPDATE users SET deleted_at = Now(), email = CONCAT('deleted_', ?, '_', email ), username = CONCAT('deleted_', ?, '_', username) WHERE id = ? `, [timestamp, timestamp, userId])
             return results
         }catch(error){
             console.log("Message Error:", error)
