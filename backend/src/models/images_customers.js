@@ -1,10 +1,10 @@
 const { getDB } = require("../config/db")
 
 class modlesImagesCustomers {
-    static async create(data) {
+    static async create(data, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO images_customers (image_url) VALUES (?)', [data])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('INSERT INTO images_customers (image_url) VALUES (?)', [data])
             return resulte
         } catch (error) {
             throw error
@@ -125,10 +125,10 @@ static async updateImgByIdCustomer(id, data) {
             throw error
         }
     }
-    static async createMapCustomer(customerId, imageId) {
+    static async createMapCustomer(customerId, imageId, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO map_images_customers  (customers_id, images_id) VALUES (?, ?)', [customerId, imageId])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('INSERT INTO map_images_customers  (customers_id, images_id) VALUES (?, ?)', [customerId, imageId])
             return resulte
         } catch (error) {
             throw error

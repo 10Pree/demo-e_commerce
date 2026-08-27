@@ -1,10 +1,10 @@
 const { getDB } = require("../config/db")
 
 class modelsCustomers {
-    static async create(data) {
+    static async create(data, conn) {
         try {
-            const conn = await getDB()
-            const [results] = await conn.query('INSERT INTO customers SET ?', [data])
+            const executer = conn || getDB()
+            const [results] = await executer.query('INSERT INTO customers SET ?', [data])
             return results
         } catch (err) {
             throw err
