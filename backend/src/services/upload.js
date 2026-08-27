@@ -10,17 +10,7 @@ const storageProducts = multer.memoryStorage();
 
 const storageUsers = multer.memoryStorage()
 
-const storageCustomers = multer.diskStorage({
-    destination: (req, File, cb) => {
-        cb(null, path_Customers)
-    },
-    filename: (req, File, cb) => {
-        const ext = path.extname(File.originalname)
-        const name = Date.now() + "-" + Math.round(Math.random() * 1E9)
-        cb(null, name + ext)
-    }
-
-})
+const storageCustomers = multer.memoryStorage()
 
 const uploadProduct = multer({
     storage: storageProducts
