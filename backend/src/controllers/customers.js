@@ -2,14 +2,27 @@ const modelsOAuth = require("../models/auth");
 const modelsCustomers = require("../models/customers");
 const modlesImagesCustomers = require("../models/images_customers");
 const { hashPassword } = require("../services/password-service");
+const { getConnection } = require("../config/db");
+const fs = require('fs/promises')
+const path = require('path')
+const path_Customers = path.join(__dirname, '../../uploads/customers')
 
 class controllerCustomers {
     static async Create(req, res) {
+        const conn = await getConnection()
         try {
+            await conn.beginTransaction()
             const { username, password, email, phone, address, role } = req.body;
-            const file_Image = req.file
-            // console.log('Body:', req.body); 
-            // console.log('File:', req.file); 
+            const newFiles = req.files || []
+            const file_Image = newFiles.map(file => {
+                const filename = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname)
+                const url = `/uploads/customers/${filename}`
+                return {
+                    filename,
+                    buffer: file.buffer,
+                    url
+                }
+            })
             const hash_Password = await hashPassword(password)
             const data = {
                 username,
@@ -18,18 +31,28 @@ class controllerCustomers {
                 phone,
                 address
             }
-            const customer = await modelsCustomers.create(data)
+            const customer = await modelsCustomers.create(data, conn)
 
-            if (file_Image && customer) {
-                const url = `/uploads/users/${customer.filename}`
-                const image = await modlesImagesCustomers.create(url)
-
-                await modlesImagesCustomers.createMapCustomer([customer.insertId, image.insertId])
+            if (Array.isArray(file_Image) && file_Image.length > 0) {
+                const image = await modlesImagesCustomers.create(file_Image[0].url, conn)
+                await modlesImagesCustomers.createMapCustomer(customer.insertId, image.insertId, conn)
+                console.log("image:", image, "customer_id:", customer.insertId, "image_id:", image.insertId )
             }
 
             if (customer) {
-                await modelsOAuth.mapRoleCustomer({ customers_id: customer.insertId, roles_id: role || 1 })
+                await modelsOAuth.mapRoleCustomer({ customers_id: customer.insertId, roles_id: role || 1 }, conn)
             }
+
+            await conn.commit()
+
+            if(Array.isArray(file_Image) && file_Image.length > 0){
+                try {
+                    await fs.writeFile(path.join(path_Customers, file_Image[0].filename), file_Image[0].buffer)
+                } catch(fileError) {
+                    console.log("File write error after commit (DB already saved):", fileError)
+                }
+            }
+
             return res.status(201).json({
                 message: "Create customer Successful!!"
             })
@@ -38,9 +61,12 @@ class controllerCustomers {
                 return res.status(409).json({ message: "Duplicate entry (username or email already exists)" })
             }
             console.log("Message Error:", err);
+            await conn.rollback()
             return res.status(500).json({
                 message: "Server Error",
             });
+        } finally {
+            conn.release()
         }
     }
     static async GetCustomers(req, res) {
