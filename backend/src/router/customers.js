@@ -4,11 +4,11 @@ const controllerCustomers = require('../controllers/customers')
 const Authorize = require('../middlewares/oAuth')
 const router = express.Router()
 
-router.post('/customer', uploadCustomers.single('image',), controllerCustomers.Create)
+router.post('/customer', uploadCustomers.array('images', 1), controllerCustomers.Create)
 router.get('/customers', controllerCustomers.GetCustomers)
 router.get('/customer/:id', controllerCustomers.GetCustomerById)
-router.put('/customer/:id', uploadCustomers.single('image') , controllerCustomers.UpdateCustomer)
-router.put('/customer/updatepassword/:id', uploadCustomers.single('image'), controllerCustomers.UpdatePassword)
+router.put('/customer/:id', uploadCustomers.single('images') , controllerCustomers.UpdateCustomer)
+router.put('/customer/updatepassword/:id', uploadCustomers.single('images'), controllerCustomers.UpdatePassword)
 router.delete('/customer/:id', controllerCustomers.softdelete)
 
 module.exports = router
