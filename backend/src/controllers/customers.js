@@ -104,56 +104,90 @@ class controllerCustomers {
         }
     }
     static async UpdateCustomer(req, res) {
+        const conn = await getConnection()
+        const filesToDeleteAfterCommit = []
+        const filesToWriteAfterCommit = []
         try {
+            await conn.beginTransaction()
             const customerId = req.params.id
             const { username, email, phone, address } = req.body
-            const file_image = req.file
-            // console.log("id:", customerId)
-            // console.log("image:", file_image)
+            const new_files = req.files || []
+            const file_image = new_files.map(file => {
+                const filename = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname)
+                const url = `/uploads/customers/${filename}`
+                return {
+                    filename,
+                    buffer: file.buffer,
+                    url
+                }
+            })
             if (!customerId) {
-                return res.status(400).json({
-                    message: "Customer ID Not Found"
-                })
+                throw new Error('Customer ID Not Found')
             }
             const newData = {}
-            const checkCustomer = await modelsCustomers.getCustomerById(customerId)
+            const checkCustomer = await modelsCustomers.getCustomerById(customerId, conn)
             if (checkCustomer.length <= 0) {
-                return res.status(404).json({
-                    message: "Customer ID Not Found"
-                })
+                throw new Error('Customer Not Found')
             }
 
             if (username) newData.username = username
             if (email) newData.email = email
             if (phone) newData.phone = phone
             if (address) newData.address = address
-            // console.log("DATA:", newData)
             if (Object.keys(newData).length > 0) {
-                const newCustomer = await modelsCustomers.update(customerId, newData)
+                await modelsCustomers.update(customerId, newData, conn)
             }
-            if (file_image) {
-                const url = `/uploads/customers/${file_image.filename}`
-                const rowImg = await modlesImagesCustomers.getImgByIdCustomer(customerId)
-                // console.log(rowImg)
-                if (rowImg.length > 0) {
-                    await modlesImagesCustomers.deleteByMapId(customerId)
-                    await modlesImagesCustomers.delete(rowImg[0].id)
+            if (Array.isArray(file_image) && file_image.length > 0) {
+                const images = []
+                const rowImg = await modlesImagesCustomers.getImgByIdCustomer(customerId, conn)
+
+                for(const img of rowImg){
+                    const full_Path = path.join(__dirname, '../../', img.image_url)
+                    filesToDeleteAfterCommit.push(full_Path)
                 }
-                const image = await modlesImagesCustomers.create(url)
-                const map = await modlesImagesCustomers.createMapCustomer(customerId, image.insertId)
+                await modlesImagesCustomers.deleteImgByIdCustomer(customerId, conn)
+                for(const img of file_image){
+                    const url = `/uploads/customers/${img.filename}`
+                    const image = await modlesImagesCustomers.create(url, conn)
+                    images.push(image.insertId)
+                    filesToWriteAfterCommit.push({
+                        fullPath: path.join(path_Customers, img.filename),
+                        buffer: img.buffer
+                    })
+                }
+
+                const rowMapId = images.map(imageId => [customerId, imageId])
+                await modlesImagesCustomers.createMapCustomer(rowMapId, conn)
             }
-            // console.log(newData)
 
+            await conn.commit()
 
+            for(const img of filesToDeleteAfterCommit){
+                try{
+                    await fs.unlink(img)
+                }catch(fileError){
+                    if (error.code !== "ENOENT") console.log("ลบไฟล์เก่าไม่สำเร็จ:", img, error)
+                }
+            }
+            for(const { fullPath, buffer } of filesToWriteAfterCommit){
+                try{
+                    await fs.writeFile(fullPath, buffer)
+                }catch(fileError){
+                    console.log("File write error after commit (DB already saved):", fileError)
+                }
+            }
             return res.status(200).json({
                 message: "Update Data Customer Successful!!"
             })
 
         } catch (err) {
             console.log("Message Error:", err);
+            await conn.rollback()
             return res.status(500).json({
                 message: "Server Error",
             });
+        } finally {
+            conn.release()
         }
     }
     static async UpdatePassword(req, res) {
