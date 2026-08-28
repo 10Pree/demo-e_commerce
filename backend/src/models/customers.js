@@ -19,10 +19,10 @@ class modelsCustomers {
             throw err
         }
     }
-    static async getCustomerById(id){
+    static async getCustomerById(id, conn){
         try{
-            const conn = await getDB()
-            const [results] = await conn.query(`
+            const executer = conn || getDB()
+            const [results] = await executer.query(`
                 SELECT c.username, c.email, c.phone, c.address, ic.id AS img_id, ic.image_url, mrc.roles_id
                 FROM customers c 
                 LEFT JOIN map_images_customers mic ON c.id = mic.customers_id
@@ -43,10 +43,10 @@ class modelsCustomers {
             throw err
         }
     }
-    static async update(id, newData){
+    static async update(id, newData, conn){
         try{
-            const conn  = await getDB()
-            const [results] = await conn.query('UPDATE customers SET ? WHERE id = ?',[newData, id] )
+            const executer  = conn || getDB()
+            const [results] = await executer.query('UPDATE customers SET ? WHERE id = ?',[newData, id] )
         }catch(err){
             throw err
         }

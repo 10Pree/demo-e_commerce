@@ -54,10 +54,10 @@ class modlesImagesCustomers {
             throw error
         }
     }
-    static async getImgByIdCustomer(id) {
+    static async getImgByIdCustomer(id, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query(`
+            const exetuer = conn || getDB()
+            const [resulte] = await exetuer.query(`
                 SELECT ic.*
                 FROM images_customers ic
                 JOIN map_images_customers mic ON mic.images_id = ic.id
@@ -102,10 +102,10 @@ static async updateImgByIdCustomer(id, data) {
             throw error
         }
     }
-    static async deleteImgByIdCustomer(id) {
+    static async deleteImgByIdCustomer(id, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query(`
+            const executer = await getDB()
+            const [resulte] = await executer.query(`
                 DELETE ic
                 FROM images_customers ic
                 JOIN map_images_customers mi ON mi.images_id = ic.id
@@ -116,19 +116,19 @@ static async updateImgByIdCustomer(id, data) {
             throw error
         }
     }
-    static async deleteByMapId(id) {
+    static async deleteByMapId(id, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('DELETE FROM map_images_customers WHERE customers_id = ?', id)
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('DELETE FROM map_images_customers WHERE customers_id = ?', id)
             return resulte
         } catch (error) {
             throw error
         }
     }
-    static async createMapCustomer(customerId, imageId, conn) {
+    static async createMapCustomer(data, conn) {
         try {
             const executer = conn || getDB()
-            const [resulte] = await executer.query('INSERT INTO map_images_customers  (customers_id, images_id) VALUES (?, ?)', [customerId, imageId])
+            const [resulte] = await executer.query('INSERT INTO map_images_customers  (customers_id, images_id) VALUES ?', [data])
             return resulte
         } catch (error) {
             throw error
