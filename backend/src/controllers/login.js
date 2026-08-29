@@ -23,7 +23,7 @@ class controllersLogin {
                 })
             }
 
-            const verifyPW = await verifyPassword(password, user[0].password)
+            const verifyPW = await verifyPassword(user[0].password, password)
             if (!verifyPW) {
                 return res.status(401).json({
                     message: "Email and password are incorrect"
@@ -59,8 +59,7 @@ class controllersLogin {
         } catch (error) {
             console.log("Server Error", error)
             return res.status(500).json({
-                message: "Server Error",
-                error
+                message: "Server Error"
             })
         }
     }
