@@ -3,9 +3,10 @@ const modelsUser = require("../models/user");
 const path = require('path')
 const fs = require('fs/promises')
 const { CreateLogAction } = require("../services/logAction");
-const { hashPassword } = require("../services/password-service");
+const { hashPassword, verifyPassword } = require("../services/password-service");
 const modelsOAuth = require("../models/auth");
 const { getConnection } = require("../config/db");
+const { Types } = require("mysql2");
 const path_Users = path.join(__dirname, '../../uploads/users')
 
 class controllersUser {
@@ -228,37 +229,47 @@ class controllersUser {
   }
 
   static async UpdatePassword(req, res) {
+    const conn = await getConnection()
     try {
+      await conn.beginTransaction()
       const userId = req.params.id;
-      const newPassword = req.body.password || {};
-      const user = await modelsUser.read(userId)
-      if (user.Length === 0) {
-        return res.status(404).json({
-          message: "User Not Found",
-        });
+      const {currentPassword ,newPassword} = req.body
+      if(!newPassword || newPassword.length < 8 || typeof newPassword !== 'string'){
+        throw new Error("Password must be at least 8 characters")
       }
-      const rows = await modelsUser.getPassword(userId);
+      const user = await modelsUser.read(userId, conn)
+      if (user.length === 0) {
+        throw new Error("User Not Found")
+      }
+      const rows = await modelsUser.getPassword(userId, conn);
       if (rows.length === 0) {
-        return res.status(400).json({
-          message: "User Not Found",
-        });
+        throw new Error("Password Not Found")
       }
 
+      const isMatch = await  verifyPassword(rows[0].password, currentPassword)
+      if(!isMatch){
+        throw new Error("Password not match")
+      }
       const newHash = await hashPassword(newPassword);
-      await modelsUser.updatePassword(userId, newHash);
+      await modelsUser.updatePassword(userId, newHash, conn);
 
       const actionUser = req.user.userId
       const DataUserId = userId
 
-      await CreateLogAction(DataUserId, actionUser, "Update.User")
+      await CreateLogAction(DataUserId, actionUser, "Update.Password", conn)
+
+      await conn.commit()
       return res.status(200).json({
         message: "Update Password Successful!!",
       });
     } catch (error) {
       console.log("Message Error", error);
+      await conn.rollback()
       return res.status(500).json({
         message: "Server Error",
       });
+    } finally {
+      conn.release()
     }
   }
 
