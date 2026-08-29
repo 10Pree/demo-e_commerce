@@ -6,8 +6,8 @@ const hashPassword = async (password) => {
     return hash
 }
 
-const verifyPassword = async(password, hashPassword) =>{
-    const verify = await argon2.verify(hashPassword, password)
+const verifyPassword = async(hashedPassword, plainPassword) =>{
+    const verify = await argon2.verify(hashedPassword, plainPassword)
     return verify
 }
 
