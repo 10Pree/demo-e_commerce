@@ -94,10 +94,10 @@ class modelsUser {
         }
     }
 
-    static async updatePassword(userId, hashPassword){
+    static async updatePassword(userId, hashPassword, conn){
         try{
-            const conn = await getDB()
-            const [results] = await conn.query('UPDATE users SET password = ? WHERE id = ?', [hashPassword, userId])
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE users SET password = ? WHERE id = ?', [hashPassword, userId])
             return results
         }catch(error){
             console.log("Message Error:", error)
@@ -105,10 +105,10 @@ class modelsUser {
         }
     }
 
-    static async getPassword(userId) {
+    static async getPassword(userId, conn) {
         try{
-            const conn = await getDB()
-            const [results] = await conn.query('SELECT password FROM users WHERE id = ? AND deleted_at IS NULL', userId)
+            const executer = conn || getDB()
+            const [results] = await executer.query('SELECT password FROM users WHERE id = ? AND deleted_at IS NULL', userId)
             return results
         }catch(error){
             console.log("Message Error:", error)
