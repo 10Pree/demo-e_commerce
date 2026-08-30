@@ -43,18 +43,29 @@ class modelsCustomers {
             throw err
         }
     }
+
+    static async getPassword(userId, conn){
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('SELECT password FROM customers WHERE id = ? AND deleted_at IS NULL', [userId])
+            return results
+        }catch (err) {
+            throw err
+        }
+    }
     static async update(id, newData, conn){
         try{
             const executer  = conn || getDB()
             const [results] = await executer.query('UPDATE customers SET ? WHERE id = ?',[newData, id] )
+            return results
         }catch(err){
             throw err
         }
     }
-    static async updatePassword(userid,newPassword){
+    static async updatePassword(userid,newPassword, conn){
         try{
-            const conn = await getDB()
-            const [results] = await conn.query('UPDATE customers SET password = ? WHERE id = ?', [newPassword , userid])
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE customers SET password = ? WHERE id = ?', [newPassword , userid])
             return results
         }catch(err){
             throw err
