@@ -1,7 +1,7 @@
 const modelsOAuth = require("../models/auth");
 const modelsCustomers = require("../models/customers");
 const modlesImagesCustomers = require("../models/images_customers");
-const { hashPassword } = require("../services/password-service");
+const { hashPassword, verifyPassword } = require("../services/password-service");
 const { getConnection } = require("../config/db");
 const fs = require('fs/promises')
 const path = require('path')
@@ -191,24 +191,34 @@ class controllerCustomers {
         }
     }
     static async UpdatePassword(req, res) {
+        const conn = await getConnection()
         try {
+            await conn.beginTransaction()
             const userId = req.params.id 
-            const newPassword = req.body.password
-            const row = await modelsCustomers.getCustomerById(userId)
+            const { currentPassword ,newPassword} = req.body
 
-            if(!userId && !newPassword){
-                return res.status(400).json({
-                    message: "Missing required fields"
-                })
+            if(!newPassword || newPassword.length < 8 || typeof newPassword !== 'string'){ 
+                throw new Error("Password must be at least 8 characters") 
             }
-            if(!row){
-                return res.status(401).json({
-                    message: "customer Not Found"
-                })
+
+            if(!userId){
+                throw new Error("Customer ID Not Found")
+            }
+
+            const row = await modelsCustomers.getPassword(userId, conn)
+            if(row.length === 0){
+                throw new Error("Customer Not Found")
+            }
+
+            const isMatch = await verifyPassword(row[0].password, currentPassword)
+            if(!isMatch){
+                throw new Error("Password not match")
             }
             
             const newHash = await hashPassword(String(newPassword))
-            await modelsCustomers.updatePassword(userId, newHash)
+            await modelsCustomers.updatePassword(userId, newHash, conn)
+
+            await conn.commit()
 
             return res.status(200).json({
                 message: "Update Customer Successful!!"
@@ -216,9 +226,12 @@ class controllerCustomers {
 
         } catch (err) {
             console.log("Message Error:", err);
+            await conn.rollback()
             return res.status(500).json({
                 message: "Server Error",
             });
+        } finally {
+            conn.release()
         }
     }
     static async deleted(req, res) {
