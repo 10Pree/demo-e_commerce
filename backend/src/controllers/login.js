@@ -66,7 +66,6 @@ class controllersLogin {
     static async LoginCustomer(req, res) {
         try {
             const { email, password } = req.body
-            // console.log(email,password)
 
             if (!email || !password) {
                 return res.status(401).json({
@@ -81,7 +80,7 @@ class controllersLogin {
                 })
             }
 
-            const rowPassword = await verifyPassword(password, row[0].password)
+            const rowPassword = await verifyPassword(row[0].password, password)
             if(!rowPassword){
                 return res.status(401).json({
                     message: "Email and password are incorrect"
