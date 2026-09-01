@@ -10,30 +10,30 @@ class moduleOrders {
             throw error
         }
     }
-    static async createOrderItem(data) {
+    static async createOrderItem(data, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO order_items SET ?', [data])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('INSERT INTO order_items SET ?', [data])
             return resulte
         } catch (error) {
             throw error
         }
     }
 
-    static async productItem(productId) {
+    static async productItem(productId, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('SELECT id, p_price FROM products WHERE id = ?', productId)
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('SELECT id, p_price, p_name FROM products WHERE id = ?', productId)
             return resulte
         } catch (error) {
             throw error
         }
     }
 
-    static async updateOrder(orderId) {
+    static async updateOrder(orderId, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('UPDATE orders SET total = ( SELECT COALESCE(SUM(line_total)) FROM order_items WHERE orders_id = ? ) WHERE id = ?', [orderId, orderId])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('UPDATE orders SET total = ( SELECT COALESCE(SUM(line_total)) FROM order_items WHERE orders_id = ? ) WHERE id = ?', [orderId, orderId])
             return resulte
         } catch (error) {
             throw error
