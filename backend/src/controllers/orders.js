@@ -2,15 +2,16 @@
 const modelsCategories = require("../models/categories")
 const moduleOrders = require("../models/orders")
 const modelsPayments = require("../models/payments")
+const { getConnection } = require("../config/db")
 
 class controllerOrders {
     static async createOrder(req, res) {
         try {
-            const { users_id, states, total } = req.body
+            const { customers_id, states, total } = req.body
 
             const data = {}
-            if (users_id) {
-                data.users_id = users_id
+            if (customers_id) {
+                data.customers_id = customers_id
             }
             if (states) {
                 data.states = states
@@ -33,33 +34,37 @@ class controllerOrders {
     }
 
     static async createOrderItem(req, res) {
+        const conn = await getConnection()
         try {
+            await conn.beginTransaction()
             const { orders_id, products_id, qty } = req.body
             if (!orders_id && !products_id) {
-                return res.status(404).json({
-                    message: "Not ProductId and OrderId"
-                })
+                throw new Error("orders_id and products_id are required")
             }
-            const product = await moduleOrders.productItem(products_id)
-            // console.log(product)
-            const price = product[0].p_price
+            const product = await moduleOrders.productItem(products_id, conn)
+            console.log(product)
+            if(product.length === 0){
+                throw new Error("Product Not Found")
+            }
 
+            const price = product[0].p_price
             const line_total = price * qty
 
             const data = {
                 orders_id,
                 products_id,
+                product_name: product[0].p_name,
                 price,
                 qty,
                 line_total
             }
-            // console.log(data)
+            console.log(data)
 
-            await moduleOrders.createOrderItem(data)
+            await moduleOrders.createOrderItem(data, conn)
 
-            await moduleOrders.updateOrder(orders_id)
+            await moduleOrders.updateOrder(orders_id, conn)
 
-
+            await conn.commit()
 
             return res.status(201).json({
                 message: "Create OrderItem  Successful!!"
@@ -67,9 +72,12 @@ class controllerOrders {
 
         } catch (error) {
             console.log("Message Error:", error)
+            await conn.rollback()
             return res.status(500).json({
                 message: "Server Error"
             })
+        } finally {
+            conn.release()
         }
     }
 
