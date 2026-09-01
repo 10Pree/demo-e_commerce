@@ -18,7 +18,6 @@ class controllerPayments {
                     message: "Orders Not Found"
                 })
             }
-            // console.log(product[0].total)
             const data = {
                 orders_id: orders_id,
                 amount: product[0].total
@@ -63,7 +62,6 @@ class controllerPayments {
             }
             await modelsPayments.updatePayment(orders_id)
 
-            // console.log(payment)
 
             await moduleOrders.updateOrderPaid(payment[0].orders_id)
 
