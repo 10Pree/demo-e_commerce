@@ -19,10 +19,10 @@ class modelsPayments {
             throw error
         }
     }
-    static async orderIdByPayment(orderId) {
+    static async orderIdByPayment(orderId, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('SELECT * FROM payments WHERE orders_id = ? ORDER BY id DESC LIMIT 1', [orderId])
+            const executer = conn || await getDB()
+            const [resulte] = await executer.query('SELECT * FROM payments WHERE orders_id = ? ORDER BY id DESC LIMIT 1', [orderId])
             return resulte
         } catch (error) {
             throw error

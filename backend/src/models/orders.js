@@ -60,10 +60,10 @@ class moduleOrders {
             throw error
         }
     }
-    static async getOrdersAndpayments() {
+    static async getOrdersAndpayments(conn) {
         try{
-            const conn = await getDB()
-            const [resulte] = await conn.query(`
+            const executer = conn || await getDB()
+            const [resulte] = await executer.query(`
                 SELECT 
                     (SELECT COUNT(*) FROM orders) AS total_orders,
                     (SELECT COUNT(*) FROM products) AS total_products,
