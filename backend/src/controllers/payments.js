@@ -1,37 +1,39 @@
 const moduleOrders = require("../models/orders")
 const modelsPayments = require("../models/payments")
+const { getConnection } = require("../config/db")
 
 class controllerPayments {
     static async CreatePayment(req, res) {
+        const conn = await getConnection()
         try {
+            await conn.beginTransaction()
             const { orders_id } = req.body
             if (!orders_id) {
-                return res.status(404).json({
-                    message: "orderID and amount Not Found"
-                })
+                throw new Error("orders_id is required")
             }
 
-
-            const product = await moduleOrders.orderItmeByID(orders_id)
+            const product = await moduleOrders.orderItmeByID(orders_id, conn)
             if (product.length === 0) {
-                return res.status(404).json({
-                    message: "Orders Not Found"
-                })
+                throw new Error("Orders Not Found")
             }
             const data = {
                 orders_id: orders_id,
                 amount: product[0].total
             }
-            await modelsPayments.createPayment(data)
+            await modelsPayments.createPayment(data, conn)
 
+            await conn.commit()
             return res.status(201).json({
-                message: "Create Payment Successful!!!"
+                message: "Create Payment Successful!!"
             })
         } catch (error) {
             console.log("Server Error:", error)
+            await conn.rollback()
             return res.status(500).json({
                 message: "Server Error"
             })
+        } finally {
+            conn.release()
         }
     }
 
