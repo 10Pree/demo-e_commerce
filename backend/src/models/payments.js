@@ -1,10 +1,10 @@
 const { getDB } = require("../config/db")
 
 class modelsPayments {
-    static async createPayment(data) {
+    static async createPayment(data, conn) {
         try {
-            const conn = await getDB()
-            const [resulte] = await conn.query('INSERT INTO payments SET ?', [data])
+            const executer = conn || getDB()
+            const [resulte] = await executer.query('INSERT INTO payments SET ?', [data])
             return resulte
         } catch (error) {
             throw error

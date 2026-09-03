@@ -1,10 +1,10 @@
 const { getDB } = require("../config/db");
 
 class moduleOrders {
-    static async createOrder(data) {
+    static async createOrder(data, conn) {
         try {
-            const conn = await getDB()
-            const resulte = await conn.query('INSERT INTO orders SET ?', [data])
+            const executer = conn || getDB()
+            const resulte = await executer.query('INSERT INTO orders SET ?', [data])
             return resulte
         } catch (error) {
             throw error
