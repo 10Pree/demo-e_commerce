@@ -42,7 +42,6 @@ class controllerOrders {
                 throw new Error("orders_id and products_id are required")
             }
             const product = await moduleOrders.productItem(products_id, conn)
-            console.log(product)
             if(product.length === 0){
                 throw new Error("Product Not Found")
             }
@@ -58,7 +57,7 @@ class controllerOrders {
                 qty,
                 line_total
             }
-            console.log(data)
+            // console.log(data)
 
             await moduleOrders.createOrderItem(data, conn)
 
@@ -71,6 +70,50 @@ class controllerOrders {
             })
 
         } catch (error) {
+            console.log("Message Error:", error)
+            await conn.rollback()
+            return res.status(500).json({
+                message: "Server Error"
+            })
+        } finally {
+            conn.release()
+        }
+    }
+
+    static async createOrderCheckout(req, res) {
+        const conn = await getConnection()
+        try{
+            await conn.beginTransaction()
+            const { product_id, customers_id, product_variants_id, qty } = req.body
+            if(!product_id && !customers_id && !product_variants_id && !qty){
+                throw new Error("product_id, customers_id, product_variants_id and qty are required")
+            }
+            const order = await moduleOrders.createOrder({customers_id: customers_id, status: "pending"}, conn)
+            const product = await moduleOrders.productItem(product_id, conn)
+            if(product.length === 0){
+                throw new Error("Product Not Found")
+            }
+            const dataOrdersItem = {
+                orders_id: order[0].insertId,
+                products_id: product_id,
+                product_name: product[0].p_name,
+                price: product[0].p_price,
+                qty: qty,
+                line_total: product[0].p_price * qty
+            }
+            await moduleOrders.createOrderItem(dataOrdersItem, conn)
+            await moduleOrders.updateOrder(order[0].insertId, conn)
+
+            const dataPayment = {
+                orders_id: order[0].insertId,
+                amount: product[0].p_price * qty
+            }
+            await modelsPayments.createPayment(dataPayment, conn)
+            await conn.commit()
+            return res.status(201).json({
+                message: "Create Order Checkout Successful!!"
+            })
+        }catch (error) {
             console.log("Message Error:", error)
             await conn.rollback()
             return res.status(500).json({
