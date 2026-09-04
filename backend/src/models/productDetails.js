@@ -71,6 +71,19 @@ class ModelsProductDetails {
         }
     }
 
+    static async updateProductVariantsStock(data, id, conn){
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE product_variants SET stock = stock - ? WHERE id = ? AND stock >= ?', [data, id, data])
+            if(results.affectedRows === 0){
+                throw new Error("Insufficient stock for the product variant")
+            }
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+
     static async updateMap_Variant_Attribute_Values(data, id, conn){
         try{
             const executer = conn || getDB()
