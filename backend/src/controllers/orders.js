@@ -2,6 +2,7 @@
 const modelsCategories = require("../models/categories")
 const moduleOrders = require("../models/orders")
 const modelsPayments = require("../models/payments")
+const modelsDetails = require("../models/productDetails")
 const { getConnection } = require("../config/db")
 
 class controllerOrders {
@@ -96,6 +97,7 @@ class controllerOrders {
             const dataOrdersItem = {
                 orders_id: order[0].insertId,
                 products_id: product_id,
+                product_variants_id: product_variants_id,
                 product_name: product[0].p_name,
                 price: product[0].p_price,
                 qty: qty,
@@ -103,6 +105,8 @@ class controllerOrders {
             }
             await moduleOrders.createOrderItem(dataOrdersItem, conn)
             await moduleOrders.updateOrder(order[0].insertId, conn)
+
+            await modelsDetails.updateProductVariantsStock(qty, product_variants_id, conn)
 
             const dataPayment = {
                 orders_id: order[0].insertId,
@@ -116,6 +120,17 @@ class controllerOrders {
         }catch (error) {
             console.log("Message Error:", error)
             await conn.rollback()
+
+            if(error.message === "Insufficient stock for the product variant"){
+                return res.status(400).json({
+                    message: "Insufficient stock"
+                })
+            }
+            if(error.message === "Product Not Found"){
+                return res.status(404).json({
+                    message: "Product Not Found"
+                })
+            }
             return res.status(500).json({
                 message: "Server Error"
             })
