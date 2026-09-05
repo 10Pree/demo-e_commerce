@@ -89,6 +89,25 @@ class moduleProduct {
         }
     }
 
+    static async updateStock(productId, stock, conn) {
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE products SET p_stock = ? WHERE id = ?', [stock, productId])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+    static async updatePrice(data, productId, conn){
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('UPDATE products SET p_price = ? WHERE id = ?', [data, productId])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+
     static async delete(productId, conn) {
         try {
             const executer = conn || getDB()
