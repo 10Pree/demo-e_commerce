@@ -77,10 +77,13 @@ class controllerProduct {
         const conn = await getConnection()
         try {
             await conn.beginTransaction()
-            const { p_name, p_price, p_details, p_stock, categories_ids, variants } = req.body || {};
+            const { p_name, p_details, categories_ids, variants } = req.body || {};
             const image_url = req.files
             const parsedCategories = categories_ids ? categories_ids.split(',').map(Number) : []
             const parsedVariants = variants ? JSON.parse(variants) : []
+            let stockAll = 0
+            let minPrice = null
+            let maxPrice = null
 
             const preparedImages = (Array.isArray(image_url) ? image_url : []).map(file => {
                 const filename = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname)
@@ -103,9 +106,7 @@ class controllerProduct {
                 throw new Error("กรุณาระบุชื่อสินค้า (p_name)");
             }
             if (p_name) data.p_name = p_name;
-            if (p_price) data.p_price = p_price;
             if (p_details) data.p_details = p_details;
-            if (p_stock) data.p_stock = p_stock;
 
             const product = await moduleProduct.create(data, conn);
 
@@ -123,7 +124,6 @@ class controllerProduct {
 
             if (Array.isArray(parsedCategories) && parsedCategories.length > 0) {
                 const rows = parsedCategories.map(catId => [product.insertId, catId])
-                // console.log(rows)
                 await modelsCategories.createMap(rows, conn)
             }
 
@@ -138,9 +138,13 @@ class controllerProduct {
                         const mapData = attribute_value_ids.map(attrValueID => ([variantId, attrValueID]))
                         await modelsProductDetails.CreateMap_Variant_Attribute_Values(mapData, conn)
                     }
-
+                    stockAll += stock
+                    if(minPrice === null || price < minPrice) minPrice = price
+                    if(maxPrice == null || price > maxPrice) maxPrice = price
                 }
             }
+            await moduleProduct.updatePrice(minPrice, product.insertId, conn)
+            await moduleProduct.updateStock(product.insertId, stockAll, conn)
 
             const userId = req.user.userId
             await CreateLogProducts(product.insertId, userId, "Create.Product", conn)
