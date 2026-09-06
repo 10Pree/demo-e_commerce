@@ -41,6 +41,16 @@ class ModelsProductDetails {
         }
     }
 
+    static async getProductVariantsStockAndPrice(productId, conn) {
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query('SELECT stock, price FROM product_variants WHERE products_id = ?', [productId])
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+
     static async updateProductAttributes(data, conn){
         try{
             const executer = conn || getDB()
@@ -61,10 +71,13 @@ class ModelsProductDetails {
         }
     }
 
-    static async updateProductVariants(data, id, conn){
+    static async updateProductVariants(data, id, products_id, conn){
         try{
             const executer = conn || getDB()
-            const [results] = await executer.query('UPDATE product_variants SET ? WHERE id = ?', [data, id])
+            const [results] = await executer.query('UPDATE product_variants SET ? WHERE id = ? AND products_id = ?', [data, id, products_id])
+            if(results.affectedRows === 0){
+                throw new Error(`Product Variant ID ${id} Not Found for Product ID ${products_id}`)
+            }
             return results
         }catch(error){
             throw error
