@@ -258,13 +258,13 @@ class controllerProduct {
             // รันเฉพาะตอนมีการแก้ไข variants เท่านั้น
             if (parsedVariants && Array.isArray(parsedVariants) && parsedVariants.length > 0) {
                 for (const variant of parsedVariants) {
-                    const { variant_id, sku, price, stock, attribute_value_ids } = variant
-                    let currentVariantId = variant_id
+                    const { vid, sku, price, stock, attribute_value_ids } = variant
+                    let currentVariantId = vid
 
-                    if (variant_id) {
-                        const productVariants = await modelsProductDetails.updateProductVariants({ sku, price, stock }, variant_id, productId, conn)
+                    if (vid) {
+                        const productVariants = await modelsProductDetails.updateProductVariants({ sku, price, stock }, vid, productId, conn)
 
-                        if (productVariants.affectedRows === 0) throw new Error(`Product Variant ID ${variant_id} Not Found`)
+                        if (productVariants.affectedRows === 0) throw new Error(`Product Variant ID ${vid} Not Found`)
                     } else {
                         const productVariants = await modelsProductDetails.createProductVariants({ products_id: productId, sku, price, stock }, conn)
                         currentVariantId = productVariants.insertId
