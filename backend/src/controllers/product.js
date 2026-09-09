@@ -95,6 +95,9 @@ class controllerProduct {
                 }
             })
 
+            if (!p_name) {
+                throw new Error("กรุณาระบุชื่อสินค้า (p_name)");
+            }
             const data = {};
             for (let i = 0; i < 3; i++) { // สุ่มใหม่ 3 ครั้ง
                 const code = genProductCode('PRD', 6);
@@ -102,9 +105,6 @@ class controllerProduct {
                 if (dup.length === 0) { data.p_code = code; break; }
             }
             if (!data.p_code) throw new Error("สร้างรหัสไม่สำเร็จ ลองใหม่อีกครั้ง");
-            if (!p_name) {
-                throw new Error("กรุณาระบุชื่อสินค้า (p_name)");
-            }
             if (p_name) data.p_name = p_name;
             if (p_details) data.p_details = p_details;
 
@@ -140,7 +140,7 @@ class controllerProduct {
                     }
                     stockAll += stock
                     if (minPrice === null || price < minPrice) minPrice = price
-                    if (maxPrice == null || price > maxPrice) maxPrice = price
+                    if (maxPrice === null || price > maxPrice) maxPrice = price
                 }
             }
             await modelsProduct.updatePrice(minPrice, product.insertId, conn)
@@ -151,8 +151,12 @@ class controllerProduct {
 
             await conn.commit()
 
-            for (const file of preparedImages) {
-                await fs.writeFile(path.join(path_Products, file.filename), file.buffer);
+            try {
+                for (const file of preparedImages) {
+                    await fs.writeFile(path.join(path_Products, file.filename), file.buffer);
+                }
+            } catch (error) {
+                console.log("File operation error after commit (DB already saved):", error)
             }
 
             return res.status(201).json({
