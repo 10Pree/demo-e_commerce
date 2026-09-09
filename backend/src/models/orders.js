@@ -62,7 +62,7 @@ class moduleOrders {
     }
     static async getOrdersAndpayments(conn) {
         try{
-            const executer = conn || await getDB()
+            const executer = conn ||  getDB()
             const [resulte] = await executer.query(`
                 SELECT 
                     (SELECT COUNT(*) FROM orders) AS total_orders,
