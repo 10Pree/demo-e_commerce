@@ -193,6 +193,7 @@ class controllerProduct {
             const productId = req.params.id
 
             const product = await modelsProduct.readById(productId)
+            const variants = await modelsProductDetails.getProductVariants(productId)
             if (product.length === 0) {
                 return res.status(401).json({
                     message: "Product Not Found"
@@ -200,7 +201,8 @@ class controllerProduct {
             }
             return res.status(200).json({
                 message: "Read Product Successful!!",
-                data: product
+                product,
+                variants
             })
         } catch (error) {
             console.log("Message Error:", error);
