@@ -51,6 +51,23 @@ class ModelsProductDetails {
         }
     }
 
+        static async getProductVariants(productId, conn) {
+        try{
+            const executer = conn || getDB()
+            const [results] = await executer.query(`
+                SELECT pv.*, pav.value AS attribute_value, pa.name AS attribute_name
+                FROM product_variants pv
+                LEFT JOIN map_variant_attribute_values mvav ON pv.id = mvav.product_variants_id
+                LEFT JOIN product_attribute_values pav ON mvav.product_attribute_values_id = pav.id
+                LEFT JOIN product_attributes pa ON pav.product_attributes_id = pa.id
+                WHERE pv.products_id = ?
+                `, productId)
+            return results
+        }catch(error){
+            throw error
+        }
+    }
+
     static async updateProductAttributes(data, conn){
         try{
             const executer = conn || getDB()
