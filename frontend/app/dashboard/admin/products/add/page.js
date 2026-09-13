@@ -12,11 +12,17 @@ export default function Page() {
     const [categories, setCategories] = useState([])
     const [productData, setProductData] = useState({
         p_name: "",
-        p_price: 0,
         p_details: "",
         p_stock: 0,
         images: [],
-        categories_ids: []
+        categories_ids: [],
+        variants: [
+            {
+                "sku":"IP20-RED-128",
+                "price":52000,
+                "stock":11,
+                "attribute_value_ids":[2,1]}
+        ]
     })
 
     // console.log("Products: ", productData)
@@ -56,6 +62,7 @@ export default function Page() {
         try {
             setProductData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }))
             seturlImagePreview(prev => prev.filter((_, i) => i !== index))
+            revokeObjectURL(urlImagePreview[index])
         } catch (err) {
             console.log("Message Error: ", err)
         }
@@ -93,7 +100,8 @@ export default function Page() {
                     <p className="text-sm text-gray-500 mt-1">ฟอร์มเพิ่มสินค้า</p>
                 </div>
             </div>
-            <div className="flex-row justify-center items-center gap-4 md:flex">
+            {/* <div className="flex-row justify-center items-center gap-4 md:flex"> */}
+            <div className="grid grid-cols-2 gap-4">
                 <div className="w-full h-full md:w-1/3  bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 ">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
@@ -101,8 +109,18 @@ export default function Page() {
                     </div>
                     <div>
                         <h1 className="text-[16px] font-bold">ราคา</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" onChange={(e) => setProductData({ ...productData, p_price: e.target.value })} />
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" onChange={(e) => setProductData({ ...productData, p_price: e.target.value })} />
                     </div>
+                    <div>
+                        <h1 className="text-[16px] font-bold">จำนวน</h1>
+                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" onChange={(e) => setProductData({ ...productData, p_stock: e.target.value })} />
+                    </div>
+                    <div>
+                        <h1 className="text-[16px] font-bold">รายละเอียด</h1>
+                        <textarea className="w-full h-40 border rounded-[8px] p-2" onChange={(e) => setProductData({ ...productData, p_details: e.target.value })}></textarea>
+                    </div>
+                </div>
+                <div className="w-full h-full md:w-1/3  bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 ">
                     <div>
                         <h1 className="text-[16px] font-bold">ประเภท</h1>
                         <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-1">
@@ -126,17 +144,34 @@ export default function Page() {
                             ))}
                         </div>
                     </div>
+                </div>
+                <div className="w-full h-full md:w-1/3  bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 ">
                     <div>
-                        <h1 className="text-[16px] font-bold">จำนวน</h1>
-                        <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" onChange={(e) => setProductData({ ...productData, p_stock: e.target.value })} />
-                    </div>
-                    <div>
-                        <h1 className="text-[16px] font-bold">รายละเอียด</h1>
-                        <textarea className="w-full h-40 border rounded-[8px] p-2" onChange={(e) => setProductData({ ...productData, p_details: e.target.value })}></textarea>
+                        <h1 className="text-[16px] font-bold">รูปแบบสินค้า</h1>
+                        <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-1">
+                            {categories.map(t => (
+                                <label key={t.id} className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        value={t.id}
+                                        checked={productData.categories_ids.includes(t.id)}
+                                        onChange={(e) => {
+                                            const id = t.id
+                                            if (e.target.checked) {
+                                                setProductData({ ...productData, categories_ids: [...productData.categories_ids, id] })
+                                            } else {
+                                                setProductData({ ...productData, categories_ids: productData.categories_ids.filter(c => c !== id) })
+                                            }
+                                        }}
+                                    />
+                                    {t.name}
+                                </label>
+                            ))}
+                        </div>
                     </div>
                 </div>
-                <div className="flex justify-center items-center m-8 md:m-0">
-                    <div className="w-fit h-fit bg-[#F3F4F6]  rounded-2xl shadow-2xl p-4 flex flex-col justify-center gap-2">
+                <div className="w-full h-full md:w-1/3  bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 ">
+                    <div className="flex flex-col">
                         <h1 className="text-[16px] font-bold">อัพโหลด</h1>
                         <div className="flex justify-start items-center">
                             <label className="cursor-pointer shadow-2xl w-fit h-fit bg-[#1E3A8A] rounded-[8px] p-3">
@@ -144,7 +179,7 @@ export default function Page() {
                             </label>
                         </div>
                         <span>รูป</span>
-                        <div className="w-[300px] h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
+                        <div className="w-full h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
                             {
                                 urlImagePreview.length > 0 ? urlImagePreview.map((src, index) =>
                                     <div key={index} className="relative w-[150px] h-[150px] flex-shrink-0">
