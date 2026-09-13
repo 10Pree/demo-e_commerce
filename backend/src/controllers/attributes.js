@@ -1,8 +1,8 @@
 const modelsProductAttributes = require("../models/attributes")
 class controllerAttributes {
-    static async getAttributes(req, res) {
+    static async getProductAttributesAndValues(req, res) {
         try{
-            const attributes = await modelsProductAttributes.getProductAttributes()
+            const attributes = await modelsProductAttributes.getProductAttributesAndValues()
             if(attributes.length === 0){
                 return res.status(404).json({
                     message: "Attributes Not Found"
