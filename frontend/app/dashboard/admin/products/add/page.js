@@ -18,10 +18,11 @@ export default function Page() {
         categories_ids: [],
         variants: [
             {
-                "sku":"IP20-RED-128",
-                "price":52000,
-                "stock":11,
-                "attribute_value_ids":[2,1]}
+                "sku": "IP20-RED-128",
+                "price": 52000,
+                "stock": 11,
+                "attribute_value_ids": [2, 1]
+            }
         ]
     })
 
@@ -101,7 +102,7 @@ export default function Page() {
                 </div>
             </div>
             {/* <div className="flex-row justify-center items-center gap-4 md:flex"> */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col md:flex-row">
                 <div className="w-full h-full md:w-1/3  bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 ">
                     <div>
                         <h1 className="text-[16px] font-bold">ชื่อ</h1>
@@ -148,25 +149,41 @@ export default function Page() {
                 <div className="w-full h-full md:w-1/3  bg-[#F3F4F6] rounded-2xl shadow-2xl p-4 ">
                     <div>
                         <h1 className="text-[16px] font-bold">รูปแบบสินค้า</h1>
-                        <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-1">
-                            {categories.map(t => (
-                                <label key={t.id} className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        value={t.id}
-                                        checked={productData.categories_ids.includes(t.id)}
-                                        onChange={(e) => {
-                                            const id = t.id
-                                            if (e.target.checked) {
-                                                setProductData({ ...productData, categories_ids: [...productData.categories_ids, id] })
-                                            } else {
-                                                setProductData({ ...productData, categories_ids: productData.categories_ids.filter(c => c !== id) })
-                                            }
-                                        }}
-                                    />
-                                    {t.name}
-                                </label>
-                            ))}
+                        <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
+                            <div className="flex flex-col gap-1">
+                                <h2 className="text-[16px] font-bold">สี</h2>
+                                <div className="flex gap-2" >
+                                    <div className="flex gap-2">
+                                        <span>แดง</span>
+                                        <input type="radio" name="coler" value="แดง" />
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <span>ดำ</span>
+                                        <input type="radio" name="coler" value="ดำ" />
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <span>ขาว</span>
+                                        <input type="radio" name="coler" value="ขาว" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <h2 className="text-[16px] font-bold">ความจำ</h2>
+                                <div className="flex gap-2" >
+                                    <div className="flex gap-2">
+                                        <span>128 GB</span>
+                                        <input type="radio" name="gb" value="128GB" />
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <span>256 GB</span>
+                                        <input type="radio" name="gb" value="256GB" />
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <span>512 GB</span>
+                                        <input type="radio" name="gb" value="512GB" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
