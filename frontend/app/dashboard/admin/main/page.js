@@ -20,7 +20,7 @@ export default function Page() {
 
   useEffect(() => {
     const getData = async () => {
-      const [summary, daily] = await Promise.all([axios.get(`${process.env.NEXT_PUBLIC_URL}/order/summary`), axios.get(`${process.env.NEXT_PUBLIC_URL}/order/daily`)])
+      const [summary, daily] = await Promise.all([axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/summary`), axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/daily`)])
       const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์']
       setSummary(summary.data.data[0])
       
