@@ -169,7 +169,7 @@ export default function Page() {
                 </div>
                 <div className="w-full md:w-1/2 h-full rounded-2xl shadow-2xl p-4">
                     <div className="flex flex-col gap-5">
-                        <div className="bg-[#F3F4F6]">
+                        <div className="flex flex-col gap-5 ">
                             <h1 className="text-[16px] font-bold">รูปแบบสินค้า</h1>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
                                 <div className="flex flex-col gap-1">
@@ -211,18 +211,32 @@ export default function Page() {
                                 <span className="text-[16px] font-bold">รหัสสินค้า</span>
                                 <input className="border-[1px] rounded-[8px] p-2" type="text" placeholder="รหัสสินค้า" />
                             </div>
-                            <div className="flex justify-end gap-2 mt-3">
-                                <div className="flex justify-center items-center gap-2 bg-[#3b5497] w-fit px-2 py-2 rounded-2xl text-white">
+                            <div className="flex justify-start items-center gap-2">
+                                <span className="text-[16px] font-bold">จำนวน</span>
+                                <input className="border-[1px] rounded-[8px] p-2" type="text" placeholder="จำนวนสินค้า" />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <div className="flex justify-center items-center gap-2 bg-[#1E3A8A] w-fit px-2 py-2 rounded-2xl text-white">
                                     <span>เพิ่ม</span>
                                     <PackagePlus size={20} />
                                 </div>
-                                <div className="w-fit px-2 py-2 bg-[#1E3A8A] rounded-2xl text-white">
-                                    บันทึก
-                                </div>
                             </div>
                         </div>
-                        <div className="flex justify-center items-center bg-amber-300">
-                            <span>รายละเอียดสต๊อกสินค้า</span>
+                        <div className="flex flex-col justify-center gap-3">
+                            <span className="text-center font-bold">รายละเอียดสต๊อกสินค้า</span>
+                            <div className="flex flex-col justify-start gap-3">
+                                <div className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
+                                    <div className="flex gap-4 ">
+                                        <span>ip-res-256</span>
+                                        <span>IPHONE 12</span>
+                                        <span>256 GB</span>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <span>5x</span>
+                                        <svg className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash preview-icon"> <path d="M10 11v6" /> <path d="M14 11v6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /> <path d="M3 6h18" /> <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /> </svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
