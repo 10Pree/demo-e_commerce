@@ -13,7 +13,7 @@ class modelsCategories {
     static async gets() {
         try {
             const conn = await getDB()
-            const [resulte] = await conn.query('SELECT * FROM categories')
+            const [resulte] = await conn.query('SELECT c.id, c.name FROM categories c')
             return resulte
         } catch (error) {
             throw error
