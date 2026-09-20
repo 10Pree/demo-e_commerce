@@ -4,7 +4,7 @@ import Image from "next/image"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
-import { PackagePlus } from 'lucide-react';
+import { PackagePlus, Trash } from 'lucide-react';
 
 
 export default function Page() {
@@ -95,16 +95,15 @@ export default function Page() {
         getCategories()
     }, [])
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full flex flex-col gap-3 ">
             <div className="flex items-center mb-6">
                 <div>
                     <h1 className="text-3xl font-bold text-[#111827]">เพิ่มสินค้า</h1>
                     <p className="text-sm text-gray-500 mt-1">ฟอร์มเพิ่มสินค้า</p>
                 </div>
             </div>
-            {/* <div className="flex-row justify-center items-center gap-4 md:flex"> */}
             <div className="flex flex-col md:flex-row gap-5">
-                <div className="w-full md:w-1/2 h-full flex flex-row md:flex-col gap-3">
+                <div className="w-full md:w-1/2 h-full flex flex-col  gap-3">
                     <div className="w-full bg-[#F3F4F6] rounded-2xl shadow-2xl p-4">
                         <div>
                             <h1 className="text-[16px] font-bold">ชื่อ</h1>
@@ -231,9 +230,9 @@ export default function Page() {
                                         <span>IPHONE 12</span>
                                         <span>256 GB</span>
                                     </div>
-                                    <div className="flex gap-4">
+                                    <div className="flex justify-center items-center gap-4">
                                         <span>5x</span>
-                                        <svg className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash preview-icon"> <path d="M10 11v6" /> <path d="M14 11v6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /> <path d="M3 6h18" /> <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /> </svg>
+                                        <Trash size={20} color="red" />
                                     </div>
                                 </div>
                             </div>
