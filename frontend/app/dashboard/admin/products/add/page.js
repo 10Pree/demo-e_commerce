@@ -110,10 +110,6 @@ export default function Page() {
                             <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" onChange={(e) => setProductData({ ...productData, p_name: e.target.value })} />
                         </div>
                         <div>
-                            <h1 className="text-[16px] font-bold">จำนวนรวม</h1>
-                            <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="number" onChange={(e) => setProductData({ ...productData, p_stock: e.target.value })} />
-                        </div>
-                        <div>
                             <h1 className="text-[16px] font-bold">รายละเอียด</h1>
                             <textarea className="w-full h-40 border rounded-[8px] p-2" onChange={(e) => setProductData({ ...productData, p_details: e.target.value })}></textarea>
                         </div>
@@ -166,7 +162,7 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
-                <div className="w-full md:w-1/2 h-full rounded-2xl shadow-2xl p-4">
+                <div className="w-full md:w-1/2 h-fit rounded-2xl shadow-2xl p-4">
                     <div className="flex flex-col gap-5">
                         <div className="flex flex-col gap-5 ">
                             <h1 className="text-[16px] font-bold">รูปแบบสินค้า</h1>
@@ -233,6 +229,16 @@ export default function Page() {
                                     <div className="flex justify-center items-center gap-4">
                                         <span>5x</span>
                                         <Trash size={20} color="red" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex justify-end">
+                                <div className="flex flex-row justify-center items-center gap-2">
+                                    <span>
+                                        รวม
+                                    </span>
+                                    <div className=" border px-5 py-1 rounded-[8px]">
+                                        5
                                     </div>
                                 </div>
                             </div>
