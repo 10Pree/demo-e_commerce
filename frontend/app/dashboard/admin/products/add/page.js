@@ -11,6 +11,7 @@ export default function Page() {
     const router = useRouter()
     const [urlImagePreview, seturlImagePreview] = useState([])
     const [categories, setCategories] = useState([])
+    const [attribute, setAttribute] = useState([])
     const [productData, setProductData] = useState({
         p_name: "",
         p_details: "",
@@ -26,10 +27,6 @@ export default function Page() {
             }
         ]
     })
-
-    // console.log("Products: ", productData)
-    // console.log("urlImagePreview: ", urlImagePreview)
-
 
     const handleCreateUser = async () => {
         try {
@@ -74,7 +71,15 @@ export default function Page() {
         try {
             const res = await axios.get("http://localhost:8000/categories", { withCredentials: true })
             setCategories(res.data.data)
-            // console.log(res.data.data)
+        } catch (error) {
+            console.log("Message Error: ", error)
+        }
+    }
+
+    const getAttribute = async() => {
+        try {
+            const res = await axios.get('http://localhost:8000/product/attributes/name', { withCredentials: true })
+            setAttribute(res.data.data)
         } catch (error) {
             console.log("Message Error: ", error)
         }
@@ -93,6 +98,9 @@ export default function Page() {
     }
     useEffect(() => {
         getCategories()
+        getAttribute()
+            console.log(attribute)
+
     }, [])
     return (
         <div className="w-full h-full flex flex-col gap-3 ">
@@ -140,7 +148,7 @@ export default function Page() {
                         </div>
                     </div>
                     <div className=" w-full bg-[#F3F4F6] rounded-2xl shadow-2xl p-4">
-                        <div className="flex flex-col">
+                        <div className="flex flex-col gap-2F">
                             <h1 className="text-[16px] font-bold">อัพโหลด</h1>
                             <div className="flex justify-start items-center">
                                 <label className="cursor-pointer shadow-2xl w-fit h-fit bg-[#1E3A8A] rounded-[8px] p-3">
@@ -170,18 +178,14 @@ export default function Page() {
                                 <div className="flex flex-col gap-1">
                                     <h2 className="text-[16px] font-bold">สี</h2>
                                     <div className="flex gap-2" >
-                                        <div className="flex gap-2">
-                                            <span>แดง</span>
-                                            <input type="radio" name="coler" value="แดง" />
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <span>ดำ</span>
-                                            <input type="radio" name="coler" value="ดำ" />
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <span>ขาว</span>
-                                            <input type="radio" name="coler" value="ขาว" />
-                                        </div>
+                                        {
+                                            attribute.map((item, index) => (
+                                                <div key={item.id} className="flex gap-2">
+                                                    <span>{item.value}</span>
+                                                    <input type="radio" name="coler" value={item.id} />
+                                                </div>
+                                            ))
+                                        }
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-1">
@@ -207,8 +211,12 @@ export default function Page() {
                                 <input className="border-[1px] rounded-[8px] p-2" type="text" placeholder="รหัสสินค้า" />
                             </div>
                             <div className="flex justify-start items-center gap-2">
+                                <span className="text-[16px] font-bold">ราคา</span>
+                                <input className="border-[1px] rounded-[8px] p-2" type="number" placeholder="ราคา" />
+                            </div>
+                            <div className="flex justify-start items-center gap-2">
                                 <span className="text-[16px] font-bold">จำนวน</span>
-                                <input className="border-[1px] rounded-[8px] p-2" type="text" placeholder="จำนวนสินค้า" />
+                                <input className="border-[1px] rounded-[8px] p-2" type="number" placeholder="จำนวนสินค้า" />
                             </div>
                             <div className="flex justify-end gap-2">
                                 <div className="flex justify-center items-center gap-2 bg-[#1E3A8A] w-fit px-2 py-2 rounded-2xl text-white">
@@ -220,17 +228,22 @@ export default function Page() {
                         <div className="flex flex-col justify-center gap-3">
                             <span className="text-center font-bold">รายละเอียดสต๊อกสินค้า</span>
                             <div className="flex flex-col justify-start gap-3">
-                                <div className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
-                                    <div className="flex gap-4 ">
-                                        <span>ip-res-256</span>
-                                        <span>IPHONE 12</span>
-                                        <span>256 GB</span>
-                                    </div>
-                                    <div className="flex justify-center items-center gap-4">
-                                        <span>5x</span>
-                                        <Trash size={20} color="red" />
-                                    </div>
-                                </div>
+                                {
+                                    productData.variants.map((item, index) => (
+                                        <div key={index} className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
+                                            <div className="flex gap-4 ">
+                                                <span>{item.sku}</span>
+                                                <span>{item.attribute_value_ids[1]}</span>
+                                                <span>{item.attribute_value_ids[2]}</span>
+                                                <span>{item.price}</span>
+                                            </div>
+                                            <div className="flex justify-center items-center gap-4">
+                                                <span>{item.stock}</span>
+                                                <Trash size={20} color="red" />
+                                            </div>
+                                        </div>
+                                    ))
+                                }
                             </div>
                             <div className="flex justify-end">
                                 <div className="flex flex-row justify-center items-center gap-2">
