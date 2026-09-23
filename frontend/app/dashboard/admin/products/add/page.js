@@ -11,7 +11,8 @@ export default function Page() {
     const router = useRouter()
     const [urlImagePreview, seturlImagePreview] = useState([])
     const [categories, setCategories] = useState([])
-    const [attribute, setAttribute] = useState([])
+    const [attributes, setAttributes] = useState([])
+    const [attributesValues, setAttributesValues] = useState([])
     const [productData, setProductData] = useState({
         p_name: "",
         p_details: "",
@@ -76,10 +77,11 @@ export default function Page() {
         }
     }
 
-    const getAttribute = async() => {
+    const getAttribute = async () => {
         try {
             const res = await axios.get('http://localhost:8000/product/attributes/name', { withCredentials: true })
-            setAttribute(res.data.data)
+            setAttributes(res.data.rowAttributes)
+            setAttributesValues(res.data.rowValues)
         } catch (error) {
             console.log("Message Error: ", error)
         }
@@ -99,7 +101,6 @@ export default function Page() {
     useEffect(() => {
         getCategories()
         getAttribute()
-            console.log(attribute)
 
     }, [])
     return (
@@ -175,36 +176,25 @@ export default function Page() {
                         <div className="flex flex-col gap-5 ">
                             <h1 className="text-[16px] font-bold">รูปแบบสินค้า</h1>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
-                                <div className="flex flex-col gap-1">
-                                    <h2 className="text-[16px] font-bold">สี</h2>
-                                    <div className="flex gap-2" >
-                                        {
-                                            attribute.map((item, index) => (
-                                                <div key={item.id} className="flex gap-2">
-                                                    <span>{item.value}</span>
-                                                    <input type="radio" name="coler" value={item.id} />
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                    <h2 className="text-[16px] font-bold">ความจำ</h2>
-                                    <div className="flex gap-2" >
-                                        <div className="flex gap-2">
-                                            <span>128 GB</span>
-                                            <input type="radio" name="gb" value="128GB" />
+                                {
+                                    attributes.map((item) => (
+                                        <div key={item.attribute_id} className="flex flex-col gap-1">
+                                            <h2 className="text-[16px] font-bold">{item.attribute_name}</h2>
+                                            <div className="flex gap-2" >
+                                                {
+                                                    attributesValues
+                                                        .filter((val) => val.attribute_id === item.attribute_id)
+                                                        .map((val, i) => (
+                                                            <div key={`${item.attribute_id}-${i}`} className="flex gap-2">
+                                                                <span>{val.value}</span>
+                                                                <input type="radio" name={`attribute-${item.attribute_id}`} value={val.attribute_id} />
+                                                            </div>
+                                                        ))
+                                                }
+                                            </div>
                                         </div>
-                                        <div className="flex gap-2">
-                                            <span>256 GB</span>
-                                            <input type="radio" name="gb" value="256GB" />
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <span>512 GB</span>
-                                            <input type="radio" name="gb" value="512GB" />
-                                        </div>
-                                    </div>
-                                </div>
+                                    ))
+                                }
                             </div>
                             <div className="flex justify-start items-center gap-2">
                                 <span className="text-[16px] font-bold">รหัสสินค้า</span>
