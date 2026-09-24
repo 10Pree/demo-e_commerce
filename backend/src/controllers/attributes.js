@@ -16,7 +16,7 @@ class controllerAttributes {
                     rowAttributes.set(row.attribute_id, { attribute_id: row.attribute_id, attribute_name: row.attribute_name })
                 }
                 if (row.value !== null) {
-                    rowValues.push({ attribute_id: row.fk_attribute_id, value: row.value })
+                    rowValues.push({ value_id:row.value_id, attribute_id: row.fk_attribute_id,  value: row.value })
                 }
             }
 
