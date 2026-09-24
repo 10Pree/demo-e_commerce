@@ -13,6 +13,7 @@ export default function Page() {
     const [categories, setCategories] = useState([])
     const [attributes, setAttributes] = useState([])
     const [attributesValues, setAttributesValues] = useState([])
+    const [variants, setVariants] = useState([])
     const [productData, setProductData] = useState({
         p_name: "",
         p_details: "",
@@ -98,6 +99,35 @@ export default function Page() {
         /// setProductData ส่งให้ Backend
         setProductData({ ...productData, images: newFiles })
     }
+
+    const handleAddVariant = (formData) => {
+        const sku = formData.get('sku')
+        const price = formData.get('price')
+        const stock = formData.get('stock')
+
+        const attributeids = attributes.map((attr) => (
+            formData.get(`attribute-${attr.attribute_id}`)
+        ))
+
+        if (!sku || !price || !stock || !attributeids) {
+            Swal.fire({
+                icon: 'warning',
+                title: "กรุณากรอกข้อมูล รูปแบบสินค้า ให้ครบ",
+                timer: 2000,
+                showConfirmButton: false
+            })
+            return
+        }
+        const newVariant = {
+            "sku": sku,
+            "price": Number(price),
+            "stock": Number(stock),
+            "attribute_value_ids": attributeids.map(Number)
+        }
+
+        setProductData(prev => ({ ...prev, variants: [...prev.variants, newVariant]}))
+        console.log("newVariant: ", newVariant)
+    }
     useEffect(() => {
         getCategories()
         getAttribute()
@@ -173,7 +203,7 @@ export default function Page() {
                 </div>
                 <div className="w-full md:w-1/2 h-fit rounded-2xl shadow-2xl p-4">
                     <div className="flex flex-col gap-5">
-                        <div className="flex flex-col gap-5 ">
+                        <form action={handleAddVariant} className="flex flex-col gap-5 ">
                             <h1 className="text-[16px] font-bold">รูปแบบสินค้า</h1>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
                                 {
@@ -187,7 +217,7 @@ export default function Page() {
                                                         .map((val, i) => (
                                                             <div key={`${item.attribute_id}-${i}`} className="flex gap-2">
                                                                 <span>{val.value}</span>
-                                                                <input type="radio" name={`attribute-${item.attribute_id}`} value={val.attribute_id} />
+                                                                <input type="radio" name={`attribute-${item.attribute_id}`} value={val.value_id} />
                                                             </div>
                                                         ))
                                                 }
@@ -198,23 +228,23 @@ export default function Page() {
                             </div>
                             <div className="flex justify-start items-center gap-2">
                                 <span className="text-[16px] font-bold">รหัสสินค้า</span>
-                                <input className="border-[1px] rounded-[8px] p-2" type="text" placeholder="รหัสสินค้า" />
+                                <input className="border-[1px] rounded-[8px] p-2" type="text" name="sku" placeholder="รหัสสินค้า" />
                             </div>
                             <div className="flex justify-start items-center gap-2">
                                 <span className="text-[16px] font-bold">ราคา</span>
-                                <input className="border-[1px] rounded-[8px] p-2" type="number" placeholder="ราคา" />
+                                <input className="border-[1px] rounded-[8px] p-2" type="number" name="price" placeholder="ราคา" />
                             </div>
                             <div className="flex justify-start items-center gap-2">
                                 <span className="text-[16px] font-bold">จำนวน</span>
-                                <input className="border-[1px] rounded-[8px] p-2" type="number" placeholder="จำนวนสินค้า" />
+                                <input className="border-[1px] rounded-[8px] p-2" type="number" name="stock" placeholder="จำนวนสินค้า" />
                             </div>
                             <div className="flex justify-end gap-2">
-                                <div className="flex justify-center items-center gap-2 bg-[#1E3A8A] w-fit px-2 py-2 rounded-2xl text-white">
-                                    <span>เพิ่ม</span>
+                                <button type="submit" className="flex justify-center items-center gap-2 bg-[#1E3A8A] w-fit px-2 py-2 rounded-2xl text-white cursor-pointer">
+                                    เพิ่ม
                                     <PackagePlus size={20} />
-                                </div>
+                                </button>
                             </div>
-                        </div>
+                        </form>
                         <div className="flex flex-col justify-center gap-3">
                             <span className="text-center font-bold">รายละเอียดสต๊อกสินค้า</span>
                             <div className="flex flex-col justify-start gap-3">
