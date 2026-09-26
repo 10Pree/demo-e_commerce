@@ -126,7 +126,6 @@ export default function Page() {
         }
 
         setProductData(prev => ({ ...prev, variants: [...prev.variants, newVariant]}))
-        console.log("newVariant: ", newVariant)
     }
     useEffect(() => {
         getCategories()
@@ -253,8 +252,20 @@ export default function Page() {
                                         <div key={index} className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
                                             <div className="flex gap-4 ">
                                                 <span>{item.sku}</span>
-                                                <span>{item.attribute_value_ids[1]}</span>
-                                                <span>{item.attribute_value_ids[2]}</span>
+                                                <span>
+                                                    {
+                                                        attributesValues
+                                                            .filter((val) => val.value_id === item.attribute_value_ids[0])
+                                                            .map((val) => val.value)
+                                                    }
+                                                </span>
+                                                <span>
+                                                    {
+                                                        attributesValues
+                                                        .filter((val) => val.value_id === item.attribute_value_ids[1])
+                                                        .map((val) => val.value)
+                                                    }
+                                                    </span>
                                                 <span>{item.price}</span>
                                             </div>
                                             <div className="flex justify-center items-center gap-4">
@@ -271,7 +282,9 @@ export default function Page() {
                                         รวม
                                     </span>
                                     <div className=" border px-5 py-1 rounded-[8px]">
-                                        5
+                                        {
+                                            productData.variants.reduce((total, item) =>  item.stock + total, 0)
+                                        }
                                     </div>
                                 </div>
                             </div>
