@@ -20,14 +20,7 @@ export default function Page() {
         p_stock: 0,
         images: [],
         categories_ids: [],
-        variants: [
-            {
-                "sku": "IP20-RED-128",
-                "price": 52000,
-                "stock": 11,
-                "attribute_value_ids": [2, 1]
-            }
-        ]
+        variants: []
     })
 
     const handleCreateUser = async () => {
@@ -125,7 +118,7 @@ export default function Page() {
             "attribute_value_ids": attributeids.map(Number)
         }
 
-        setProductData(prev => ({ ...prev, variants: [...prev.variants, newVariant]}))
+        setProductData(prev => ({ ...prev, variants: [...prev.variants, newVariant] }))
     }
     useEffect(() => {
         getCategories()
@@ -262,14 +255,14 @@ export default function Page() {
                                                 <span>
                                                     {
                                                         attributesValues
-                                                        .filter((val) => val.value_id === item.attribute_value_ids[1])
-                                                        .map((val) => val.value)
+                                                            .filter((val) => val.value_id === item.attribute_value_ids[1])
+                                                            .map((val) => val.value)
                                                     }
-                                                    </span>
+                                                </span>
                                                 <span>{item.price}</span>
                                             </div>
                                             <div className="flex justify-center items-center gap-4">
-                                                <span>{item.stock}</span>
+                                                <span>{item.stock} ชิ้น</span>
                                                 <Trash size={20} color="red" />
                                             </div>
                                         </div>
@@ -283,9 +276,12 @@ export default function Page() {
                                     </span>
                                     <div className=" border px-5 py-1 rounded-[8px]">
                                         {
-                                            productData.variants.reduce((total, item) =>  item.stock + total, 0)
+                                            productData.variants.reduce((total, item) => item.stock + total, 0)
                                         }
                                     </div>
+                                    <span>
+                                        ชิ้น
+                                    </span>
                                 </div>
                             </div>
                         </div>
