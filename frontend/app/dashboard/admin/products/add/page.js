@@ -120,6 +120,14 @@ export default function Page() {
 
         setProductData(prev => ({ ...prev, variants: [...prev.variants, newVariant] }))
     }
+
+    const handleDeleteVariant = (index) => {
+        try { 
+            
+        } catch (error) {
+            console.log("Message Error: ", error)
+        }
+    }
     useEffect(() => {
         getCategories()
         getAttribute()
