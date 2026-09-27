@@ -123,7 +123,7 @@ export default function Page() {
 
     const handleDeleteVariant = (index) => {
         try { 
-            
+            setProductData(prev => ({ ...prev, variants: prev.variants.filter((_, i) => i !== index) }))
         } catch (error) {
             console.log("Message Error: ", error)
         }
@@ -252,6 +252,7 @@ export default function Page() {
                                     productData.variants.map((item, index) => (
                                         <div key={index} className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
                                             <div className="flex gap-4 ">
+                                                <span>{index + 1}</span>
                                                 <span>{item.sku}</span>
                                                 <span>
                                                     {
@@ -271,7 +272,7 @@ export default function Page() {
                                             </div>
                                             <div className="flex justify-center items-center gap-4">
                                                 <span>{item.stock} ชิ้น</span>
-                                                <Trash size={20} color="red" />
+                                                <Trash size={20} color="red" onClick={() => handleDeleteVariant(index)}/>
                                             </div>
                                         </div>
                                     ))
