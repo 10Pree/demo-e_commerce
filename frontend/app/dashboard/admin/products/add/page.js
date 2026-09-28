@@ -4,7 +4,7 @@ import axios from "axios"
 import Swal from "sweetalert2"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { PackagePlus, Trash } from 'lucide-react';
+import { PackagePlus, Trash, X } from 'lucide-react';
 
 
 export default function Page() {
@@ -122,7 +122,7 @@ export default function Page() {
     }
 
     const handleDeleteVariant = (index) => {
-        try { 
+        try {
             setProductData(prev => ({ ...prev, variants: prev.variants.filter((_, i) => i !== index) }))
         } catch (error) {
             console.log("Message Error: ", error)
@@ -277,7 +277,7 @@ export default function Page() {
                                             </div>
                                             <div className="flex justify-center items-center gap-4">
                                                 <span>{item.stock} ชิ้น</span>
-                                                <Trash size={20} color="red" onClick={() => handleDeleteVariant(index)}/>
+                                                <Trash size={20} color="red" onClick={() => handleDeleteVariant(index)} />
                                             </div>
                                         </div>
                                     ))
@@ -303,7 +303,16 @@ export default function Page() {
                 </div>
             </div>
             <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={handleCreateUser}>บันทึก</button></div>
-            
+            <div className="bg-black/50 w-full h-full fixed top-0 left-0 flex justify-center items-center">
+                <div className="bg-white w-[40%] h-[80%] rounded-3xl">
+                    <div className="flex justify-end items-center mt-3 mr-3">
+                        <X/>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
