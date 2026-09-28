@@ -27,7 +27,7 @@ export default async function Page({ params }) {
                             <span className=" text-gray-400 line-through  mt-4">999</span>
                         </div>
                         <span className="text-[1rem] font-bold">ความจุ</span>
-                        <div className="flex flex-wrap gap-4">
+                        <div className="flex flex-wrap gap-4"> 
                             <label className="cursor-pointer flex">
                                 <input className="hidden peer" type="radio" value={256} name="valence" />
                                 <span className="w-[90px] h-[30px] text-[20px] bg-[#F3F4F6]  rounded-[8px] font-bold text-center text-[#111827] peer-checked:bg-[#1E3A8A] peer-checked:text-white">256GB</span>

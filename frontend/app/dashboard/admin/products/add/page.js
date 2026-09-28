@@ -1,9 +1,9 @@
 "use client"
-import { useEffect, useState } from "react"
 import Image from "next/image"
 import axios from "axios"
-import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { PackagePlus, Trash } from 'lucide-react';
 
 
@@ -205,6 +205,11 @@ export default function Page() {
                     <div className="flex flex-col gap-5">
                         <form action={handleAddVariant} className="flex flex-col gap-5 ">
                             <h1 className="text-[16px] font-bold">รูปแบบสินค้า</h1>
+                            <div className="flex justify-end items-center">
+                                <div className="flex justify-center items-center gap-2 bg-[#1E3A8A] w-fit px-2 py-2 rounded-2xl text-white cursor-pointer">
+                                    เพิ่มรูปแบบสินค้า
+                                </div>
+                            </div>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
                                 {
                                     attributes.map((item) => (
@@ -298,6 +303,7 @@ export default function Page() {
                 </div>
             </div>
             <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={handleCreateUser}>บันทึก</button></div>
+            
         </div>
     )
 }
