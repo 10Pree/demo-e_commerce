@@ -304,14 +304,29 @@ export default function Page() {
             </div>
             <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={handleCreateUser}>บันทึก</button></div>
             <div className="bg-black/50 w-full h-full fixed top-0 left-0 flex justify-center items-center">
-                <div className="bg-white w-[40%] h-[80%] rounded-3xl">
+                <form className="bg-white w-[20%] h-[50%] rounded-3xl relative">
                     <div className="flex justify-end items-center mt-3 mr-3">
-                        <X/>
+                        <X className=" cursor-pointer" />
                     </div>
-                    <div>
-
+                    <div className="flex flex-col justify-center items-center gap-6">
+                        <h2 className="font-bold">รูปแบบสินค้า</h2>
+                        <div className="flex flex-col gap-3 border rounded-[12px] w-[80%] h-[300px] p-3 overflow-y-scroll">
+                            <div className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
+                                <input type="checkbox" name="variant" value={""} />
+                                <span>สี</span>
+                            </div>
+                            <div className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
+                                <input type="checkbox" name="variant" value={""} />
+                                <span>ความจำ</span>
+                            </div>
+                            <div className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
+                                <input type="checkbox" name="variant" value={""} />
+                                <span>ขนาด</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <button className="absolute bottom-4 right-4 py-2 px-4 bg-[#1E3A8A] text-white rounded-[12px] cursor-pointer" type="submit">เลือก</button>
+                </form>
             </div>
         </div>
     )
