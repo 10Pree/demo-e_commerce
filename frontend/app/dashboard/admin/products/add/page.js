@@ -311,18 +311,14 @@ export default function Page() {
                     <div className="flex flex-col justify-center items-center gap-6">
                         <h2 className="font-bold">รูปแบบสินค้า</h2>
                         <div className="flex flex-col gap-3 border rounded-[12px] w-[80%] h-[300px] p-3 overflow-y-scroll">
-                            <div className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
-                                <input type="checkbox" name="variant" value={""} />
-                                <span>สี</span>
-                            </div>
-                            <div className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
-                                <input type="checkbox" name="variant" value={""} />
-                                <span>ความจำ</span>
-                            </div>
-                            <div className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
-                                <input type="checkbox" name="variant" value={""} />
-                                <span>ขนาด</span>
-                            </div>
+                            {
+                                attributes.map((arr) => (
+                                    <div key={arr.id} className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
+                                        <input type="checkbox" name="variant" value={arr.id} />
+                                        <span>{arr.attribute_name}</span>
+                                    </div>
+                                ))
+                            }
                         </div>
                     </div>
                     <button className="absolute bottom-4 right-4 py-2 px-4 bg-[#1E3A8A] text-white rounded-[12px] cursor-pointer" type="submit">เลือก</button>
