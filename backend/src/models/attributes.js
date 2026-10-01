@@ -20,6 +20,22 @@ class modelsAttributes {
         }
     }
 
+    static async getProductAttributesById(ids) {
+        try {
+            const conn = await getDB()
+            const [results] = await conn.query(
+                `
+                SELECT pa.id AS attribute_id, pa.name AS attribute_name, pav.id AS value_id, pav.value
+                FROM product_attributes pa
+                JOIN product_attribute_values pav ON pav.product_attributes_id = pa.id
+                WHERE pa.id IN (?)
+                `, [ids])
+            return results
+        }catch (error) {
+            throw error
+        }
+    }
+
 }
 
 module.exports = modelsAttributes
