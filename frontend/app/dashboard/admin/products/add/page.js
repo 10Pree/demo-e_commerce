@@ -13,7 +13,7 @@ export default function Page() {
     const [categories, setCategories] = useState([])
     const [attributes, setAttributes] = useState([])
     const [attributesValues, setAttributesValues] = useState([])
-    const [variants, setVariants] = useState([])
+    const [variantsIds, setVariantsIds] = useState([])
     const [productData, setProductData] = useState({
         p_name: "",
         p_details: "",
@@ -127,6 +127,10 @@ export default function Page() {
         } catch (error) {
             console.log("Message Error: ", error)
         }
+    }
+    const handleSubmitVariant = (formData) => {
+        const variantIds = formData.getAll('variant').map(Number)
+        setVariantsIds(variantIds)
     }
     useEffect(() => {
         getCategories()
@@ -304,7 +308,7 @@ export default function Page() {
             </div>
             <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={handleCreateUser}>บันทึก</button></div>
             <div className="bg-black/50 w-full h-full fixed top-0 left-0 flex justify-center items-center">
-                <form className="bg-white w-[20%] h-[50%] rounded-3xl relative">
+                <form action={handleSubmitVariant} className="bg-white w-[20%] h-[50%] rounded-3xl relative">
                     <div className="flex justify-end items-center mt-3 mr-3">
                         <X className=" cursor-pointer" />
                     </div>
@@ -313,8 +317,8 @@ export default function Page() {
                         <div className="flex flex-col gap-3 border rounded-[12px] w-[80%] h-[300px] p-3 overflow-y-scroll">
                             {
                                 attributes.map((arr) => (
-                                    <div key={arr.id} className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
-                                        <input type="checkbox" name="variant" value={arr.id} />
+                                    <div key={arr.attribute_id} className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
+                                        <input type="checkbox" name="variant" value={arr.attribute_id} />
                                         <span>{arr.attribute_name}</span>
                                     </div>
                                 ))
