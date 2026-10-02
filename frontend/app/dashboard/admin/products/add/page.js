@@ -217,7 +217,8 @@ export default function Page() {
                             </div>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
                                 {
-                                    attributes.map((item) => (
+                                    false ? 
+                                                                        attributes.map((item) => (
                                         <div key={item.attribute_id} className="flex flex-col gap-1">
                                             <h2 className="text-[16px] font-bold">{item.attribute_name}</h2>
                                             <div className="flex gap-2" >
@@ -234,6 +235,10 @@ export default function Page() {
                                             </div>
                                         </div>
                                     ))
+                                    :
+                                    <div className="flex justify-center items-center h-[100px] w-full">
+                                        <span className="text-black/60">ไม่มีรูปแบบสินค้า</span>
+                                    </div>
                                 }
                             </div>
                             <div className="flex justify-start items-center gap-2">
@@ -259,7 +264,8 @@ export default function Page() {
                             <span className="text-center font-bold">รายละเอียดสต๊อกสินค้า</span>
                             <div className="flex flex-col justify-start gap-3">
                                 {
-                                    productData.variants.map((item, index) => (
+                                    productData.variants.length > 0 ?
+                                                                        productData.variants.map((item, index) => (
                                         <div key={index} className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
                                             <div className="flex gap-4 ">
                                                 <span>{index + 1}</span>
@@ -286,6 +292,10 @@ export default function Page() {
                                             </div>
                                         </div>
                                     ))
+                                    :
+                                    <div className="flex justify-center items-center h-[200px] w-full">
+                                        <span className="text-black/60">ไม่มีรายละเอียดสต๊อกสินค้า</span>
+                                    </div>
                                 }
                             </div>
                             <div className="flex justify-end">
