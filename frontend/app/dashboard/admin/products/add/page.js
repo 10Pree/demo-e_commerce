@@ -14,6 +14,7 @@ export default function Page() {
     const [attributes, setAttributes] = useState([])
     const [attributesValues, setAttributesValues] = useState([])
     const [variantsIds, setVariantsIds] = useState([])
+    const [openpopup, setOpenpopup] = useState(true)
     const [productData, setProductData] = useState({
         p_name: "",
         p_details: "",
@@ -210,7 +211,7 @@ export default function Page() {
                         <form action={handleAddVariant} className="flex flex-col gap-5 ">
                             <h1 className="text-[16px] font-bold">รูปแบบสินค้า</h1>
                             <div className="flex justify-end items-center">
-                                <div className="flex justify-center items-center gap-2 bg-[#1E3A8A] w-fit px-2 py-2 rounded-2xl text-white cursor-pointer">
+                                <div onClick={() =>  setOpenpopup(false)} className="flex justify-center items-center gap-2 bg-[#1E3A8A] w-fit px-2 py-2 rounded-2xl text-white cursor-pointer">
                                     เพิ่มรูปแบบสินค้า
                                 </div>
                             </div>
@@ -306,11 +307,11 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={handleCreateUser}>บันทึก</button></div>
-            <div className="bg-black/50 w-full h-full fixed top-0 left-0 flex justify-center items-center">
+            <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={() => handleCreateUser}>บันทึก</button></div>
+            <div className={`bg-black/50 w-full h-full fixed top-0 left-0 flex justify-center items-center ${openpopup ? 'hidden' : '' }`}>
                 <form action={handleSubmitVariant} className="bg-white w-[20%] h-[50%] rounded-3xl relative">
                     <div className="flex justify-end items-center mt-3 mr-3">
-                        <X className=" cursor-pointer" />
+                        <X className=" cursor-pointer" onClick={() => setOpenpopup(true)} />
                     </div>
                     <div className="flex flex-col justify-center items-center gap-6">
                         <h2 className="font-bold">รูปแบบสินค้า</h2>
