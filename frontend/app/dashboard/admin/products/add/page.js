@@ -14,6 +14,7 @@ export default function Page() {
     const [attributes, setAttributes] = useState([])
     const [attributesValues, setAttributesValues] = useState([])
     const [variantsIds, setVariantsIds] = useState([])
+    const [variants, setVariants] = useState([])
     const [openpopup, setOpenpopup] = useState(true)
     const [productData, setProductData] = useState({
         p_name: "",
@@ -82,6 +83,31 @@ export default function Page() {
         }
     }
 
+    const getProductAttributesById = async () => {
+        try {
+            const res = await axios.post(`http://localhost:8000/product/attributes/name/id`, { ids: variantsIds }, { withCredentials: true })
+            const grouped = Object.values(
+                res.data.data.reduce((acc, row) => {
+                    if (!acc[row.attribute_id]) {
+                        acc[row.attribute_id] = {
+                            attribute_id: row.attribute_id,
+                            attribute_name: row.attribute_name,
+                            values: []
+                        }
+                    }
+                    acc[row.attribute_id].values.push({
+                        value_id: row.value_id,
+                        value: row.value
+                    })
+                    return acc
+                }, {})
+            )
+            setVariants(grouped)
+        } catch (error) {
+            console.log("Message Error: ", error)
+        }
+    }
+
     const handleUpload = (e) => {
         const files = [...e.target.files]
         const prevViewUrl = files.map(file => URL.createObjectURL(file))
@@ -99,7 +125,7 @@ export default function Page() {
         const price = formData.get('price')
         const stock = formData.get('stock')
 
-        const attributeids = attributes.map((attr) => (
+        const attributeids = variants.map((attr) => (
             formData.get(`attribute-${attr.attribute_id}`)
         ))
 
@@ -132,12 +158,16 @@ export default function Page() {
     const handleSubmitVariant = (formData) => {
         const variantIds = formData.getAll('variant').map(Number)
         setVariantsIds(variantIds)
+        setOpenpopup(true)
     }
     useEffect(() => {
         getCategories()
         getAttribute()
-
     }, [])
+    useEffect(() => {
+        if (variantsIds.length === 0) return
+        getProductAttributesById(variantsIds)
+    }, [variantsIds])
     return (
         <div className="w-full h-full flex flex-col gap-3 ">
             <div className="flex items-center mb-6">
@@ -211,34 +241,32 @@ export default function Page() {
                         <form action={handleAddVariant} className="flex flex-col gap-5 ">
                             <h1 className="text-[16px] font-bold">รูปแบบสินค้า</h1>
                             <div className="flex justify-end items-center">
-                                <div onClick={() =>  setOpenpopup(false)} className="flex justify-center items-center gap-2 bg-[#1E3A8A] w-fit px-2 py-2 rounded-2xl text-white cursor-pointer">
+                                <div onClick={() => setOpenpopup(false)} className="flex justify-center items-center gap-2 bg-[#1E3A8A] w-fit px-2 py-2 rounded-2xl text-white cursor-pointer">
                                     เพิ่มรูปแบบสินค้า
                                 </div>
                             </div>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
                                 {
-                                    false ? 
-                                                                        attributes.map((item) => (
-                                        <div key={item.attribute_id} className="flex flex-col gap-1">
-                                            <h2 className="text-[16px] font-bold">{item.attribute_name}</h2>
-                                            <div className="flex gap-2" >
-                                                {
-                                                    attributesValues
-                                                        .filter((val) => val.attribute_id === item.attribute_id)
-                                                        .map((val, i) => (
-                                                            <div key={`${item.attribute_id}-${i}`} className="flex gap-2">
+                                    variants.length > 0 ?
+                                        variants.map((item) => (
+                                            <div key={item.attribute_id} className="flex flex-col gap-1">
+                                                <h2 className="text-[16px] font-bold">{item.attribute_name}</h2>
+                                                <div className="flex gap-2" >
+                                                    {
+                                                        item.values.map((val) => (
+                                                            <div key={val.value_id} className="flex gap-2">
                                                                 <span>{val.value}</span>
                                                                 <input type="radio" name={`attribute-${item.attribute_id}`} value={val.value_id} />
                                                             </div>
                                                         ))
-                                                }
+                                                    }
+                                                </div>
                                             </div>
+                                        ))
+                                        :
+                                        <div className="flex justify-center items-center h-[100px] w-full">
+                                            <span className="text-black/60">ไม่มีรูปแบบสินค้า</span>
                                         </div>
-                                    ))
-                                    :
-                                    <div className="flex justify-center items-center h-[100px] w-full">
-                                        <span className="text-black/60">ไม่มีรูปแบบสินค้า</span>
-                                    </div>
                                 }
                             </div>
                             <div className="flex justify-start items-center gap-2">
@@ -264,38 +292,38 @@ export default function Page() {
                             <span className="text-center font-bold">รายละเอียดสต๊อกสินค้า</span>
                             <div className="flex flex-col justify-start gap-3">
                                 {
-                                    productData.variants.length > 0 ?
-                                                                        productData.variants.map((item, index) => (
-                                        <div key={index} className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
-                                            <div className="flex gap-4 ">
-                                                <span>{index + 1}</span>
-                                                <span>{item.sku}</span>
-                                                <span>
-                                                    {
-                                                        attributesValues
-                                                            .filter((val) => val.value_id === item.attribute_value_ids[0])
-                                                            .map((val) => val.value)
-                                                    }
-                                                </span>
-                                                <span>
-                                                    {
-                                                        attributesValues
-                                                            .filter((val) => val.value_id === item.attribute_value_ids[1])
-                                                            .map((val) => val.value)
-                                                    }
-                                                </span>
-                                                <span>{item.price}</span>
+                                    variants.length > 0 ?
+                                        productData.variants.map((item, index) => (
+                                            <div key={index} className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
+                                                <div className="flex gap-4 ">
+                                                    <span>{index + 1}</span>
+                                                    <span>{item.sku}</span>
+                                                    <span>
+                                                        {
+                                                            attributesValues
+                                                                .filter((val) => val.value_id === item.attribute_value_ids[0])
+                                                                .map((val) => val.value)
+                                                        }
+                                                    </span>
+                                                    <span>
+                                                        {
+                                                            attributesValues
+                                                                .filter((val) => val.value_id === item.attribute_value_ids[1])
+                                                                .map((val) => val.value)
+                                                        }
+                                                    </span>
+                                                    <span>{item.price}</span>
+                                                </div>
+                                                <div className="flex justify-center items-center gap-4">
+                                                    <span>{item.stock} ชิ้น</span>
+                                                    <Trash size={20} color="red" onClick={() => handleDeleteVariant(index)} />
+                                                </div>
                                             </div>
-                                            <div className="flex justify-center items-center gap-4">
-                                                <span>{item.stock} ชิ้น</span>
-                                                <Trash size={20} color="red" onClick={() => handleDeleteVariant(index)} />
-                                            </div>
+                                        ))
+                                        :
+                                        <div className="flex justify-center items-center h-[200px] w-full">
+                                            <span className="text-black/60">ไม่มีรายละเอียดสต๊อกสินค้า</span>
                                         </div>
-                                    ))
-                                    :
-                                    <div className="flex justify-center items-center h-[200px] w-full">
-                                        <span className="text-black/60">ไม่มีรายละเอียดสต๊อกสินค้า</span>
-                                    </div>
                                 }
                             </div>
                             <div className="flex justify-end">
@@ -318,7 +346,7 @@ export default function Page() {
                 </div>
             </div>
             <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={() => handleCreateUser}>บันทึก</button></div>
-            <div className={`bg-black/50 w-full h-full fixed top-0 left-0 flex justify-center items-center ${openpopup ? 'hidden' : '' }`}>
+            <div className={`bg-black/50 w-full h-full fixed top-0 left-0 flex justify-center items-center ${openpopup ? 'hidden' : ''}`}>
                 <form action={handleSubmitVariant} className="bg-white w-[20%] h-[50%] rounded-3xl relative">
                     <div className="flex justify-end items-center mt-3 mr-3">
                         <X className=" cursor-pointer" onClick={() => setOpenpopup(true)} />
