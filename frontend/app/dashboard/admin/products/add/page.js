@@ -30,25 +30,26 @@ export default function Page() {
             const formData = new FormData()
 
             formData.append('p_name', productData.p_name)
-            formData.append('p_price', productData.p_price)
+            // formData.append('p_price', productData.p_price)
             formData.append('p_details', productData.p_details)
-            formData.append('p_stock', productData.p_stock)
+            // formData.append('p_stock', productData.p_stock)
 
             productData.images.forEach(file => {
                 formData.append('images', file)
             })
 
             formData.append('categories_ids', productData.categories_ids)
+            formData.append('variants', JSON.stringify(productData.variants))
 
             const res = await axios.post("http://localhost:8000/product", formData, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
-            // alert("Create User Successful")
+            // console.log("Product Data:", productData)
             Swal.fire({
                 icon: 'success',
                 title: "เพิ่มสินค้าแล้ว",
                 timer: 2000,
                 showConfirmButton: false
             })
-            router.push("/dashboard/admin/products")
+            // router.push("/dashboard/admin/products")
         } catch (error) {
             console.log("Message Error: ", error)
         }
@@ -146,6 +147,7 @@ export default function Page() {
         }
 
         setProductData(prev => ({ ...prev, variants: [...prev.variants, newVariant] }))
+        // console.log("Product Data Variants:", productData.variants)
     }
 
     const handleDeleteVariant = (index) => {
@@ -345,7 +347,7 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={() => handleCreateUser}>บันทึก</button></div>
+            <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={handleCreateUser}>บันทึก</button></div>
             <div className={`bg-black/50 w-full h-full fixed top-0 left-0 flex justify-center items-center ${openpopup ? 'hidden' : ''}`}>
                 <form action={handleSubmitVariant} className="bg-white w-[20%] h-[50%] rounded-3xl relative">
                     <div className="flex justify-end items-center mt-3 mr-3">
