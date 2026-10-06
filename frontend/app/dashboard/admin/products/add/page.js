@@ -49,7 +49,7 @@ export default function Page() {
                 timer: 2000,
                 showConfirmButton: false
             })
-            // router.push("/dashboard/admin/products")
+            router.push("/dashboard/admin/products")
         } catch (error) {
             console.log("Message Error: ", error)
         }
@@ -349,7 +349,7 @@ export default function Page() {
             </div>
             <div className="text-end"><button className="bg-[#1E3A8A] px-4 py-2 rounded-2xl text-white" onClick={handleCreateUser}>บันทึก</button></div>
             <div className={`bg-black/50 w-full h-full fixed top-0 left-0 flex justify-center items-center ${openpopup ? 'hidden' : ''}`}>
-                <form action={handleSubmitVariant} className="bg-white w-[20%] h-[50%] rounded-3xl relative">
+                <form action={handleSubmitVariant} className="bg-white md:w-[440px] md:h-[468px] w-[70%] h-[59%] rounded-3xl relative">
                     <div className="flex justify-end items-center mt-3 mr-3">
                         <X className=" cursor-pointer" onClick={() => setOpenpopup(true)} />
                     </div>
