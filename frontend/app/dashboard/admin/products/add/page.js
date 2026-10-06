@@ -130,7 +130,7 @@ export default function Page() {
             formData.get(`attribute-${attr.attribute_id}`)
         ))
 
-        if (!sku || !price || !stock || !attributeids) {
+        if (!sku || !price || !stock || !attributeids || !attributeids || attributeids.length === 0) {
             Swal.fire({
                 icon: 'warning',
                 title: "กรุณากรอกข้อมูล รูปแบบสินค้า ให้ครบ",
