@@ -1,3 +1,4 @@
+
 const modelsProductAttributes = require("../models/attributes")
 class controllerAttributes {
     static async getProductAttributesAndValues(req, res) {
@@ -36,6 +37,11 @@ class controllerAttributes {
     static async getProductAttributesById(req, res) {
         try{
             const { ids } = req.body 
+            if(!Array.isArray(ids) || ids.length === 0){
+                return res.status(400).json({
+                    message: "Invalid Input: 'ids' must be a non-empty array"
+                })
+            }
             const attributes = await modelsProductAttributes.getProductAttributesById(ids)
             if(attributes.length === 0){
                 return res.status(404).json({
