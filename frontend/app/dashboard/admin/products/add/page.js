@@ -41,6 +41,16 @@ export default function Page() {
             formData.append('categories_ids', productData.categories_ids)
             formData.append('variants', JSON.stringify(productData.variants))
 
+            if (!productData.p_name || !productData.p_details || productData.images.length === 0 || productData.categories_ids.length === 0 || productData.variants.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: "กรุณากรอกข้อมูลให้ครบ!!",
+                    timer: 2000,
+                    showConfirmButton: false
+                })
+                return
+            }
+
             const res = await axios.post("http://localhost:8000/product", formData, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
             // console.log("Product Data:", productData)
             Swal.fire({
