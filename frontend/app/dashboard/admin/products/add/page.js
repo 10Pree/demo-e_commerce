@@ -108,7 +108,7 @@ export default function Page() {
                     }
                     acc[row.attribute_id].values.push({
                         value_id: row.value_id,
-                        value: row.value
+                        name: row.value
                     })
                     return acc
                 }, {})
@@ -267,7 +267,7 @@ export default function Page() {
                                                     {
                                                         item.values.map((val) => (
                                                             <div key={val.value_id} className="flex gap-2">
-                                                                <span>{val.value}</span>
+                                                                <span>{val.name}</span>
                                                                 <input type="radio" name={`attribute-${item.attribute_id}`} value={val.value_id} />
                                                             </div>
                                                         ))
