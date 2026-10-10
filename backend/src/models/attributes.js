@@ -29,6 +29,7 @@ class modelsAttributes {
                 FROM product_attributes pa
                 JOIN product_attribute_values pav ON pav.product_attributes_id = pa.id
                 WHERE pa.id IN (?)
+                ORDER BY pa.id, pav.id
                 `, [ids])
             return results
         }catch (error) {

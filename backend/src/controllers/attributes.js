@@ -37,6 +37,7 @@ class controllerAttributes {
     static async getProductAttributesById(req, res) {
         try{
             const { ids } = req.body 
+            console.log("Received IDs:", ids); // Log the received IDs for debugging
             if(!Array.isArray(ids) || ids.length === 0){
                 return res.status(400).json({
                     message: "Invalid Input: 'ids' must be a non-empty array"
