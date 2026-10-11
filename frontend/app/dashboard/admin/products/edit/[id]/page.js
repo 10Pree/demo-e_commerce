@@ -13,7 +13,7 @@ export default function Page({ params }) {
     const [attributes, setAttributes] = useState([])
     const [attributesValues, setAttributesValues] = useState([])
     const [variantsIds, setVariantsIds] = useState([])
-    const [variants, setVariants] = useState([])
+    const [variantsShow, setVariantsShow] = useState([])
     const [openpopup, setOpenpopup] = useState(true)
     const { id } = use(params)
     const [productData, setProductData] = useState({
@@ -25,11 +25,11 @@ export default function Page({ params }) {
         variants: []
     })
 
-
     const getProductById = async () => {
         try {
             const res = await axios.get(`http://localhost:8000/product/${id}`, { withCredentials: true })
             const productRow = res.data.product?.[0]
+            const variantsRow = res.data.variants || []
             if (!productRow) {
                 Swal.fire({
                     icon: 'error',
@@ -40,17 +40,31 @@ export default function Page({ params }) {
                 router.push("/dashboard/admin/products")
                 return
             }
-            const variantsRow = res.data.variants || []
             const { p_name, p_price, p_details, p_stock, images, categories_ids } = productRow
-
-            setProductData({ p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || [], variants: variantsRow || [] })
-            setUrlImagePreview(images.map(img => `http://localhost:8000${img}`))
-
+            
+            seturlImagePreview(images.map(img => `http://localhost:8000${img}`))
+            
+            const attributeIds = groupedVariantsIds(variantsRow, 'pav_id').filter(Boolean) // [1, 2]
+            console.log("Attribute Ids:", attributeIds)
+            if (attributeIds.length > 0) {
+                getProductAttributesById(attributeIds)
+            }
+            
+            const variantData = variantsRow.map(variant => ({
+                ...variant,
+                imvav_id: variant.imvav_id,
+                attribute_value_ids: attributeIds.map(Number)
+            }))
+            
+            setProductData({ p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || [], variants: variantData || []})
 
         } catch (error) {
             console.log("Message Error: ", error)
         }
     }
+
+    const groupedVariantsIds = (row = [], key = 'attribute_id') => [...new Set(row.map(item => item[key]))]
+
     const getCategories = async () => {
         try {
             const res = await axios.get("http://localhost:8000/categories", { withCredentials: true })
@@ -60,12 +74,36 @@ export default function Page({ params }) {
         }
     }
 
-    const getCategoryById = async () => {
+    const getProductAttributesById = async (ids) => {
         try {
-            const res = await axios.get(`http://localhost:8000/categorie/${id}`, { withCredentials: true })
-            setShowCategory(res.data.data[0])
-            console.log(res)
-
+            const res = await axios.post(`http://localhost:8000/product/attributes/name/id`, { ids: ids }, { withCredentials: true })
+            const grouped = Object.values(
+                res.data.data.reduce((acc, row) => {
+                    if (!acc[row.attribute_id]) {
+                        acc[row.attribute_id] = {
+                            attribute_id: row.attribute_id,
+                            attribute_name: row.attribute_name,
+                            values: []
+                        }
+                    }
+                    acc[row.attribute_id].values.push({
+                        value_id: row.value_id,
+                        name: row.value
+                    })
+                    return acc
+                }, {})
+            )
+            console.log("Grouped Variants:", grouped)
+            setVariantsShow(grouped)
+        } catch (error) {
+            console.log("Message Error: ", error)
+        }
+    }
+    const getAttribute = async () => {
+        try {
+            const res = await axios.get('http://localhost:8000/product/attributes/name', { withCredentials: true })
+            setAttributes(res.data.rowAttributes)
+            setAttributesValues(res.data.rowValues)
         } catch (error) {
             console.log("Message Error: ", error)
         }
@@ -75,7 +113,7 @@ export default function Page({ params }) {
         try {
             setProductData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }))
             seturlImagePreview(prev => prev.filter((_, i) => i !== index))
-            revokeObjectURL(urlImagePreview[index])
+            URL.revokeObjectURL(urlImagePreview[index])
         } catch (err) {
             console.log("Message Error: ", err)
         }
@@ -163,7 +201,7 @@ export default function Page({ params }) {
                 withCredentials: true
 
             })
-            console.log("oldImages:", oldImages)
+            // console.log("oldImages:", oldImages)
 
             Swal.fire({
                 icon: 'success',
@@ -181,11 +219,13 @@ export default function Page({ params }) {
     useEffect(() => {
         getProductById()
         getCategories()
-        getCategoryById()
-
-        console.log("Products: ", productData)
-        console.log("urlImagePreview: ", urlImagePreview)
+        getAttribute()
     }, [])
+    useEffect(() => {
+        if (variantsIds.length === 0) return
+        getProductAttributesById(variantsIds)
+    }, [variantsIds])
+
     return (
         <div className="w-full h-full flex flex-col gap-3 ">
             <div className="flex items-center mb-6">
@@ -214,7 +254,7 @@ export default function Page({ params }) {
                         <div>
                             <h1 className="text-[16px] font-bold">ประเภท</h1>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-1">
-                                {/* {categories.map(t => (
+                                {categories.map(t => (
                                     <label key={t.id} className="flex items-center gap-2 cursor-pointer">
                                         <input
                                             type="checkbox"
@@ -231,7 +271,7 @@ export default function Page({ params }) {
                                         />
                                         {t.name}
                                     </label>
-                                ))} */}
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -245,7 +285,7 @@ export default function Page({ params }) {
                             </div>
                             <span>รูป</span>
                             <div className="w-full h-[300px] flex justify-center items-center gap-2 overflow-x-scroll">
-                                {/* {
+                                {
                                     urlImagePreview.length > 0 ? urlImagePreview.map((src, index) =>
                                         <div key={index} className="relative w-[150px] h-[150px] flex-shrink-0">
                                             <Image className="w-full h-full object-cover" unoptimized src={src} alt="icon upload" width={300} height={300} />
@@ -253,7 +293,7 @@ export default function Page({ params }) {
                                         </div>)
                                         :
                                         <div className="w-1/2 h-1/2 border-[1px] rounded-2xl flex justify-center items-center ">ไม่ได้อัพรูป</div>
-                                } */}
+                                }
                             </div>
                         </div>
                     </div>
@@ -268,16 +308,16 @@ export default function Page({ params }) {
                                 </div>
                             </div>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
-                                {/* {
-                                    variants.length > 0 ?
-                                        variants.map((item) => (
+                                {
+                                    variantsShow.length > 0 ?
+                                        variantsShow.map((item) => (
                                             <div key={item.attribute_id} className="flex flex-col gap-1">
                                                 <h2 className="text-[16px] font-bold">{item.attribute_name}</h2>
                                                 <div className="flex gap-2" >
                                                     {
                                                         item.values.map((val) => (
-                                                            <div key={val.value_id} className="flex gap-2">
-                                                                <span>{val.value}</span>
+                                                            <div key={val.id} className="flex gap-2">
+                                                                <span>{val.name}</span>
                                                                 <input type="radio" name={`attribute-${item.attribute_id}`} value={val.value_id} />
                                                             </div>
                                                         ))
@@ -289,7 +329,7 @@ export default function Page({ params }) {
                                         <div className="flex justify-center items-center h-[100px] w-full">
                                             <span className="text-black/60">ไม่มีรูปแบบสินค้า</span>
                                         </div>
-                                } */}
+                                }
                             </div>
                             <div className="flex justify-start items-center gap-2">
                                 <span className="text-[16px] font-bold">รหัสสินค้า</span>
@@ -313,8 +353,8 @@ export default function Page({ params }) {
                         <div className="flex flex-col justify-center gap-3">
                             <span className="text-center font-bold">รายละเอียดสต๊อกสินค้า</span>
                             <div className="flex flex-col justify-start gap-3">
-                                {/* {
-                                    variants.length > 0 ?
+                                {
+                                    productData.variants && productData.variants.length > 0 && attributesValues.length > 0 ?
                                         productData.variants.map((item, index) => (
                                             <div key={index} className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
                                                 <div className="flex gap-4 ">
@@ -346,7 +386,7 @@ export default function Page({ params }) {
                                         <div className="flex justify-center items-center h-[200px] w-full">
                                             <span className="text-black/60">ไม่มีรายละเอียดสต๊อกสินค้า</span>
                                         </div>
-                                } */}
+                                }
                             </div>
                             <div className="flex justify-end">
                                 <div className="flex flex-row justify-center items-center gap-2">
@@ -354,9 +394,9 @@ export default function Page({ params }) {
                                         รวม
                                     </span>
                                     <div className=" border px-5 py-1 rounded-[8px]">
-                                        {/* {
+                                        {
                                             productData.variants.reduce((total, item) => item.stock + total, 0)
-                                        } */}
+                                        }
                                     </div>
                                     <span>
                                         ชิ้น
@@ -376,14 +416,14 @@ export default function Page({ params }) {
                     <div className="flex flex-col justify-center items-center gap-6">
                         <h2 className="font-bold">รูปแบบสินค้า</h2>
                         <div className="flex flex-col gap-3 border rounded-[12px] w-[80%] h-[300px] p-3 overflow-y-scroll">
-                            {/* {
+                            {
                                 attributes.map((arr) => (
                                     <div key={arr.attribute_id} className="flex gap-2 py-2 px-4 border w-fit rounded-[12px]">
                                         <input type="checkbox" name="variant" value={arr.attribute_id} />
                                         <span>{arr.attribute_name}</span>
                                     </div>
                                 ))
-                            } */}
+                            }
                         </div>
                     </div>
                     <button className="absolute bottom-4 right-4 py-2 px-4 bg-[#1E3A8A] text-white rounded-[12px] cursor-pointer" type="submit">เลือก</button>

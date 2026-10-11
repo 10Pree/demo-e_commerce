@@ -29,8 +29,6 @@ export default function Page() {
     }
     useEffect(() => {
         getCategory()
-    })
-    useEffect(() => {
         const timeOut = setTimeout(() => {
             getProducts()
         }, 500)

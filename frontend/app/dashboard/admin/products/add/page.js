@@ -24,7 +24,6 @@ export default function Page() {
         categories_ids: [],
         variants: []
     })
-
     const handleCreateUser = async () => {
         try {
             const formData = new FormData()
@@ -113,6 +112,7 @@ export default function Page() {
                     return acc
                 }, {})
             )
+            console.log("Grouped Variants:", grouped)
             setVariants(grouped)
         } catch (error) {
             console.log("Message Error: ", error)
@@ -157,7 +157,6 @@ export default function Page() {
         }
 
         setProductData(prev => ({ ...prev, variants: [...prev.variants, newVariant] }))
-        // console.log("Product Data Variants:", productData.variants)
     }
 
     const handleDeleteVariant = (index) => {
