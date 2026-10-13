@@ -13,6 +13,7 @@ export default function Page({ params }) {
     const [attributes, setAttributes] = useState([])
     const [attributesValues, setAttributesValues] = useState([])
     const [variantsIds, setVariantsIds] = useState([])
+    const [variantsData, setVariantsData] = useState([])
     const [variantsShow, setVariantsShow] = useState([])
     const [openpopup, setOpenpopup] = useState(true)
     const { id } = use(params)
@@ -25,6 +26,7 @@ export default function Page({ params }) {
         variants: []
     })
 
+    // console.log("Product Data:", productData)
     const getProductById = async () => {
         try {
             const res = await axios.get(`http://localhost:8000/product/${id}`, { withCredentials: true })
@@ -50,13 +52,14 @@ export default function Page({ params }) {
                 getProductAttributesById(attributeIds)
             }
             
-            const variantData = variantsRow.map(variant => ({
+            const variantsData = variantsRow.map(variant => ({
                 ...variant,
                 imvav_id: variant.imvav_id,
                 attribute_value_ids: attributeIds.map(Number)
             }))
             
-            setProductData({ p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || [], variants: variantData || []})
+            setProductData({ p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || [], variants: variantsData || []})
+            setVariantsShow(grouedVarantsRows(variantsRow))
 
         } catch (error) {
             console.log("Message Error: ", error)
@@ -65,6 +68,28 @@ export default function Page({ params }) {
 
     const groupedVariantsIds = (row = [], key = 'attribute_id') => [...new Set(row.map(item => item[key]))]
 
+    const  grouedVarantsRows = (row = []) => {
+        console.log("Grouped Variants S1:", row)
+        Object.values(
+            row.reduce((acc, r)=> {
+                const v = (acc[r.mvav_id] ??= {
+                    id: r.variant_id,
+                    sku: r.sku,
+                    price: r.price,
+                    stock: r.stock,
+                    attributes: []
+                })
+                if(r.pav_id !== null) {
+                    v.attributes.push({
+                        attribute_id: r.pav_id,
+                        attribute_value: r.value
+                    })
+                }
+                console.log("Grouped Variants S2:", v)
+                return acc
+            }, [])
+        )
+    }
     const getCategories = async () => {
         try {
             const res = await axios.get("http://localhost:8000/categories", { withCredentials: true })
@@ -99,6 +124,7 @@ export default function Page({ params }) {
             console.log("Message Error: ", error)
         }
     }
+
     const getAttribute = async () => {
         try {
             const res = await axios.get('http://localhost:8000/product/attributes/name', { withCredentials: true })
@@ -221,10 +247,10 @@ export default function Page({ params }) {
         getCategories()
         getAttribute()
     }, [])
-    useEffect(() => {
-        if (variantsIds.length === 0) return
-        getProductAttributesById(variantsIds)
-    }, [variantsIds])
+    // useEffect(() => {
+    //     if (variantsIds.length === 0) return
+    //     getProductAttributesById(variantsIds)
+    // }, [variantsIds])
 
     return (
         <div className="w-full h-full flex flex-col gap-3 ">
@@ -308,7 +334,7 @@ export default function Page({ params }) {
                                 </div>
                             </div>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
-                                {
+                                {/* {
                                     variantsShow.length > 0 ?
                                         variantsShow.map((item) => (
                                             <div key={item.attribute_id} className="flex flex-col gap-1">
@@ -329,7 +355,7 @@ export default function Page({ params }) {
                                         <div className="flex justify-center items-center h-[100px] w-full">
                                             <span className="text-black/60">ไม่มีรูปแบบสินค้า</span>
                                         </div>
-                                }
+                                } */}
                             </div>
                             <div className="flex justify-start items-center gap-2">
                                 <span className="text-[16px] font-bold">รหัสสินค้า</span>
@@ -354,24 +380,20 @@ export default function Page({ params }) {
                             <span className="text-center font-bold">รายละเอียดสต๊อกสินค้า</span>
                             <div className="flex flex-col justify-start gap-3">
                                 {
-                                    productData.variants && productData.variants.length > 0 && attributesValues.length > 0 ?
-                                        productData.variants.map((item, index) => (
+                                    variantsShow ?
+                                        variantsShow.map((item, index) => (
                                             <div key={index} className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
                                                 <div className="flex gap-4 ">
                                                     <span>{index + 1}</span>
                                                     <span>{item.sku}</span>
                                                     <span>
                                                         {
-                                                            attributesValues
-                                                                .filter((val) => val.value_id === item.attribute_value_ids[0])
-                                                                .map((val) => val.value)
+                                                            item.attribute_name
                                                         }
                                                     </span>
                                                     <span>
                                                         {
-                                                            attributesValues
-                                                                .filter((val) => val.value_id === item.attribute_value_ids[1])
-                                                                .map((val) => val.value)
+                                                            item.value
                                                         }
                                                     </span>
                                                     <span>{item.price}</span>
