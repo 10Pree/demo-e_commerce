@@ -55,7 +55,7 @@ class ModelsProductDetails {
         try{
             const executer = conn || getDB()
             const [results] = await executer.query(`
-                SELECT pv.id AS variant_id, pv.sku, pv.price, pv.stock, pav.id AS pav_id, pav.value, mvav.id AS mvav_id
+                SELECT pv.id AS pv_id, pv.sku, pv.price, pv.stock, pav.id AS pav_id, pav.value, mvav.id AS mvav_id, pa.id AS pa_id, pa.name AS pa_name
                 FROM product_variants pv
                 LEFT JOIN map_variant_attribute_values mvav ON pv.id = mvav.product_variants_id
                 LEFT JOIN product_attribute_values pav ON mvav.product_attribute_values_id = pav.id
