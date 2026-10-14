@@ -11,10 +11,11 @@ export default function Page({ params }) {
     const [urlImagePreview, seturlImagePreview] = useState([])
     const [categories, setCategories] = useState([])
     const [attributes, setAttributes] = useState([])
-    const [attributesValues, setAttributesValues] = useState([])
-    const [variantsIds, setVariantsIds] = useState([])
-    const [variantsData, setVariantsData] = useState([])
-    const [variantsShow, setVariantsShow] = useState([])
+    // const [attributesValues, setAttributesValues] = useState([])
+    // const [variantsIds, setVariantsIds] = useState([])
+    // const [variantsData, setVariantsData] = useState([])
+    // const [variantsShow, setVariantsShow] = useState([])
+    const [attributesOptions, setAttributesOptions] = useState([])
     const [openpopup, setOpenpopup] = useState(true)
     const { id } = use(params)
     const [productData, setProductData] = useState({
@@ -46,50 +47,50 @@ export default function Page({ params }) {
             
             seturlImagePreview(images.map(img => `http://localhost:8000${img}`))
             
-            const attributeIds = groupedVariantsIds(variantsRow, 'pav_id').filter(Boolean) // [1, 2]
-            console.log("Attribute Ids:", attributeIds)
-            if (attributeIds.length > 0) {
-                getProductAttributesById(attributeIds)
-            }
+            // const attributeIds = groupedVariantsIds(variantsRow, 'pav_id').filter(Boolean) // [1, 2]
+            // console.log("Attribute Ids:", attributeIds)
+            // if (attributeIds.length > 0) {
+            //     getProductAttributesById(attributeIds)
+            // }
             
-            const variantsData = variantsRow.map(variant => ({
-                ...variant,
-                imvav_id: variant.imvav_id,
-                attribute_value_ids: attributeIds.map(Number)
-            }))
+            // const variantsData = variantsRow.map(variant => ({
+            //     ...variant,
+            //     imvav_id: variant.imvav_id,
+            //     attribute_value_ids: attributeIds.map(Number)
+            // }))
             
-            setProductData({ p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || [], variants: variantsData || []})
-            setVariantsShow(grouedVarantsRows(variantsRow))
+            setProductData({ p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || [], variants: variantsRow || []})
+            // setVariantsShow(grouedVarantsRows(variantsRow))
 
         } catch (error) {
             console.log("Message Error: ", error)
         }
     }
 
-    const groupedVariantsIds = (row = [], key = 'attribute_id') => [...new Set(row.map(item => item[key]))]
+    // const groupedVariantsIds = (row = [], key = 'pav_id`') => [...new Set(row.map(item => item[key]))]
 
-    const  grouedVarantsRows = (row = []) => {
-        console.log("Grouped Variants S1:", row)
-        Object.values(
-            row.reduce((acc, r)=> {
-                const v = (acc[r.mvav_id] ??= {
-                    id: r.variant_id,
-                    sku: r.sku,
-                    price: r.price,
-                    stock: r.stock,
-                    attributes: []
-                })
-                if(r.pav_id !== null) {
-                    v.attributes.push({
-                        attribute_id: r.pav_id,
-                        attribute_value: r.value
-                    })
-                }
-                console.log("Grouped Variants S2:", v)
-                return acc
-            }, [])
-        )
-    }
+    // const  grouedVarantsRows  = (row = []) => {
+    //     console.log("Grouped Variants S1:", row)
+    //     return Object.values(
+    //         row.reduce((acc, r)=> {
+    //             const v = (acc[r.mvav_id] ??= {
+    //                 id: r.pv_id,
+    //                 sku: r.sku,
+    //                 price: r.price,
+    //                 stock: r.stock,
+    //                 attributes: []
+    //             })
+    //             if(r.pav_id !== null) {
+    //                 v.attributes.push({
+    //                     attribute_id: r.pav_id,
+    //                     attribute_value: r.value
+    //                 })
+    //             }
+    //             console.log("Grouped Variants S2:", v)
+    //             return acc
+    //         }, {})
+    //     )
+    // }
     const getCategories = async () => {
         try {
             const res = await axios.get("http://localhost:8000/categories", { withCredentials: true })
@@ -118,8 +119,7 @@ export default function Page({ params }) {
                     return acc
                 }, {})
             )
-            console.log("Grouped Variants:", grouped)
-            setVariantsShow(grouped)
+            setAttributesOptions(grouped)
         } catch (error) {
             console.log("Message Error: ", error)
         }
@@ -162,9 +162,11 @@ export default function Page({ params }) {
         const price = formData.get('price')
         const stock = formData.get('stock')
 
-        const attributeids = variantsData.map((attr) => (
-            formData.get(`attribute-${attr.attribute_id}`)
-        ))
+        const attributeids = variantsData.map((attr) => {
+            const valueId = formData.get(`attribute-${attr.attribute_id}`)
+            const val = attr.values.find((v) => String(v.value_id) ===  valueId)
+            return val ? val.value_id : null
+    })
 
         if (!sku || !price || !stock || !attributeids || !attributeids || attributeids.length === 0) {
             Swal.fire({
@@ -195,7 +197,7 @@ export default function Page({ params }) {
     }
     const handleSubmitVariant = (formData) => {
         const variantIds = formData.getAll('variant').map(Number)
-        setVariantsIds(variantIds)
+        setAttributesOptions(variantIds)
         setOpenpopup(true)
     }
 
@@ -380,8 +382,8 @@ export default function Page({ params }) {
                             <span className="text-center font-bold">รายละเอียดสต๊อกสินค้า</span>
                             <div className="flex flex-col justify-start gap-3">
                                 {
-                                    variantsShow ?
-                                        variantsShow.map((item, index) => (
+                                    productData.variants.length > 0 ?
+                                        productData.variants.map((item, index) => (
                                             <div key={index} className="flex justify-between gap-2 border rounded-2xl p-2 px-6">
                                                 <div className="flex gap-4 ">
                                                     <span>{index + 1}</span>
