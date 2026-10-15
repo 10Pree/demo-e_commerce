@@ -2,7 +2,7 @@
 import Image from "next/image"
 import axios from "axios"
 import Swal from "sweetalert2"
-import { use, useEffect, useState } from "react"
+import { use, useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { PackagePlus, Trash, X } from 'lucide-react';
 
@@ -27,8 +27,8 @@ export default function Page({ params }) {
         variants: []
     })
 
-    // console.log("Product Data:", productData)
-    const getProductById = async () => {
+    console.log("Product Data:", productData)
+    const getProductById = useCallback(async () => {
         try {
             const res = await axios.get(`http://localhost:8000/product/${id}`, { withCredentials: true })
             const productRow = res.data.product?.[0]
@@ -44,61 +44,57 @@ export default function Page({ params }) {
                 return
             }
             const { p_name, p_price, p_details, p_stock, images, categories_ids } = productRow
-            
+
             seturlImagePreview(images.map(img => `http://localhost:8000${img}`))
-            
-            // const attributeIds = groupedVariantsIds(variantsRow, 'pav_id').filter(Boolean) // [1, 2]
-            // console.log("Attribute Ids:", attributeIds)
-            // if (attributeIds.length > 0) {
-            //     getProductAttributesById(attributeIds)
-            // }
-            
-            // const variantsData = variantsRow.map(variant => ({
-            //     ...variant,
-            //     imvav_id: variant.imvav_id,
-            //     attribute_value_ids: attributeIds.map(Number)
-            // }))
-            
-            setProductData({ p_name, p_price, p_details, p_stock, images: images || [], categories_ids: categories_ids || [], variants: variantsRow || []})
+
+
+            const variantsData = grouedVarantsRows(variantsRow)
+            // console.log("Variants Data:", variantsData)
+            setProductData({
+                p_name, p_price, p_details, p_stock,
+                images: images || [],
+                categories_ids: categories_ids || [],
+                variants: variantsData || []
+            })
             // setVariantsShow(grouedVarantsRows(variantsRow))
 
         } catch (error) {
             console.log("Message Error: ", error)
         }
-    }
+    }, [id, router])
 
     // const groupedVariantsIds = (row = [], key = 'pav_id`') => [...new Set(row.map(item => item[key]))]
 
-    // const  grouedVarantsRows  = (row = []) => {
-    //     console.log("Grouped Variants S1:", row)
-    //     return Object.values(
-    //         row.reduce((acc, r)=> {
-    //             const v = (acc[r.mvav_id] ??= {
-    //                 id: r.pv_id,
-    //                 sku: r.sku,
-    //                 price: r.price,
-    //                 stock: r.stock,
-    //                 attributes: []
-    //             })
-    //             if(r.pav_id !== null) {
-    //                 v.attributes.push({
-    //                     attribute_id: r.pav_id,
-    //                     attribute_value: r.value
-    //                 })
-    //             }
-    //             console.log("Grouped Variants S2:", v)
-    //             return acc
-    //         }, {})
-    //     )
-    // }
-    const getCategories = async () => {
+    const grouedVarantsRows = (row = []) => {
+        console.log("Grouped Variants S1:", row)
+        return Object.values(
+            row.reduce((acc, r) => {
+                const v = (acc[r.pv_id] ??= {
+                    id: r.pv_id,
+                    sku: r.sku,
+                    price: r.price,
+                    stock: r.stock,
+                    attributes: []
+                })
+                if (r.pav_id !== null) {
+                    v.attributes.push({
+                        attribute_id: r.pav_id,
+                        attribute_value: r.value
+                    })
+                }
+                console.log("Grouped Variants S2:", v)
+                return acc
+            }, {})
+        )
+    }
+    const getCategories = useCallback(async () => {
         try {
             const res = await axios.get("http://localhost:8000/categories", { withCredentials: true })
             setCategories(res.data.data)
         } catch (error) {
             console.log("Message Error: ", error)
         }
-    }
+    }, [])
 
     const getProductAttributesById = async (ids) => {
         try {
@@ -119,13 +115,14 @@ export default function Page({ params }) {
                     return acc
                 }, {})
             )
+            console.log("Grouped Variants:", grouped)
             setAttributesOptions(grouped)
         } catch (error) {
             console.log("Message Error: ", error)
         }
     }
 
-    const getAttribute = async () => {
+    const getAttribute = useCallback(async () => {
         try {
             const res = await axios.get('http://localhost:8000/product/attributes/name', { withCredentials: true })
             setAttributes(res.data.rowAttributes)
@@ -133,7 +130,7 @@ export default function Page({ params }) {
         } catch (error) {
             console.log("Message Error: ", error)
         }
-    }
+    }, [])
 
     const handleDeleteimg = (index) => {
         try {
@@ -162,11 +159,11 @@ export default function Page({ params }) {
         const price = formData.get('price')
         const stock = formData.get('stock')
 
-        const attributeids = variantsData.map((attr) => {
+        const attributeids = attributesOptions.map((attr) => {
             const valueId = formData.get(`attribute-${attr.attribute_id}`)
-            const val = attr.values.find((v) => String(v.value_id) ===  valueId)
-            return val ? val.value_id : null
-    })
+            const val = attr.values.find((v) => String(v.value_id) === valueId)
+            return val ? { value_id: val.value_id, name: val.name} : null
+        })
 
         if (!sku || !price || !stock || !attributeids || !attributeids || attributeids.length === 0) {
             Swal.fire({
@@ -181,8 +178,11 @@ export default function Page({ params }) {
             "sku": sku,
             "price": Number(price),
             "stock": Number(stock),
-            "attribute_value_ids": attributeids.map(Number)
+            "attributes": attributeids.map((a) => ({attribute_id: a.value_id, attribute_value: a.name})),
+            "attribute_value_ids": attributeids.map((a) => a.value_id)
         }
+
+        console.log("New Variant:", newVariant)
 
         setProductData(prev => ({ ...prev, variants: [...prev.variants, newVariant] }))
         // console.log("Product Data Variants:", productData.variants)
@@ -197,7 +197,7 @@ export default function Page({ params }) {
     }
     const handleSubmitVariant = (formData) => {
         const variantIds = formData.getAll('variant').map(Number)
-        setAttributesOptions(variantIds)
+        getProductAttributesById(variantIds)
         setOpenpopup(true)
     }
 
@@ -249,10 +249,6 @@ export default function Page({ params }) {
         getCategories()
         getAttribute()
     }, [])
-    // useEffect(() => {
-    //     if (variantsIds.length === 0) return
-    //     getProductAttributesById(variantsIds)
-    // }, [variantsIds])
 
     return (
         <div className="w-full h-full flex flex-col gap-3 ">
@@ -336,15 +332,15 @@ export default function Page({ params }) {
                                 </div>
                             </div>
                             <div className="border-[1px] rounded-[8px] p-2 flex flex-col gap-3">
-                                {/* {
-                                    variantsShow.length > 0 ?
-                                        variantsShow.map((item) => (
+                                {
+                                    attributesOptions.length > 0 ?
+                                        attributesOptions.map((item) => (
                                             <div key={item.attribute_id} className="flex flex-col gap-1">
                                                 <h2 className="text-[16px] font-bold">{item.attribute_name}</h2>
                                                 <div className="flex gap-2" >
                                                     {
-                                                        item.values.map((val) => (
-                                                            <div key={val.id} className="flex gap-2">
+                                                        item.values.map((val, idex) => (
+                                                            <div key={idex} className="flex gap-2">
                                                                 <span>{val.name}</span>
                                                                 <input type="radio" name={`attribute-${item.attribute_id}`} value={val.value_id} />
                                                             </div>
@@ -357,7 +353,7 @@ export default function Page({ params }) {
                                         <div className="flex justify-center items-center h-[100px] w-full">
                                             <span className="text-black/60">ไม่มีรูปแบบสินค้า</span>
                                         </div>
-                                } */}
+                                }
                             </div>
                             <div className="flex justify-start items-center gap-2">
                                 <span className="text-[16px] font-bold">รหัสสินค้า</span>
@@ -388,16 +384,13 @@ export default function Page({ params }) {
                                                 <div className="flex gap-4 ">
                                                     <span>{index + 1}</span>
                                                     <span>{item.sku}</span>
-                                                    <span>
-                                                        {
-                                                            item.attribute_name
-                                                        }
-                                                    </span>
-                                                    <span>
-                                                        {
-                                                            item.value
-                                                        }
-                                                    </span>
+                                                    {
+                                                        item.attributes.map((val) => (
+                                                            <span key={val.attribute_id}>
+                                                                {val.attribute_value}
+                                                            </span>
+                                                        ))
+                                                    }
                                                     <span>{item.price}</span>
                                                 </div>
                                                 <div className="flex justify-center items-center gap-4">
