@@ -213,15 +213,13 @@ export default function Page({ params }) {
 
 
             formData.append('p_name', productData.p_name)
-            formData.append('p_price', productData.p_price)
             formData.append('p_details', productData.p_details)
             formData.append('p_stock', productData.p_stock)
-
             formData.append('categories_ids', productData.categories_ids)
+            formData.append('variants', JSON.stringify(productData.variants))
 
             const oldImages = productData.images.filter(img => typeof img === 'string')
             const newImages = productData.images.filter(img => img instanceof File)
-
             formData.append('old_images', JSON.stringify(oldImages)) // ส่งเป็น JSON
             newImages.forEach(file => formData.append('images', file)) // ส่งเป็น File
 
