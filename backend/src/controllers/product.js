@@ -248,6 +248,7 @@ class controllerProduct {
             const parsedOldImages = old_images ? JSON.parse(old_images) : []
             const parsedCategories = categories_ids ? categories_ids.split(',').map(Number) : []
             const parsedVariants = variants ? JSON.parse(variants) : []
+            console.log(parsedVariants.map((v) => ({ vid: v.vid, sku: v.sku, price: v.price, stock: v.stock })))
             const newFiles = req.files
             const newData = {}
             let stockAll = 0
@@ -267,6 +268,15 @@ class controllerProduct {
                     const { vid, sku, price, stock, attribute_value_ids } = variant
                     let currentVariantId = vid
 
+                    if(parsedVariants){
+                        const row = await modelsProductDetails.getProductVariantsStockAndPrice(productId, conn)
+                        for (const v of row) {
+                            let index = 0
+                            if(v.id !== parsedVariants[index].id){
+                               //! รอทำ model deldete variants ทั้งหมด
+                            }
+                        }
+                    }
                     if (vid) {
                         const productVariants = await modelsProductDetails.updateProductVariants({ sku, price, stock }, vid, productId, conn)
 
@@ -397,10 +407,10 @@ class controllerProduct {
             })
         } catch (error) {
             console.log("Message Error:", error.message);
+            await conn.rollback()
             return res.status(500).json({
                 message: "Server Error",
             });
-            await conn.rollback()
         } finally {
             conn.release()
         }
