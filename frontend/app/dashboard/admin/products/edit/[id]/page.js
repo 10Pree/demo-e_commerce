@@ -13,8 +13,8 @@ export default function Page({ params }) {
     const [attributes, setAttributes] = useState([])
     // const [attributesValues, setAttributesValues] = useState([])
     // const [variantsIds, setVariantsIds] = useState([])
-    // const [variantsData, setVariantsData] = useState([])
     // const [variantsShow, setVariantsShow] = useState([])
+    // const [variantsNewData, setVariantsNewData] = useState([])
     const [attributesOptions, setAttributesOptions] = useState([])
     const [openpopup, setOpenpopup] = useState(true)
     const { id } = use(params)
@@ -49,24 +49,20 @@ export default function Page({ params }) {
 
 
             const variantsData = grouedVarantsRows(variantsRow)
-            // console.log("Variants Data:", variantsData)
             setProductData({
                 p_name, p_price, p_details, p_stock,
                 images: images || [],
                 categories_ids: categories_ids || [],
-                variants: variantsData || []
+                variants: variantsData.map(v => ({ vid: v.id, sku: v.sku, price: v.price, stock: v.stock, attributes: v.attributes })) || []
             })
-            // setVariantsShow(grouedVarantsRows(variantsRow))
 
         } catch (error) {
             console.log("Message Error: ", error)
         }
     }, [id, router])
 
-    // const groupedVariantsIds = (row = [], key = 'pav_id`') => [...new Set(row.map(item => item[key]))]
 
     const grouedVarantsRows = (row = []) => {
-        console.log("Grouped Variants S1:", row)
         return Object.values(
             row.reduce((acc, r) => {
                 const v = (acc[r.pv_id] ??= {
@@ -82,7 +78,6 @@ export default function Page({ params }) {
                         attribute_value: r.value
                     })
                 }
-                console.log("Grouped Variants S2:", v)
                 return acc
             }, {})
         )
@@ -115,7 +110,6 @@ export default function Page({ params }) {
                     return acc
                 }, {})
             )
-            console.log("Grouped Variants:", grouped)
             setAttributesOptions(grouped)
         } catch (error) {
             console.log("Message Error: ", error)
@@ -126,7 +120,6 @@ export default function Page({ params }) {
         try {
             const res = await axios.get('http://localhost:8000/product/attributes/name', { withCredentials: true })
             setAttributes(res.data.rowAttributes)
-            setAttributesValues(res.data.rowValues)
         } catch (error) {
             console.log("Message Error: ", error)
         }
@@ -175,6 +168,7 @@ export default function Page({ params }) {
             return
         }
         const newVariant = {
+            "vid": null,
             "sku": sku,
             "price": Number(price),
             "stock": Number(stock),
@@ -185,7 +179,6 @@ export default function Page({ params }) {
         console.log("New Variant:", newVariant)
 
         setProductData(prev => ({ ...prev, variants: [...prev.variants, newVariant] }))
-        // console.log("Product Data Variants:", productData.variants)
     }
 
     const handleDeleteVariant = (index) => {
@@ -223,11 +216,11 @@ export default function Page({ params }) {
             formData.append('old_images', JSON.stringify(oldImages)) // ส่งเป็น JSON
             newImages.forEach(file => formData.append('images', file)) // ส่งเป็น File
 
+
             const res = await axios.put(`http://localhost:8000/product/${id}`, formData, {
                 withCredentials: true
 
             })
-            // console.log("oldImages:", oldImages)
 
             Swal.fire({
                 icon: 'success',
@@ -236,7 +229,6 @@ export default function Page({ params }) {
                 showConfirmButton: false
             })
 
-            console.log(res)
 
         } catch (error) {
             console.log("Message Error: ", error)
