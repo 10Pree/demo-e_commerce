@@ -2,57 +2,57 @@ const { getDB } = require("../config/db")
 
 class ModelsProductDetails {
     static async createProductAttributes(data, conn) {
-        try{
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('INSERT INTO product_attributes SET ?', [data])
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
     static async createProductAttributesValues(id, value, conn) {
-        try{
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('INSERT INTO product_attribute_values (value, product_attributes_id) VALUES (?, ?)', [value, id])
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
-    static async createProductVariants (data, conn) {
-        try{
+    static async createProductVariants(data, conn) {
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('INSERT INTO product_variants SET ?', [data])
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
     static async CreateMap_Variant_Attribute_Values(data, conn) {
-        try{
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('INSERT INTO map_variant_attribute_values (product_variants_id, product_attribute_values_id) VALUES ?', [data])
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
     static async getProductVariantsStockAndPrice(productId, conn) {
-        try{
+        try {
             const executer = conn || getDB()
-            const [results] = await executer.query('SELECT stock, price FROM product_variants WHERE products_id = ?', [productId])
+            const [results] = await executer.query('SELECT id, stock, price FROM product_variants WHERE products_id = ?', [productId])
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
-        static async getProductVariants(productId, conn) {
-        try{
+    static async getProductVariants(productId, conn) {
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query(`
                 SELECT pv.id AS pv_id, pv.sku, pv.price, pv.stock, pav.id AS pav_id, pav.value, mvav.id AS mvav_id, pa.id AS pa_id, pa.name AS pa_name
@@ -63,73 +63,83 @@ class ModelsProductDetails {
                 WHERE pv.products_id = ?
                 `, productId)
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
-    static async updateProductAttributes(data, conn){
-        try{
+    static async updateProductAttributes(data, conn) {
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('UPDATE product_attributes SET ? WHERE id = ?', [data, data.id])
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
-    static async updateProductAttributesValues(data, id, conn){
-        try{
+    static async updateProductAttributesValues(data, id, conn) {
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('UPDATE product_attribute_values SET ? WHERE id = ?', [data, id])
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
-    static async updateProductVariants(data, vid, products_id, conn){
-        try{
+    static async updateProductVariants(data, vid, products_id, conn) {
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('UPDATE product_variants SET ? WHERE id = ? AND products_id = ?', [data, vid, products_id])
-            if(results.affectedRows === 0){
+            if (results.affectedRows === 0) {
                 throw new Error(`Product Variant ID ${vid} Not Found for Product ID ${products_id}`)
             }
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
-    static async updateProductVariantsStock(data, id, conn){
-        try{
+    static async updateProductVariantsStock(data, id, conn) {
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('UPDATE product_variants SET stock = stock - ? WHERE id = ? AND stock >= ?', [data, id, data])
-            if(results.affectedRows === 0){
+            if (results.affectedRows === 0) {
                 throw new Error("Insufficient stock for the product variant")
             }
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
-    static async updateMap_Variant_Attribute_Values(data, id, conn){
-        try{
+    static async updateMap_Variant_Attribute_Values(data, id, conn) {
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('UPDATE map_variant_attribute_values SET ? WHERE id = ?', [data, id])
             return results
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }
 
-        static async deleteMap_Variant_Attribute_Values(id, conn){
-        try{
+    static async deleteMap_Variant_Attribute_Values(id, conn) {
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('DELETE FROM map_variant_attribute_values WHERE product_variants_id = ?', [id])
             return results
-        }catch(error){
+        } catch (error) {
+            throw error
+        }
+    }
+
+    static async deleteProductVariantByid(variantId, products_id, conn) {
+        try {
+            const executer = conn || getDB()
+            const [results] = await executer.query('DELETE FROM product_variants WHERE id = ? AND products_id = ?', [variantId, products_id])
+            return results
+        } catch (error) {
             throw error
         }
     }

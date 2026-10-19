@@ -103,6 +103,19 @@ class ControllerProductDetails {
         }
     }
 
+    static async deleteProductVariantByid(req, res){
+        try{
+            const { variantId, products_id } = req.body
+            await ModelsProductDetails.deleteProductVariantByid(variantId, products_id)
+            return res.status(200).json({
+                message: "Delete Product Variant Successful!!",
+            })
+        }catch(error){
+            console.log(error)
+            return res.status(500).json({ message: error.message })
+        }
+    }
+
 }
 
 module.exports = ControllerProductDetails
