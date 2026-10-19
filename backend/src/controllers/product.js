@@ -268,15 +268,17 @@ class controllerProduct {
                     const { vid, sku, price, stock, attribute_value_ids } = variant
                     let currentVariantId = vid
 
-                    if(parsedVariants){
-                        const row = await modelsProductDetails.getProductVariantsStockAndPrice(productId, conn)
-                        for (const v of row) {
-                            let index = 0
-                            if(v.id !== parsedVariants[index].id){
-                               //! รอทำ model deldete variants ทั้งหมด
-                            }
+                        const variantRow = await modelsProductDetails.getProductVariantsStockAndPrice(productId, conn)
+                        // console.log("variantRow:", variantRow)
+                        const sentIds = new Set(parsedVariants.filter(v => v.vid != null).map(v => Number(v.vid)))
+                        const toDelete = [...new Set(variantRow.map(v => v.id))].filter(id => !sentIds.has(id))
+                        // console.log("sentIds:", sentIds, "toDelete:", toDelete)
+
+                        for(const variantId of toDelete) {
+                            await modelsProductDetails.deleteProductVariantByid(variantId, productId, conn)
+                            // console.log(`Delete Product Variant ID ${variantId} Successful!!`)
                         }
-                    }
+                    
                     if (vid) {
                         const productVariants = await modelsProductDetails.updateProductVariants({ sku, price, stock }, vid, productId, conn)
 
