@@ -9,7 +9,7 @@ export default function Page() {
 
     const getLogProducts = async () => {
         try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/log/products`, { withCredentials: true})
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/log/products`, { withCredentials: true})
             setDataLog(res.data.data)
         } catch (err) {
             console.log("Message Error:", err)

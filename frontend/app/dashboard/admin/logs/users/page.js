@@ -8,7 +8,7 @@ export default function Page() {
 
     const getLog = async() => {
         try{
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/log/users`, { withCredentials: true})
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/log/users`, { withCredentials: true})
             setLogUser(res.data.data)
         }catch(err){
             console.log("Message:", err)
