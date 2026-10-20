@@ -248,7 +248,7 @@ class controllerProduct {
             const parsedOldImages = old_images ? JSON.parse(old_images) : []
             const parsedCategories = categories_ids ? categories_ids.split(',').map(Number) : []
             const parsedVariants = variants ? JSON.parse(variants) : []
-            console.log(parsedVariants.map((v) => ({ vid: v.vid, sku: v.sku, price: v.price, stock: v.stock })))
+            // console.log(parsedVariants.map((v) => ({ vid: v.vid, sku: v.sku, price: v.price, stock: v.stock })))
             const newFiles = req.files
             const newData = {}
             let stockAll = 0
