@@ -20,6 +20,7 @@ export default function Page({ params }) {
     const { id } = use(params)
     const [productData, setProductData] = useState({
         p_name: "",
+        p_price: 0,
         p_details: "",
         p_stock: 0,
         images: [],
@@ -257,7 +258,8 @@ export default function Page({ params }) {
                         </div>
                         <div>
                             <h1 className="text-[16px] font-bold">ราคา</h1>
-                            <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" name="p_price" onChange={handleChange} value={productData.p_price || ""} />
+                            <input className="bg-white border-[1px] rounded-[8px] p-1 w-full" type="text" name="p_price" onChange={handleChange} value={productData.p_price || ""} disabled />
+                            <div className="flex gap-2"><span className="text-red-500 font-bold">*</span><span className=" opacity-50">ราคาสินค้าไม่สามารถแก้ไขได้ ราคาจะเปลี่ยนไปตามราคาของสต๊อกสินค้าที่ราคาน้อยที่สุด</span></div>
                         </div>
                         <div>
                             <h1 className="text-[16px] font-bold">รายละเอียด</h1>
