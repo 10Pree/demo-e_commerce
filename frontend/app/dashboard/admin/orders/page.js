@@ -17,8 +17,8 @@ export default function Page() {
             {/* Header */}
             <div className="flex items-center mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-[#111827]">ตารางรายการชําระ</h1>
-                    <p className="text-sm text-gray-500 mt-1">ตารางรวมรายการชําระทั้งหมด</p>
+                    <h1 className="text-3xl font-bold text-[#111827]">ตารางรายการสั่งซื้อ</h1>
+                    <p className="text-sm text-gray-500 mt-1">ตารางรวมแสดงรายการสั่งซื้อทั้งหมด</p>
                 </div>
             </div>
             <div>

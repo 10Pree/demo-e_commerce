@@ -54,7 +54,7 @@ export default function SideBar({ open }) {
                 <div className=" flex flex-col gap-3 pl-10 pt-10">
                     <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/admin/main">หน้าหลัก</Link>
                     <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/admin/products">สินค้า</Link>
-                    <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/admin/payments">รายการชำระเงิน</Link>
+                    <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/admin/orders">รายการสั่งซื้อ</Link>
                     <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl" href="/dashboard/admin/users">ผู้ใช้งาน</Link>
                     <div>
                         <button onClick={handleLog} className="text-white w-fit hover:text-[#2563EB] rounded-2xl text-start">Logs <span className="text-[13px]">{logOpen ? "▼" : "▲"}</span></button>
