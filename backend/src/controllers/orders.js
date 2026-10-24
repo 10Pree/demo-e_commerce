@@ -1,6 +1,6 @@
 
 const modelsCategories = require("../models/categories")
-const moduleOrders = require("../models/orders")
+const modelsOrders = require("../models/orders")
 const modelsPayments = require("../models/payments")
 const modelsDetails = require("../models/productDetails")
 const { getConnection } = require("../config/db")
@@ -21,7 +21,7 @@ class controllerOrders {
                 data.total = total
             }
 
-            await moduleOrders.createOrder(data)
+            await modelsOrders.createOrder(data)
 
             return res.status(201).json({
                 message: "Create Order Successful!!"
@@ -42,7 +42,7 @@ class controllerOrders {
             if (!orders_id && !products_id) {
                 throw new Error("orders_id and products_id are required")
             }
-            const product = await moduleOrders.productItem(products_id, conn)
+            const product = await modelsOrders.productItem(products_id, conn)
             if(product.length === 0){
                 throw new Error("Product Not Found")
             }
@@ -60,9 +60,9 @@ class controllerOrders {
             }
             // console.log(data)
 
-            await moduleOrders.createOrderItem(data, conn)
+            await modelsOrders.createOrderItem(data, conn)
 
-            await moduleOrders.updateOrder(orders_id, conn)
+            await modelsOrders.updateOrder(orders_id, conn)
 
             await conn.commit()
 
@@ -89,8 +89,8 @@ class controllerOrders {
             if(!product_id && !customers_id && !product_variants_id && !qty){
                 throw new Error("product_id, customers_id, product_variants_id and qty are required")
             }
-            const order = await moduleOrders.createOrder({customers_id: customers_id, status: "pending"}, conn)
-            const product = await moduleOrders.productItem(product_id, conn)
+            const order = await modelsOrders.createOrder({customers_id: customers_id, status: "pending"}, conn)
+            const product = await modelsOrders.productItem(product_id, conn)
             if(product.length === 0){
                 throw new Error("Product Not Found")
             }
@@ -103,8 +103,8 @@ class controllerOrders {
                 qty: qty,
                 line_total: product[0].p_price * qty
             }
-            await moduleOrders.createOrderItem(dataOrdersItem, conn)
-            await moduleOrders.updateOrder(order[0].insertId, conn)
+            await modelsOrders.createOrderItem(dataOrdersItem, conn)
+            await modelsOrders.updateOrder(order[0].insertId, conn)
 
             await modelsDetails.updateProductVariantsStock(qty, product_variants_id, conn)
 
@@ -139,9 +139,20 @@ class controllerOrders {
         }
     }
 
+    static async getListOrders(req, res){
+        try{
+            const orders = await modelsOrders.getListOrders()
+        }catch(error){
+            console.log("Message Error:", error)
+            return res.status(500).json({
+                message: "Server Error"
+            })
+        }
+    }
+
     static async getOrdersAndpayments(req, res) {
         try {
-            const orders = await moduleOrders.getOrdersAndpayments()
+            const orders = await modelsOrders.getOrdersAndpayments()
 
             return res.status(200).json({
                 message: "Get getOrdersAndpayments Successful!!",
@@ -156,7 +167,7 @@ class controllerOrders {
     }
     static async getDailyOrdersAndPayments(req, res) {
         try {
-            const dataOrders = await moduleOrders.getDailyOrders()
+            const dataOrders = await modelsOrders.getDailyOrders()
             const dataPayments = await modelsPayments.getDailyIncome()
             const dataCategoriesProduct = await modelsCategories.getProductsCategories()
 

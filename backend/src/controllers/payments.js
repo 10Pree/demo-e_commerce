@@ -1,4 +1,4 @@
-const moduleOrders = require("../models/orders")
+const modelsOrders = require("../models/orders")
 const modelsPayments = require("../models/payments")
 const { getConnection } = require("../config/db")
 
@@ -12,7 +12,7 @@ class controllerPayments {
                 throw new Error("orders_id is required")
             }
 
-            const product = await moduleOrders.orderItmeByID(orders_id, conn)
+            const product = await modelsOrders.orderItmeByID(orders_id, conn)
             if (product.length === 0) {
                 throw new Error("Orders Not Found")
             }
@@ -65,7 +65,7 @@ class controllerPayments {
             await modelsPayments.updatePayment(orders_id)
 
 
-            await moduleOrders.updateOrderPaid(payment[0].orders_id)
+            await modelsOrders.updateOrderPaid(payment[0].orders_id)
 
             res.status(200).json({
                 message: `Update Payment Order:${orders_id} Successful!!`

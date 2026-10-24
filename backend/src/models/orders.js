@@ -1,6 +1,6 @@
 const { getDB } = require("../config/db");
 
-class moduleOrders {
+class modelsOrders {
     static async createOrder(data, conn) {
         try {
             const executer = conn || getDB()
@@ -26,6 +26,34 @@ class moduleOrders {
             const [resulte] = await executer.query('SELECT id, p_price, p_name FROM products WHERE id = ?', productId)
             return resulte
         } catch (error) {
+            throw error
+        }
+    }
+
+    static async getListOrders() {
+        try{
+            const conn = await getDB()
+            const [resulte] = await conn.query(`
+                SELECT
+                o.id, o.status, o.total, o.creates_at, o.paid_at, 
+                c.username AS customer_name, c.email, c.phone, 
+                p.method AS payment_method, p.status AS payment_status,
+                COALESCE(oi.item_conut, 0) AS item_conut, COALESCE(oi.total_qty, 0) AS total_qty
+                FROM orders
+                JOIN customers c ON c.id = orders.customerd_id
+                LEFT JOIN payments p ON p.orders_id = orders.id
+                LEFT JOIN (
+                    SELECT
+                    orders_id, COUNT(*) AS item_conut, SUM(qty) AS total_qty
+                    FROM
+                    order_items
+                    GROUP BY oders_id
+                    ) oi ON oi.orders_id = orders.id
+                ORDER BY orders.id DESC, o.id DESC
+
+                `)
+            return resulte
+        }catch(error){
             throw error
         }
     }
@@ -100,4 +128,4 @@ class moduleOrders {
     }
 }
 
-module.exports = moduleOrders
+module.exports = modelsOrders
