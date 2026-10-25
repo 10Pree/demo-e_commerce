@@ -30,6 +30,7 @@ class modelsOrders {
         }
     }
 
+
     static async getListOrders() {
         try{
             const conn = await getDB()
@@ -39,18 +40,18 @@ class modelsOrders {
                 c.username AS customer_name, c.email, c.phone, 
                 p.method AS payment_method, p.status AS payment_status,
                 COALESCE(oi.item_conut, 0) AS item_conut, COALESCE(oi.total_qty, 0) AS total_qty
-                FROM orders
-                JOIN customers c ON c.id = orders.customerd_id
-                LEFT JOIN payments p ON p.orders_id = orders.id
+                FROM orders o
+                JOIN customers c ON c.id = o.customers_id
+                LEFT JOIN payments p ON p.orders_id = o.id
                 LEFT JOIN (
                     SELECT
                     orders_id, COUNT(*) AS item_conut, SUM(qty) AS total_qty
                     FROM
                     order_items
-                    GROUP BY oders_id
-                    ) oi ON oi.orders_id = orders.id
-                ORDER BY orders.id DESC, o.id DESC
-
+                    GROUP BY orders_id
+                    ) oi ON oi.orders_id = o.id
+                ORDER BY o.id DESC, o.id DESC
+                LIMIT 100 OFFSET 0
                 `)
             return resulte
         }catch(error){
