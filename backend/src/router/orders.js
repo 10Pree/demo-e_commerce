@@ -4,6 +4,7 @@ const router = express.Router()
 
 router.get('/order/summary', controllerOrders.getOrdersAndpayments)
 router.get('/order/daily', controllerOrders.getDailyOrdersAndPayments)
+router.get('/order/list', controllerOrders.getListOrders)
 router.post('/order', controllerOrders.createOrder)
 router.post('/order/item', controllerOrders.createOrderItem)
 router.post('/order/checkout', controllerOrders.createOrderCheckout)

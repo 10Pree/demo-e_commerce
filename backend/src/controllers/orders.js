@@ -142,6 +142,11 @@ class controllerOrders {
     static async getListOrders(req, res){
         try{
             const orders = await modelsOrders.getListOrders()
+
+            return res.status(200).json({
+                message: "Get List Orders Successful!!",
+                data: orders
+            })
         }catch(error){
             console.log("Message Error:", error)
             return res.status(500).json({
