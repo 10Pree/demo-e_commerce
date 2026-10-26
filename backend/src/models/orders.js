@@ -59,6 +59,26 @@ class modelsOrders {
         }
     }
 
+    static async getOrderDetail(orderId){
+        try{
+            const conn = await getDB()
+            const [resulte] = await conn.query(`
+                SELECT 
+                oi.product_name, oi.price, oi.qty, oi.line_total,
+                c.username AS customer_name, c.email, c.phone, c.address,
+                p.amount, p.method AS payment_method, p.status AS payment_status, p.paid_at, p.expires_at, p.external_ref, p.payer_ref
+                FROM order_items oi
+                JOIN orders o ON o.id = oi.orders_id
+                JOIN customers c ON c.id = o.customers_id
+                JOIN payments p ON p.orders_id = o.id
+                WHERE o.id = ?
+                `, [orderId])
+                return resulte
+        }catch(error){
+            throw error
+        }
+    }
+
     static async updateOrder(orderId, conn) {
         try {
             const executer = conn || getDB()

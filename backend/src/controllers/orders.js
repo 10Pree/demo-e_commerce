@@ -155,6 +155,22 @@ class controllerOrders {
         }
     }
 
+    static async getOrderDetail(req, res){
+        try{
+            const { orderId } = req.body
+            const order = await modelsOrders.getOrderDetail(orderId)
+            return res.status(200).json({
+                message: "Get Order Detail Successful!!",
+                data: order
+            })
+        }catch(error){
+            console.log("Message Error:", error)
+            return res.status(500).json({
+                message: "Server Error"
+            })
+        }
+    }
+
     static async getOrdersAndpayments(req, res) {
         try {
             const orders = await modelsOrders.getOrdersAndpayments()
