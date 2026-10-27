@@ -62,18 +62,29 @@ class modelsOrders {
     static async getOrderDetail(orderId){
         try{
             const conn = await getDB()
-            const [resulte] = await conn.query(`
+            const [orders] = await conn.query(`
                 SELECT 
-                oi.product_name, oi.price, oi.qty, oi.line_total,
                 c.username AS customer_name, c.email, c.phone, c.address,
-                p.amount, p.method AS payment_method, p.status AS payment_status, p.paid_at, p.expires_at, p.external_ref, p.payer_ref
-                FROM order_items oi
-                JOIN orders o ON o.id = oi.orders_id
+                p.amount, p.method AS payment_method, p.status AS payment_status, p.paid_at, p.expires_at, p.external_ref, payer_ref
+                FROM orders o
                 JOIN customers c ON c.id = o.customers_id
-                JOIN payments p ON p.orders_id = o.id
+                LEFT JOIN payments p ON p.orders_id = o.id
                 WHERE o.id = ?
                 `, [orderId])
-                return resulte
+                
+                if(orders.length === 0) return null
+
+                const [items] = await conn.query(`
+                    SELECT 
+                    oi.id, oi.products_id, oi.product_name, oi.price, oi.qty, oi.line_total, pv.sku
+                    FROM 
+                    order_items oi
+                    LEFT JOIN product_variants pv ON pv.id = oi.product_variants_id
+                    WHERE oi.orders_id = ?
+                    ORDER BY oi.id
+                    `, [orderId])
+
+                return {...orders[0], items}
         }catch(error){
             throw error
         }
