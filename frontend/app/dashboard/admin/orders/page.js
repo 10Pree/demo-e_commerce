@@ -7,10 +7,26 @@ import { DataTableProducts } from "@/components/dashboard/Table_Products"
 
 
 export default function Page() {
-        const [product, setProduct] = useState([])
+        const [orders, setOrders] = useState([])
         const [search, setSearch] = useState("")
         const [category, setCategory] = useState("")
         const [showCategory, setShowCategory] = useState([])
+
+        console.log(orders)
+
+        const getListOrders = async() => {
+            try{
+                const rows = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/list`, { withCredentials: true})
+                setOrders(rows.data.data)
+            }catch(error){
+                console.log("Message Error: ", error)
+            }
+        }
+
+
+        useEffect(() => {
+            getListOrders()
+        }, [])
 
     return (
         <div>
@@ -21,7 +37,7 @@ export default function Page() {
                     <p className="text-sm text-gray-500 mt-1">ตารางรวมแสดงรายการสั่งซื้อทั้งหมด</p>
                 </div>
             </div>
-            <div>
+            {/* <div>
                 <div className="flex flex-col md:flex-row justify-between gap-2 my-3">
                     <div className="flex flex-col md:flex-row gap-2">
                         <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} className="bg-gray-200 border-1 border-[#1E3A8A] rounded-2xl p-2" />
@@ -37,7 +53,7 @@ export default function Page() {
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <DataTableProducts data={product}  />
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }
