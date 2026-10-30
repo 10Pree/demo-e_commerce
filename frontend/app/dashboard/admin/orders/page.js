@@ -48,7 +48,6 @@ export default function Page() {
                             <option  value={""} >-</option>
                         </select>
                     </div>
-                    <Link href="/dashboard/admin/products/add" className="p-2 bg-[#1E3A8A] font-bold text-white rounded-2xl">เพิ่มสินค้า</Link>
                 </div>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <DataTableOrders data={orders}  />
