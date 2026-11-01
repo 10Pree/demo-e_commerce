@@ -157,8 +157,9 @@ class controllerOrders {
 
     static async getOrderDetail(req, res){
         try{
-            const { orderId } = req.body
-            const order = await modelsOrders.getOrderDetail(orderId)
+            const { id } = req.params
+            // console.log(orderId)
+            const order = await modelsOrders.getOrderDetail(id)
             return res.status(200).json({
                 message: "Get Order Detail Successful!!",
                 data: order
