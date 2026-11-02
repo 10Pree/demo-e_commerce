@@ -34,22 +34,22 @@ export default function Page({ params }) {
                 <div className="flex flex-col gap-10 w-full h-fit bg-[#F3F4F6] border-gray-500 rounded-2xl shadow-md p-6">
                     <div className="flex flex-col gap-4">
                         <h2 className=" font-bold">รายละเอียด</h2>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid md:grid-cols-2  grid-cols-1 gap-4">
                             <div className="flex items-center gap-2">
                                 <label>ชื่อ</label>
-                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" type="text" value={order.customer_name || ""} disabled />
+                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" type="text" value={order.customer_name || ""} disabled />
                             </div>
                             <div className="flex items-center gap-2 ">
                                 <label>อีเมล</label>
-                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" type="text" value={order.email || ""} disabled />
+                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" type="text" value={order.email || ""} disabled />
                             </div>
                             <div className="flex items-center gap-2">
                                 <label>เบอร์โทร</label>
-                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" type="text" value={order.phone || ""} disabled />
+                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" type="text" value={order.phone || ""} disabled />
                             </div>
                             <div className="flex items-center gap-2">
                                 <label>ที่อยู่</label>
-                                <textarea className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" value={order.address || ""} disabled />
+                                <textarea className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" value={order.address || ""} disabled />
                             </div>
                         </div>
                     </div>
@@ -58,48 +58,39 @@ export default function Page({ params }) {
                     </div>
                     <div className="flex flex-col gap-4">
                         <h2 className=" font-bold">สถานะ</h2>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid md:grid-cols-2  grid-cols-1  gap-4">
                             <div className="flex gap-2">
                                 <label>Payment Method</label>
-                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" type="text" value={order.payment_method || "null"} disabled />
+                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" type="text" value={order.payment_method || "null"} disabled />
                             </div>
                             <div className="flex gap-2">
                                 <label>Payment Status</label>
-                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" type="text" value={order.payment_status || "null"} disabled />
+                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" type="text" value={order.payment_status || "null"} disabled />
                             </div>
                             <div className="flex gap-2">
                                 <label>Paid</label>
-                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" type="text" value={order.paid_at || "null"} disabled />
+                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" type="text" value={order.paid_at || "null"} disabled />
                             </div>
                             <div className="flex gap-2">
                                 <label>Expires Date</label>
-                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" type="text" value={order.expires_at || "null"} disabled />
+                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" type="text" value={order.expires_at || "null"} disabled />
                             </div>
                             <div className="flex gap-2">
                                 <label>External Reference</label>
-                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" type="text" value={order.external_ref || "null"} disabled />
+                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" type="text" value={order.external_ref || "null"} disabled />
                             </div>
                             <div className="flex gap-2">
                                 <label>Payer Reference</label>
-                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 w-1/2" type="text" value={order.payer_ref || "null"} disabled />
+                                <input className="bg-gray-200 border-gray-700 rounded-[8px] p-1 md:w-1/2 w-full" type="text" value={order.payer_ref || "null"} disabled />
                             </div>
                         </div>
                     </div>
-                    {/* <div className="flex justify-end items-center">
-                        <div className="flex items-center gap-2">
-                            <span>ราคารวม</span>
-                            <div className="border rounded-[8px] px-2 py-1">
-                                {order.amount || "0"}
-                            </div>
-                            <span>บาท</span>
-                        </div>
-                    </div> */}
                 </div>
                 <div className="flex justify-center items-center">
                     <h1 className="font-bold">รายการ</h1>
                 </div>
                 <div className="flex flex-col gap-10 w-full h-fit bg-[#F3F4F6] border-gray-500 rounded-2xl shadow-md p-4">
-                    <div className="flex justify-between items-center">
+                    <div className="flex sm:flex-row flex-col justify-between items-center ms:gap-0 gap-4">
                         <div className="flex items-center gap-2">
                             <span>จำนวน</span>
                             <div className="border rounded-[8px] px-2 py-1">
