@@ -39,6 +39,60 @@ class controllersSearch {
             })
         }
     }
+
+    static async searchOrders(req, res) {
+        try {
+            const { search, status } = req.body
+            console.log("search:", search, "status:", status)
+            let sql
+            let sqlBase = `
+                SELECT
+                o.id, o.status, o.total, o.creates_at, o.paid_at, 
+                c.username AS customer_name, c.email, c.phone, 
+                p.method AS payment_method, p.status AS payment_status,
+                COALESCE(oi.item_conut, 0) AS item_conut, COALESCE(oi.total_qty, 0) AS total_qty
+                FROM orders o
+                JOIN customers c ON c.id = o.customers_id
+                LEFT JOIN payments p ON p.orders_id = o.id
+                LEFT JOIN (
+                    SELECT
+                    orders_id, COUNT(*) AS item_conut, SUM(qty) AS total_qty
+                    FROM
+                    order_items
+                    GROUP BY orders_id
+                    ) oi ON oi.orders_id = o.id
+                     WHERE 1=1
+            `
+            let params = []
+            if (search) {
+                sqlBase += ` AND c.username LIKE ?`
+                params.push(`%${search}%`)
+            }
+
+            if (status) {
+                sqlBase += `AND o.status = ?`
+                params.push(status)
+            }
+
+            sqlBase += `ORDER BY o.id DESC, o.id DESC`
+
+            
+            if (search || status) {
+                sql = sqlBase
+            }
+
+            const data = await modelsSearch.search(sql, params)
+            return res.status(200).json({
+                message: "Search Successful!!",
+                data: data
+            })
+        } catch (error) {
+            console.log("Server Error: ", error)
+            return res.status(500).json({
+                message: "Server Error"
+            })
+        }
+    }
     static async searchUsers(req, res) {
         try {
             const { name } = req.query

@@ -7,7 +7,7 @@ const router = express.Router()
 router.get('/search',Authorize("project.read"), controllersSearch.search)
 router.get('/search/user',Authorize("project.read"),  controllersSearch.searchUsers)
 router.get('/search/customer',Authorize("project.read"), controllersSearch.searchCustomers)
-
+router.get('/search/orders', controllersSearch.searchOrders)
 router.get('/search/products', controllersSearch.searchProductsPublic)
 
 
