@@ -107,7 +107,7 @@ export default function Page({ params }) {
                         </div>
                     </div>
                     <div className="h-[400px] overflow-y-scroll">
-                        <table className="w-full h-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <table className="w-full h-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-600">
                             <thead className="text-xs uppercase  text-[#111827]">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">
@@ -135,13 +135,13 @@ export default function Page({ params }) {
                                                 {index + 1}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {item.sku}
+                                                {item.sku || "null"}
                                             </td>
                                             <td className="px-6 py-4">
-                                                { item.product_name}
+                                                { item.product_name || "null"}
                                             </td>
                                             <td className="px-6 py-4">
-                                                { item.price }
+                                                { item.price || "null" }
                                             </td>
                                             <td className="px-6 py-4">
                                                 { item.qty }
