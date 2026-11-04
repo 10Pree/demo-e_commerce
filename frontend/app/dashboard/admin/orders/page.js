@@ -9,14 +9,11 @@ import { DataTableOrders } from "@/components/dashboard/Table_Orders"
 export default function Page() {
         const [orders, setOrders] = useState([])
         const [search, setSearch] = useState("")
-        const [category, setCategory] = useState("")
-        const [showCategory, setShowCategory] = useState([])
-
-        console.log(orders)
+        const [status, setStatus] = useState("")
 
         const getListOrders = async() => {
             try{
-                const rows = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/list`, { withCredentials: true})
+                const rows = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/search/orders`, { withCredentials: true, params: { search: search , status: status}})
                 setOrders(rows.data.data)
             }catch(error){
                 console.log("Message Error: ", error)
@@ -26,7 +23,7 @@ export default function Page() {
 
         useEffect(() => {
             getListOrders()
-        }, [])
+        }, [search, status])
 
     return (
         <div>
@@ -41,11 +38,10 @@ export default function Page() {
                 <div className="flex flex-col md:flex-row justify-between gap-2 my-3">
                     <div className="flex flex-col md:flex-row gap-2">
                         <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} className="bg-gray-200 border-1 border-[#1E3A8A] rounded-2xl p-2" />
-                        <select onChange={(e)=> setCategory(e.target.value)} className=" border border-[#1E3A8A] rounded-2xl p-2">
-                            {showCategory.map((c)=> (
-                                <option key={c.id} value={c.id} >{c.name}</option>
-                            ))}
-                            <option  value={""} >-</option>
+                        <select onChange={(e)=> setStatus(e.target.value)} className=" border border-[#1E3A8A] rounded-2xl p-2">
+                            <option value={""} >ทั้งหมด</option>
+                            <option value="pending" >รอดำเนินการ</option>
+                            <option value="paid" >ชำระแล้ว</option>
                         </select>
                     </div>
                 </div>
