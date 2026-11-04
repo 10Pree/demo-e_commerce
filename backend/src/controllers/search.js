@@ -42,10 +42,10 @@ class controllersSearch {
 
     static async searchOrders(req, res) {
         try {
-            const { search, status } = req.body
-            console.log("search:", search, "status:", status)
-            let sql
-            let sqlBase = `
+            const { search, status } = req.query
+            console.log("Search:", search, "Status:", status)
+            // let sql
+            let sql = `
                 SELECT
                 o.id, o.status, o.total, o.creates_at, o.paid_at, 
                 c.username AS customer_name, c.email, c.phone, 
@@ -65,21 +65,19 @@ class controllersSearch {
             `
             let params = []
             if (search) {
-                sqlBase += ` AND c.username LIKE ?`
+                sql += ` AND c.username LIKE ?`
                 params.push(`%${search}%`)
             }
 
             if (status) {
-                sqlBase += `AND o.status = ?`
+                sql += ` AND o.status = ?`
                 params.push(status)
             }
 
-            sqlBase += `ORDER BY o.id DESC, o.id DESC`
+            sql += `ORDER BY o.id DESC, o.id DESC`
 
+            // sql = sqlBase
             
-            if (search || status) {
-                sql = sqlBase
-            }
 
             const data = await modelsSearch.search(sql, params)
             return res.status(200).json({
