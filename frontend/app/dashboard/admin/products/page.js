@@ -2,7 +2,6 @@
 import axios from "axios"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { Pagination } from "@/components/dashboard/pagination"
 import { DataTableProducts } from "@/components/dashboard/Table_Products"
 
 export default function Page() {
