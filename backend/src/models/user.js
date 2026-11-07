@@ -22,7 +22,7 @@ class modelsUser {
             throw error
         }
     }
-        static async read(id, conn) {
+    static async read(id, conn) {
         try {
             const executer = conn || await getDB()
             const [results] = await executer.query('SELECT id, username, email, phone, address FROM users WHERE id = ? AND deleted_at IS NULL', id)
@@ -33,7 +33,7 @@ class modelsUser {
         }
     }
     static async readsMapRole() {
-        try{
+        try {
             const conn = await getDB()
             const [results] = await conn.query(`
                 SELECT
@@ -48,8 +48,8 @@ class modelsUser {
                 JOIN roles r ON r.id = mr.roles_id
                 WHERE deleted_at IS NULL
                 `)
-                return results
-        }catch(error){
+            return results
+        } catch (error) {
             console.log("Message Error:", error)
             throw error
         }
@@ -72,67 +72,78 @@ class modelsUser {
         }
     }
 
-    static async getEmail(email){
-        try{
+    static async getEmail(email) {
+        try {
             const conn = await getDB()
             const [results] = await conn.query('SELECT id, email, password FROM users WHERE email = ? AND deleted_at IS NULL LIMIT 1', [email])
             return results
-        }catch(error){
+        } catch (error) {
             console.log(error)
             throw error
         }
     }
 
+
+    static async getMe(id, conn) {
+        try {
+            const executer = conn || await getDB()
+            const [results] = await executer.query('SELECT id, username, email, phone, address FROM users WHERE id = ? AND deleted_at IS NULL', id)
+            return results
+        } catch (error) {
+            throw error
+        }
+    }
+
     static async update(userId, userData, conn) {
-        try{
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('UPDATE users SET ? WHERE id = ?', [userData, userId])
             return results
-        }catch(error){
+        } catch (error) {
             console.log("Message Error:", error)
             throw error
         }
     }
 
-    static async updatePassword(userId, hashPassword, conn){
-        try{
+    static async updatePassword(userId, hashPassword, conn) {
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('UPDATE users SET password = ? WHERE id = ?', [hashPassword, userId])
             return results
-        }catch(error){
+        } catch (error) {
             console.log("Message Error:", error)
             throw error
         }
     }
 
     static async getPassword(userId, conn) {
-        try{
+        try {
             const executer = conn || getDB()
             const [results] = await executer.query('SELECT password FROM users WHERE id = ? AND deleted_at IS NULL', userId)
             return results
-        }catch(error){
+        } catch (error) {
             console.log("Message Error:", error)
             throw error
         }
     }
 
     static async delete(userId) {
-        try{
+        try {
             const conn = await getDB()
             const [results] = await conn.query('DELETE FROM users WHERE id = ?', userId)
             return results
-        }catch(error){
+        } catch (error) {
             console.log("Message Error:", error)
             throw error
         }
     }
-        static async softdelete(userId, conn) {
-        try{
+    static async softdelete(userId, conn) {
+        try {
             const timestamp = Date.now()
             const executer = conn || getDB()
             const [results] = await executer.query(`UPDATE users SET deleted_at = Now(), email = CONCAT('deleted_', ?, '_', email ), username = CONCAT('deleted_', ?, '_', username) WHERE id = ? `, [timestamp, timestamp, userId])
             return results
-        }catch(error){
+        } catch (error) {
             console.log("Message Error:", error)
             throw error
         }

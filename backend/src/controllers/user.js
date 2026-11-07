@@ -128,6 +128,22 @@ class controllersUser {
     }
   }
 
+  static async getMe(req, res) {
+    try {
+      const userId = req.user.userId;
+      const user = await modelsUser.getMe(userId)
+      return res.status(200).json({
+        message: "Get Me Successful!!",
+        data: user,
+      });
+    } catch (error) {
+      console.log("Message Error:", error);
+      return res.status(500).json({
+        message: "Server Error",
+      });
+    }
+  }
+
   static async Update(req, res) {
     const conn = await getConnection()
     const filesToDeleteAfterCommit = []   // เก็บ path ไฟล์เก่าที่รอลบ
@@ -233,8 +249,8 @@ class controllersUser {
     try {
       await conn.beginTransaction()
       const userId = req.params.id;
-      const {currentPassword ,newPassword} = req.body
-      if(!newPassword || newPassword.length < 8 || typeof newPassword !== 'string'){
+      const { currentPassword, newPassword } = req.body
+      if (!newPassword || newPassword.length < 8 || typeof newPassword !== 'string') {
         throw new Error("Password must be at least 8 characters")
       }
       const user = await modelsUser.read(userId, conn)
@@ -246,8 +262,8 @@ class controllersUser {
         throw new Error("Password Not Found")
       }
 
-      const isMatch = await  verifyPassword(rows[0].password, currentPassword)
-      if(!isMatch){
+      const isMatch = await verifyPassword(rows[0].password, currentPassword)
+      if (!isMatch) {
         throw new Error("Password not match")
       }
       const newHash = await hashPassword(newPassword);
