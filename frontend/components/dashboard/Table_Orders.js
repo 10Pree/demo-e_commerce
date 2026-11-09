@@ -73,25 +73,27 @@ export function DataTableOrders({ data, onRefresh }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentItem.map((O, index) => (
-                        <tr key={O.id} className="bg-white border-b text-[#111827] border-gray-200 hover:bg-[#111827] hover:text-white ">
+                    {currentItem.map((o, index) => (
+                        <tr key={o.id} className="bg-white border-b text-[#111827] border-gray-200 hover:bg-[#111827] hover:text-white ">
                             <th scope="row" className="px-3 py-4 font-medium whitespace-nowrap ">
                                 {startIdex + index + 1}
                             </th>
                             <td className="px-6 py-4">
-                                {O.customer_name}
+                                {o.customer_name}
                             </td>
                             <td className="px-6 py-4">
-                                {O.total}
+                                {o.total}
                             </td>
                             <td className="px-6 py-4">
-                                {O.item_conut}
+                                {o.item_conut}
                             </td>
                             <td className="px-6 py-4">
-                                {O.status}
+                                 <div className={`w-fit p-2 rounded-2xl text-white ${o.status === "pending" ? "bg-yellow-500" : o.status === "paid" ? "bg-green-500" : o.status === "cancelled" ? "bg-red-500" : "bg-gray-500"}`}>
+                                    {o.status}
+                                 </div>
                             </td>
                             <td className="py-4 text-center flex justify-center items-center gap-4">
-                                <Link href={`/dashboard/admin/orders/view/${O.id}`} className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">view</Link>
+                                <Link href={`/dashboard/admin/orders/view/${o.id}`} className=" px-6 py-2 font-medium text-white bg-blue-600 rounded-2xl hover:underline">view</Link>
                                 {/* <button className=" px-6 py-2 font-medium text-red-600  rounded-2xl hover:underline hover:bg-red-600 hover:text-white">Delete</button> */}
                             </td>
                         </tr>
