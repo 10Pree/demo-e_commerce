@@ -69,9 +69,9 @@ export default function SideBar({ open }) {
                     </div>
                 </div>
                 <div className="w-full pl-10 mt-[100%]">
-                    <Link className="text-white hover:text-[#2563EB] w-fit rounded-2xl cursor-pointer" href="/">
-                        <Image src={"/icons/icons8-logout-50.png"} width={20} height={20} alt="icon" onClick={handleLogout} />
-                    </Link>
+                    <div className="text-white hover:text-[#2563EB] w-fit rounded-2xl cursor-pointer">
+                        <Image className="brightness-0 invert" src={"/icons/icons8-export-24.png"} width={20} height={20} alt="icon" onClick={handleLogout} />
+                    </div>
                 </div>
             </nav>
             
