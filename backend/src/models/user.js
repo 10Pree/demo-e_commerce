@@ -87,7 +87,15 @@ class modelsUser {
     static async getMe(id, conn) {
         try {
             const executer = conn || await getDB()
-            const [results] = await executer.query('SELECT id, username, email, phone, address FROM users WHERE id = ? AND deleted_at IS NULL', id)
+            const [results] = await executer.query(`
+                SELECT u.id, u.username, u.email, u.phone, u.address, r.name AS roles_name, iu.id AS img_id, iu.image_url
+                FROM 
+                users u
+                JOIN map_roles mr ON u.id = mr.users_id
+                JOIN roles r ON mr.roles_id = r.id
+                JOIN map_image_users miu ON u.id = miu.users_id
+                JOIN images_users iu ON miu.images_id = iu.id
+                WHERE u.id = ? AND u.deleted_at IS NULL`, id)
             return results
         } catch (error) {
             throw error
