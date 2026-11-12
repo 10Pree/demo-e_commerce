@@ -5,39 +5,51 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PencilIcon } from "@/public/icons";
 import { cn } from "@/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { defaultPersonalInfo } from "./data";
 import EditPersonalInfoDialog from "./edit-dialog";
 import InfoField from "./info-field";
 import SocialLinks from "./social-links";
 import { PersonalInfo, PersonalInfoCardProps } from "./types";
+import axios from "axios";
 
-export default function PersonalInformationSection({
-  data = defaultPersonalInfo,
-  className,
-}: PersonalInfoCardProps) {
+export default function PersonalInformationSection({ data = defaultPersonalInfo, className }: PersonalInfoCardProps) {
   const [profileData, setProfileData] = useState<PersonalInfo>(data);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // const [profileData, setProfileData] = useState([]);
+
 
   const initialLetter = profileData.firstName?.trim()
     ? profileData.firstName.trim()[0].toUpperCase()
     : "M";
 
+
+        useEffect(() => {
+            const getUser = async () => {
+                try {
+                    const res = await axios.get(`http://localhost:8000/user/me`, { withCredentials: true });
+                    setProfileData(res.data.data[0]);
+                } catch (error) {
+                    console.log("Message Errer: ", error)
+                }
+            }
+            getUser();
+        }, []);
   return (
     <>
       <Card
         className={cn(
-          "relative overflow-hidden border border-gray-200 p-5 sm:p-6 lg:p-7 dark:border-gray-700",
+          "relative overflow-hidden border border-gray-200 p-5 sm:p-6 lg:p-7",
           className,
         )}
       >
         {/* Top Header Row: Title & Edit Button */}
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-base font-semibold text-gray-800 sm:text-lg dark:text-white/90">
+          <h2 className="text-base font-semibold text-gray-800 sm:text-lg ">
             Personal Information
           </h2>
 
-          <Button
+          {/* <Button
             type="button"
             variant="outline"
             size="sm"
@@ -46,15 +58,15 @@ export default function PersonalInformationSection({
           >
             <PencilIcon className="size-4.5" />
             <span>Edit</span>
-          </Button>
+          </Button> */}
         </div>
 
         {/* Profile Pic & Basic Meta */}
         <div className="mt-2 flex items-center gap-4 sm:gap-6">
           <Avatar className="size-16 shrink-0 sm:size-20">
             <AvatarImage
-              src={profileData.avatarUrl || "/images/user/owner.png"}
-              alt={profileData.fullName || "User profile"}
+              src={"http://localhost:8000" + profileData.image_url || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"}
+              alt={profileData.username || "User profile"}
             />
             <AvatarFallback className="bg-brand-400 text-xl font-medium text-white sm:text-2xl dark:bg-brand-400 dark:text-white">
               {initialLetter}
@@ -62,14 +74,14 @@ export default function PersonalInformationSection({
           </Avatar>
 
           <div className="flex flex-col gap-1">
-            <h3 className="text-base font-semibold text-gray-800 sm:text-lg dark:text-white/90">
-              {profileData.fullName}
+            <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
+              {profileData.username}
             </h3>
 
             <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 sm:text-sm dark:text-gray-400">
-              <span>{profileData.role}</span>
+              <span>{profileData.roles_name || "null"}</span>
               <span className="inline-block h-3.5 w-px bg-gray-300 dark:bg-gray-700" />
-              <span>{profileData.location}</span>
+              <span>{profileData.address}</span>
             </div>
           </div>
         </div>
@@ -77,32 +89,32 @@ export default function PersonalInformationSection({
         {/* Details & Social Links Grid */}
         <div className="mt-2 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-6">
-            <InfoField label="First Name" value={profileData.firstName} />
+            {/* <InfoField label="First Name" value={profileData.firstName} /> */}
             <InfoField label="Email address" value={profileData.email} />
           </div>
 
           <div className="flex flex-col gap-6">
-            <InfoField label="Last Name" value={profileData.lastName} />
+            {/* <InfoField label="Last Name" value={profileData.lastName} /> */}
             <InfoField label="Phone" value={profileData.phone} />
           </div>
 
-          <div className="flex flex-col gap-6">
+          {/* <div className="flex flex-col gap-6">
             <InfoField label="Bio" value={profileData.bio} />
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-6">
-            <SocialLinks socialLinks={profileData.socialLinks} />
+            {/* <SocialLinks socialLinks={profileData.socialLinks} /> */}
           </div>
         </div>
       </Card>
 
       {/* Edit Personal Information Dialog */}
-      <EditPersonalInfoDialog
+      {/* <EditPersonalInfoDialog
         isOpen={isDialogOpen}
         onOpenChange={setIsDialogOpen}
         initialData={profileData}
         onSave={setProfileData}
-      />
+      /> */}
     </>
   );
 }

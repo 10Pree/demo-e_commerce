@@ -6,10 +6,10 @@ export interface SocialLinks {
 }
 
 export interface PersonalInfo {
-  avatarUrl: string;
-  fullName: string;
-  role: string;
-  location: string;
+  image_url: string;
+  username: string;
+  roles_name: string;
+  address: string;
   firstName: string;
   lastName: string;
   email: string;
