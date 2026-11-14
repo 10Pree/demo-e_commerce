@@ -11,6 +11,7 @@
   "dependencies": {
     "@base-ui/react": "^1.9.0",
     "@hookform/resolvers": "^7.0.5",
+    "apexcharts": "^8.8.2",
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -19,7 +20,9 @@
     "lucide-react": "^1.72.0",
     "multer": "^2.0.2",
     "next": "15.4.6",
+    "next-intl": "^4.15.1",
     "react": "19.1.0",
+    "react-apexcharts": "^2.2.1",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.92.0",
     "recharts": "^3.3.0",
