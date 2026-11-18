@@ -6,7 +6,7 @@ import { ApexOptions } from "apexcharts";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import CardHeader from "./card-header";
-import { monthKeys, monthlySalesData } from "./data";
+import { weekKeys, weeklySalesData } from "./data";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
@@ -16,12 +16,46 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-export default function MonthlySalesChart() {
+const baht = new Intl.NumberFormat("th-TH", {
+  style: "currency",
+  currency: "THB",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+})
+
+export default function WeeklySalesChart() {
   const { theme } = useTheme();
-  const MONTHS_TH: Record<string, string> = {
-    jan: "ม.ค.", feb: "ก.พ.", mar: "มี.ค.", apr: "เม.ย.", may: "พ.ค.", jun: "มิ.ย.",
-    jul: "ก.ค.", aug: "ส.ค.", sep: "ก.ย.", oct: "ต.ค.", nov: "พ.ย.", dec: "ธ.ค.",
-}
+  const [showGraph, setShowGraph] = useState(1);
+  const [dailyRevenue, setDailyRevenue] = useState([]);
+  const [dailyOrders, setDailyOrders] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
+  const [summary, setSummary] = useState({
+    total_orders: 0,
+    total_products: 0,
+    paid_orders: 0,
+    pending_orders: 0,
+    total_revenue: 0,
+  });
+
+  // const chartTitles: Record<ChartId, string> = {
+  //   1: "รายได้รายวัน",
+  //   2: "จำนวนออเดอร์รายวัน",
+  //   3: "สินค้าแต่ละหมวดหมู่",
+  // };
+
+    const MONTHS_TH: Record<string, string> = {
+    Mon: "จันทร์",
+    Tue: "อังคาร",
+    Wed: "พุธ",
+    Thu: "พฤหัสบดี",
+    Fri: "ศุกร์",
+    Sat: "เสาร์",
+    Sun: "อาทิตย์",
+  };
+
+    const values = dailyRevenue.map((d) => Number(d.revenue) || 0);
+  const maxValue = Math.max(0, ...values);
+  
   const options: ApexOptions = {
     colors: ["#465FFF"],
     chart: {
@@ -45,7 +79,7 @@ export default function MonthlySalesChart() {
     },
     dataLabels: {
       enabled: true,
-      formatter: (val: number) => `${(val / 100).toFixed(1)}%`,
+      formatter: (v: number) => (v >= 1000 ? `฿${(v / 1000).toFixed(1)}K` : baht.format(v)),
       offsetY: -20,
       style: {
         fontSize: "12px",
@@ -61,7 +95,7 @@ export default function MonthlySalesChart() {
       show: false,
     },
     xaxis: {
-      categories: monthKeys.map((key) => MONTHS_TH[key]),
+      categories: weekKeys.map((key) => MONTHS_TH[key]),
       axisBorder: {
         show: false,
       },
@@ -79,7 +113,7 @@ export default function MonthlySalesChart() {
       show: false,
     },
     yaxis: {
-      max: 420,
+      max: maxValue > 0 ? Math.ceil(maxValue * 1.25) : 100,
       min: 0,
       tickAmount: 4,
       labels: {
@@ -131,49 +165,47 @@ export default function MonthlySalesChart() {
         show: false,
       },
       y: {
-        formatter: (val: number) => `${(val / 100).toFixed(1)}%`,
+        formatter: (val: number) => baht.format(val),
       },
     },
   };
   const series = [
     {
-      name: "Monthly Sales",
-      data: [...monthlySalesData],
+      name: "Weekly Sales",
+      data: [...dailyRevenue],
     },
   ];
 
-
-
-    const [showGraph, setShowGraph] = useState(1)
-  const [dailyRevenue, setDailyRevenue] = useState([])
-  const [dailyOrders, setDailyOrders] = useState([])
-  const [categoryData, setCategoryData] = useState([])
-  const [summary, setSummary] = useState({
-    total_orders: 0,
-    total_products: 0,
-    paid_orders: 0,
-    pending_orders: 0,
-    total_revenue: 0
-  })
-
   useEffect(() => {
     const getData = async () => {
-      const [summary, daily] = await Promise.all([axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/summary`), axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/daily`)])
-      const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์']
-      setSummary(summary.data.data[0])
-      
-        setDailyRevenue(daily.data.dataPayments.map(item => ({
-            ...item,
-            name: dayNames[new Date(item.date).getDay()] 
-        })))
-      setDailyOrders(daily.data.dataOrders.map(item => ({
-        ...item,
-        name: dayNames[new Date(item.date).getDay()]
-      })))
-      setCategoryData(daily.data.dataCategoriesProduct)
-    }
-    getData()
-  }, [])
+      const [summary, daily] = await Promise.all([
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/summary`),
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/daily`),
+      ]);
+      const dayNames = [
+        "อาทิตย์",
+        "จันทร์",
+        "อังคาร",
+        "พุธ",
+        "พฤหัส",
+        "ศุกร์",
+        "เสาร์",
+      ];
+      setSummary(summary.data.data[0]);
+
+      setDailyRevenue(
+        daily.data.dataPayments.map((item) => item.revenue)
+      );
+      setDailyOrders(
+        daily.data.dataOrders.map((item) => ({
+          ...item,
+          name: dayNames[new Date(item.date).getDay()],
+        })),
+      );
+      setCategoryData(daily.data.dataCategoriesProduct);
+    };
+    getData();
+  }, []);
 
   const cards = [
     {
@@ -181,14 +213,14 @@ export default function MonthlySalesChart() {
       label: "รายได้วันนี้",
       value: summary?.total_revenue ?? 0,
       icon: "/icons/icons8-search-90.svg",
-      change: "+12.4%",
+      // change: "+12.4%",
     },
     {
       id: 2,
       label: "จำนวนออเดอร์",
       value: summary?.total_orders ?? 0,
       icon: "/icons/icons8-search-90.svg",
-      change: "+8.1%",
+      // change: "+8.1%",
     },
     {
       id: 3,
@@ -197,30 +229,27 @@ export default function MonthlySalesChart() {
       icon: "/icons/icons8-search-90.svg",
       change: "9 หมวดหมู่",
     },
-  ]
+  ];
 
-  const chartTitles = {
-    1: "รายได้รายวัน",
-    2: "จำนวนออเดอร์รายวัน",
-    3: "สินค้าแต่ละหมวดหมู่",
-  }
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 pb-5 sm:px-6 sm:pt-6 sm:pb-5 dark:border-gray-800 dark:bg-white/3">
       {/* <CardHeader /> */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {cards.map((card) => (
           <button
             key={card.id}
             onClick={() => setShowGraph(card.id)}
             className={`flex items-center gap-4 p-5 rounded-2xl text-left transition-all duration-200 shadow-sm
-              ${showGraph === card.id
-                ? "bg-[#1E3A8A] text-white shadow-lg scale-[1.02]"
-                : "bg-white border border-gray-200 text-[#111827] hover:border-[#1E3A8A] hover:shadow-md"
+              ${
+                showGraph === card.id
+                  ? "bg-[#1E3A8A] text-white shadow-lg scale-[1.02]"
+                  : "bg-white border border-gray-200 text-[#111827] hover:border-[#1E3A8A] hover:shadow-md"
               }`}
           >
             {/* Icon Box */}
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0
+            <div
+              className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0
               ${showGraph === card.id ? "bg-white/20" : "bg-[#EEF2FF]"}`}
             >
               <Image
@@ -234,13 +263,17 @@ export default function MonthlySalesChart() {
 
             {/* Text */}
             <div>
-              <p className={`text-sm font-normal ${showGraph === card.id ? "text-blue-200" : "text-gray-500"}`}>
+              <p
+                className={`text-sm font-normal ${showGraph === card.id ? "text-blue-200" : "text-gray-500"}`}
+              >
                 {card.label}
               </p>
               <p className="text-2xl font-bold mt-0.5">{card.value}</p>
-              <p className={`text-xs mt-1 ${showGraph === card.id ? "text-blue-200" : "text-green-600"}`}>
+              {/* <p
+                className={`text-xs mt-1 ${showGraph === card.id ? "text-blue-200" : "text-green-600"}`}
+              >
                 ↑ {card.change}
-              </p>
+              </p> */}
             </div>
           </button>
         ))}
