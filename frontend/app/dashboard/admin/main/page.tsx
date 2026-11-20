@@ -6,8 +6,8 @@ import { ApexOptions } from "apexcharts";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import CardHeader from "./card-header";
-import { weekKeys, weeklySalesData } from "./data";
-import { useEffect, useState } from "react";
+import { monthKeys, monthlySalesData } from "./data";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 
@@ -21,7 +21,7 @@ const baht = new Intl.NumberFormat("th-TH", {
   currency: "THB",
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
-})
+});
 
 export default function WeeklySalesChart() {
   const { theme } = useTheme();
@@ -43,19 +43,48 @@ export default function WeeklySalesChart() {
   //   3: "สินค้าแต่ละหมวดหมู่",
   // };
 
-    const MONTHS_TH: Record<string, string> = {
-    Mon: "จันทร์",
-    Tue: "อังคาร",
-    Wed: "พุธ",
-    Thu: "พฤหัสบดี",
-    Fri: "ศุกร์",
-    Sat: "เสาร์",
-    Sun: "อาทิตย์",
-  };
+const MONTHS_TH: Record<string, string> = {
+  Jan: "ม.ค.",
+  Feb: "ก.พ.",
+  Mar: "มี.ค.",
+  Apr: "เม.ย.",
+  May: "พ.ค.",
+  Jun: "มิ.ย.",
+  Jul: "ก.ค.",
+  Aug: "ส.ค.",
+  Sep: "ก.ย.",
+  Oct: "ต.ค.",
+  Nov: "พ.ย.",
+  Dec: "ธ.ค.",
+};
 
-    const values = dailyRevenue.map((d) => Number(d.revenue) || 0);
+  const DAY_NAMES = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+
+  const dayName = (value: string) => {
+  const d = /^\d{4}-\d{2}-\d{2}$/.test(value)
+    ? new Date(...(value.split("-").map(Number) as [number, number, number]).map((n, i) => (i === 1 ? n - 1 : n)) as [number, number, number])
+    : new Date(value);
+  return DAY_NAMES[d.getDay()];
+};
+
+  const charts = useMemo(() => {
+    if(showGraph === 1) {
+      return {
+        name: "รายได้",
+        // labels: dailyRevenue.map((r) => dayName(r.date)),
+        labels: monthKeys.map((key) => MONTHS_TH[key]),
+        // values: dailyRevenue.map((r) => r.revenue),
+        values: dailyRevenue.map((r) => r.revenue),
+        short: (v:number) => (v >= 1000 ? `฿${(v / 1000).toFixed(1)}k` : baht.format(v)),
+        format: (v : number) => baht.format(v)
+
+      }
+    }
+  }, [showGraph, dailyRevenue, dailyOrders, categoryData])
+
+  const values = dailyRevenue.map((d) => Number(d.revenue) || 0);
   const maxValue = Math.max(0, ...values);
-  
+
   const options: ApexOptions = {
     colors: ["#465FFF"],
     chart: {
@@ -79,7 +108,7 @@ export default function WeeklySalesChart() {
     },
     dataLabels: {
       enabled: true,
-      formatter: (v: number) => (v >= 1000 ? `฿${(v / 1000).toFixed(1)}K` : baht.format(v)),
+      formatter: (val : number) => (val > 0 ? charts.short(val) : ""),
       offsetY: -20,
       style: {
         fontSize: "12px",
@@ -95,7 +124,7 @@ export default function WeeklySalesChart() {
       show: false,
     },
     xaxis: {
-      categories: weekKeys.map((key) => MONTHS_TH[key]),
+      categories: charts.labels,
       axisBorder: {
         show: false,
       },
@@ -172,7 +201,7 @@ export default function WeeklySalesChart() {
   const series = [
     {
       name: "Weekly Sales",
-      data: [...dailyRevenue],
+      data: [...monthlySalesData],
     },
   ];
 
@@ -182,27 +211,10 @@ export default function WeeklySalesChart() {
         axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/summary`),
         axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/daily`),
       ]);
-      const dayNames = [
-        "อาทิตย์",
-        "จันทร์",
-        "อังคาร",
-        "พุธ",
-        "พฤหัส",
-        "ศุกร์",
-        "เสาร์",
-      ];
       setSummary(summary.data.data[0]);
-
-      setDailyRevenue(
-        daily.data.dataPayments.map((item) => item.revenue)
-      );
-      setDailyOrders(
-        daily.data.dataOrders.map((item) => ({
-          ...item,
-          name: dayNames[new Date(item.date).getDay()],
-        })),
-      );
-      setCategoryData(daily.data.dataCategoriesProduct);
+      setDailyRevenue(daily.data.dataPayments || []);
+      setDailyOrders(daily.data.dataOrders || []);
+      setCategoryData(daily.data.dataCategoriesProduct || []);
     };
     getData();
   }, []);
@@ -230,7 +242,6 @@ export default function WeeklySalesChart() {
       change: "9 หมวดหมู่",
     },
   ];
-
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 pb-5 sm:px-6 sm:pt-6 sm:pb-5 dark:border-gray-800 dark:bg-white/3">
