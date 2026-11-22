@@ -189,10 +189,10 @@ class controllerOrders {
     }
     static async getDailyOrdersAndPayments(req, res) {
         try {
+            const year = new  Date().getFullYear()
             const dataOrders = await modelsOrders.getDailyOrders()
-            const dataPayments = await modelsPayments.getDailyIncome()
+            const dataPayments = await modelsPayments.getDailyMonthIncome(year)
             const dataCategoriesProduct = await modelsCategories.getProductsCategories()
-
 
             return res.status(200).json({
                 message: "Get DailyOrders Successful!!",

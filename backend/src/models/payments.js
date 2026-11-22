@@ -36,7 +36,7 @@ class modelsPayments {
                     DATE(paid_at) AS date,
                     SUM(amount) AS revenue
                     FROM payments
-                    WHERE status = 'paid' AND paid_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+                    WHERE status = 'paid' AND paid_at >= DATE_SUB(CURDATE(), INTERVAL 12 year)
                     GROUP BY DATE(paid_at)
                     ORDER BY date ASC
                 `)
@@ -45,6 +45,37 @@ class modelsPayments {
                 date: r.date.toISOString().split('T')[0],
                 revenue: Number(r.revenue)
             }))
+        } catch (error) {
+            throw error
+        }
+    }
+
+        static async getDailyMonthIncome(year) {
+        try {
+            const conn = await getDB()
+            const [resulte] = await conn.query(`
+                WITH RECURSIVE m AS (
+                    SELECT 1 AS n
+                    UNION ALL
+                    SELECT n + 1 FROM m WHERE n < 12
+                ),
+                monthly AS (
+                    SELECT 
+                        MONTH(paid_at) AS month_on ,
+                        SUM(amount) AS revenue
+                        FROM payments 
+                        WHERE status = "paid" 
+                            AND paid_at >= MAKEDATE(?, 1)
+                            AND paid_at < MAKEDATE(? + 1, 1)
+                         GROUP BY MONTH(paid_at)
+                )
+                SELECT
+                    m.n AS month, COALESCE(monthly.revenue) AS revenue
+                FROM m
+                LEFT JOIN monthly ON monthly.month_on = m.n
+                ORDER BY m.n
+                `, [year, year])
+            return resulte
         } catch (error) {
             throw error
         }
