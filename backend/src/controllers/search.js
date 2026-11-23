@@ -43,8 +43,6 @@ class controllersSearch {
     static async searchOrders(req, res) {
         try {
             const { search, status } = req.query
-            console.log("Search:", search, "Status:", status)
-            // let sql
             let sql = `
                 SELECT
                 o.id, o.status, o.total, o.creates_at, o.paid_at, 

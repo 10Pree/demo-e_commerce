@@ -140,20 +140,34 @@ class modelsOrders {
         }
     }
 
-    static async getDailyOrders() {
+    static async getDailyOrders(year) {
         try{
             const conn = await getDB()
             const [resulte] = await conn.query(`
-                SELECT DATE(creates_at) AS date, COUNT(*) AS total_orders 
-                FROM orders 
-                WHERE creates_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) 
-                GROUP BY DATE(creates_at) 
-                ORDER BY date ASC
-                `)
-            return resulte.map(r => ({
-                ...r,
-                date: r.date.toISOString().split('T')[0]
-            }))
+                WITH RECURSIVE m AS (
+                    SELECT 1 AS n
+                    UNION ALL
+                    SELECT n + 1 FROM m WHERE n < 12
+                ),
+                monthly AS (
+                    SELECT MONTH(creates_at) AS month_on,
+                           COUNT(CASE WHEN status = 'paid' THEN 1 END) AS paid_orders,
+                           COUNT(CASE WHEN status = 'pending' THEN 1 END) AS pending_orders,
+                           COUNT(CASE WHEN status = 'cancelled' THEN 1 END) AS cancelled_orders
+                    FROM orders
+                    WHERE creates_at >= MAKEDATE(?, 1)
+                        AND creates_at <  MAKEDATE(? + 1, 1)
+                    GROUP BY MONTH(creates_at)
+                )
+                SELECT m.n AS month, 
+                    COALESCE(monthly.paid_orders, 0) AS paid_orders,
+                    COALESCE(monthly.pending_orders, 0) AS pending_orders,
+                    COALESCE(monthly.cancelled_orders, 0) AS cancelled_orders
+                FROM m
+                LEFT JOIN monthly ON monthly.month_on = m.n
+                ORDER BY m.n
+                `, [year, year])
+            return resulte
         }catch(error){
             throw error
         }

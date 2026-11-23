@@ -70,7 +70,7 @@ class modelsPayments {
                          GROUP BY MONTH(paid_at)
                 )
                 SELECT
-                    m.n AS month, COALESCE(monthly.revenue) AS revenue
+                    m.n AS month, COALESCE(monthly.revenue, 0) AS revenue
                 FROM m
                 LEFT JOIN monthly ON monthly.month_on = m.n
                 ORDER BY m.n

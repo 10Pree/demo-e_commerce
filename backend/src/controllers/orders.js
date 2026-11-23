@@ -190,7 +190,7 @@ class controllerOrders {
     static async getDailyOrdersAndPayments(req, res) {
         try {
             const year = new  Date().getFullYear()
-            const dataOrders = await modelsOrders.getDailyOrders()
+            const dataOrders = await modelsOrders.getDailyOrders(year)
             const dataPayments = await modelsPayments.getDailyMonthIncome(year)
             const dataCategoriesProduct = await modelsCategories.getProductsCategories()
 
