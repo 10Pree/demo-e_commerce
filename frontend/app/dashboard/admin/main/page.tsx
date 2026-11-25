@@ -23,6 +23,8 @@ const baht = new Intl.NumberFormat("th-TH", {
   maximumFractionDigits: 0,
 });
 
+const conut = new Intl.NumberFormat("th-TH")
+
 export default function WeeklySalesChart() {
   const { theme } = useTheme();
   const [showGraph, setShowGraph] = useState(1);
@@ -77,7 +79,16 @@ const MONTHS_TH: Record<string, string> = {
         values: dailyRevenue.map((r) => r.revenue),
         short: (v:number) => (v >= 1000 ? `฿${(v / 1000).toFixed(1)}k` : baht.format(v)),
         format: (v : number) => baht.format(v)
+      }
+    }
 
+    if(showGraph === 2) {
+      return {
+        name: "จำนวนออเดอร์",
+        labels: monthKeys.map((key) => MONTHS_TH[key]),
+        values: dailyOrders.map((r) => r.paid_orders),
+        short: (v:number) => (v >= 1000 ? `฿${(v / 1000).toFixed(1)}k` : baht.format(v)),
+        format: (v : number) => baht.format(v)
       }
     }
   }, [showGraph, dailyRevenue, dailyOrders, categoryData])
@@ -292,8 +303,9 @@ const MONTHS_TH: Record<string, string> = {
       <ScrollArea className="max-w-full">
         <div className="min-w-162.5 xl:min-w-full">
           <ReactApexChart
+            key={showGraph}
             options={options}
-            series={series}
+            series={[{ name: charts.name ,data: charts.values }]}
             type="bar"
             height={200}
           />
