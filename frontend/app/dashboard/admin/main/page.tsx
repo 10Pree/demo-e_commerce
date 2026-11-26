@@ -25,26 +25,6 @@ const baht = new Intl.NumberFormat("th-TH", {
 
 const conut = new Intl.NumberFormat("th-TH")
 
-export default function WeeklySalesChart() {
-  const { theme } = useTheme();
-  const [showGraph, setShowGraph] = useState(1);
-  const [dailyRevenue, setDailyRevenue] = useState([]);
-  const [dailyOrders, setDailyOrders] = useState([]);
-  const [categoryData, setCategoryData] = useState([]);
-  const [summary, setSummary] = useState({
-    total_orders: 0,
-    total_products: 0,
-    paid_orders: 0,
-    pending_orders: 0,
-    total_revenue: 0,
-  });
-
-  // const chartTitles: Record<ChartId, string> = {
-  //   1: "รายได้รายวัน",
-  //   2: "จำนวนออเดอร์รายวัน",
-  //   3: "สินค้าแต่ละหมวดหมู่",
-  // };
-
 const MONTHS_TH: Record<string, string> = {
   Jan: "ม.ค.",
   Feb: "ก.พ.",
@@ -60,41 +40,60 @@ const MONTHS_TH: Record<string, string> = {
   Dec: "ธ.ค.",
 };
 
-  const DAY_NAMES = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+const MONTH_NAMES = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
 
-  const dayName = (value: string) => {
-  const d = /^\d{4}-\d{2}-\d{2}$/.test(value)
-    ? new Date(...(value.split("-").map(Number) as [number, number, number]).map((n, i) => (i === 1 ? n - 1 : n)) as [number, number, number])
-    : new Date(value);
-  return DAY_NAMES[d.getDay()];
-};
+const compactBaht = (v: number) => {
+  if (v >= 1_000_000) return `฿${(v / 1_000_000).toFixed(1)}M`
+  if (v >= 1_000) return `฿${(v / 1_000).toFixed(1)}K`
+  return baht.format(v)
+}
 
-  const charts = useMemo(() => {
+export default function WeeklySalesChart() {
+  const { theme } = useTheme();
+  const [showGraph, setShowGraph] = useState(1);
+  const [dailyRevenue, setDailyRevenue] = useState([]);
+  const [dailyOrders, setDailyOrders] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
+  const [summary, setSummary] = useState({
+    total_orders: 0,
+    total_products: 0,
+    paid_orders: 0,
+    pending_orders: 0,
+    total_revenue: 0,
+  });
+
+
+    const charts = useMemo(() => {
     if(showGraph === 1) {
       return {
         name: "รายได้",
-        // labels: dailyRevenue.map((r) => dayName(r.date)),
         labels: monthKeys.map((key) => MONTHS_TH[key]),
-        // values: dailyRevenue.map((r) => r.revenue),
         values: dailyRevenue.map((r) => r.revenue),
-        short: (v:number) => (v >= 1000 ? `฿${(v / 1000).toFixed(1)}k` : baht.format(v)),
+        short: compactBaht,
         format: (v : number) => baht.format(v)
       }
     }
-
     if(showGraph === 2) {
       return {
         name: "จำนวนออเดอร์",
         labels: monthKeys.map((key) => MONTHS_TH[key]),
         values: dailyOrders.map((r) => r.paid_orders),
-        short: (v:number) => (v >= 1000 ? `฿${(v / 1000).toFixed(1)}k` : baht.format(v)),
-        format: (v : number) => baht.format(v)
+        short: (v : number) => conut.format(v),
+        format: (v : number) => `${conut.format(v)} ออเดอร์`
       }
     }
+      return {
+        name: "หมวดหมู่",
+        labels: categoryData.map((c) => c.category),
+        values: categoryData.map((c) => Number(c.stock) || 0),
+        short: (v : number) => conut.format(v),
+        format: (v : number) => `${conut.format(v)} ชิ้น`
+      }
   }, [showGraph, dailyRevenue, dailyOrders, categoryData])
 
-  const values = dailyRevenue.map((d) => Number(d.revenue) || 0);
+  const values = charts.values.map((v) => Number(v) || 0);
   const maxValue = Math.max(0, ...values);
+
 
   const options: ApexOptions = {
     colors: ["#465FFF"],
