@@ -3,9 +3,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTheme } from "@/public/context/theme-context";
 import { ApexOptions } from "apexcharts";
-import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
-import CardHeader from "./card-header";
 import { monthKeys, monthlySalesData } from "./data";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
@@ -83,7 +81,7 @@ export default function WeeklySalesChart() {
       }
     }
       return {
-        name: "หมวดหมู่",
+        name: "จำนวนสต็อก",
         labels: categoryData.map((c) => c.category),
         values: categoryData.map((c) => Number(c.stock) || 0),
         short: (v : number) => conut.format(v),
@@ -208,12 +206,6 @@ export default function WeeklySalesChart() {
       },
     },
   };
-  const series = [
-    {
-      name: "Weekly Sales",
-      data: [...monthlySalesData],
-    },
-  ];
 
   useEffect(() => {
     const getData = async () => {
@@ -234,21 +226,21 @@ export default function WeeklySalesChart() {
       id: 1,
       label: "รายได้วันนี้",
       value: summary?.total_revenue ?? 0,
-      icon: "/icons/icons8-search-90.svg",
+      icon: "/icons/icons8-income-96.png",
       // change: "+12.4%",
     },
     {
       id: 2,
       label: "จำนวนออเดอร์",
       value: summary?.total_orders ?? 0,
-      icon: "/icons/icons8-search-90.svg",
+      icon: "/icons/icons8-purchase-order-96.png",
       // change: "+8.1%",
     },
     {
       id: 3,
       label: "สินค้าทั้งหมด",
       value: summary?.total_products ?? 0,
-      icon: "/icons/icons8-search-90.svg",
+      icon: "/icons/icons8-box.svg",
       change: "9 หมวดหมู่",
     },
   ];
