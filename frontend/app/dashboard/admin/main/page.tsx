@@ -210,8 +210,8 @@ export default function WeeklySalesChart() {
   useEffect(() => {
     const getData = async () => {
       const [summary, daily] = await Promise.all([
-        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/summary`),
-        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/daily`),
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/summary`, { withCredentials: true }),
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/order/daily`, { withCredentials: true }),
       ]);
       setSummary(summary.data.data[0]);
       setDailyRevenue(daily.data.dataPayments || []);
